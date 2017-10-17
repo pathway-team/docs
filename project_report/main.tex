@@ -1,4 +1,4 @@
-\documentclass{article}
+﻿\documentclass{article}
 \usepackage[utf8]{inputenc}
 \usepackage{graphicx}
 \usepackage{float}
@@ -884,7 +884,7 @@ The sub-system itself will store all tracked and analyzed data from the statisti
 \begin{itemize}
     \item The System will allow the user to create an account that will be kept up to date by the system.
     \item The system for user accounts will keep track of a user's life time statistics and display them in an always up to date state, statistics include, life time steps, distance, best course, best time, etc.
-    \item The user accounts system will save all user routes in the appearance of a fanned stack of cards.
+    \item The user accounts system will save all user routes as buttons that will produce a popup view of the selected route.
     \item The system will allow the user to pull up these saved routes and see their best time or if that time has been beaten by anyone that they have shared it with.
     \item The system will also create graphs that display the user’s progression over time of running a route, that user can see.
     \item The system will be designed to accommodate future updates and additional functionality as needed.
@@ -936,7 +936,7 @@ Many applications are similar to Pathways user accounts in the sense that they m
 
 \subsubsection{System Analysis}
 For the user accounts sub-system, since it relies heavily on the database and the statistical sub-systems for its information that it will display to the user. The matter of analysis will not be so much on the algorithms that will be implemented, other than what encryption algorithm will be used, but more on what tools through Android 5(Java) will be used/more useful. As I mentioned before the only real real decision algorithm wise will be the decision on what encryption algorithm will be used to encrypt user credentials for storage in the database. For the sake of this project I wanted to select an algorithm that was both secure and used widely throughout the field of security as a way of preparing myself for the field at large, and also wanted an algorithm that would be able to be easily and timely implemented in the time remaining for the project. In light of all of these necessities I have chosen to use the AES encryption algorithm for the safe transmission and storage of user credentials.
-For the rest of the sub-system I will be using primarily Django’s, User classes and functionality to build my authentication system for the client application and the server, these will work in tandem using HTML to request authentication tokens to allow the user to login and/or create an account in Pathway. The accounts sub-system will also use HTML to request up to date statistical analysis and saved user routes from the database and statistical analysis sub-systems. 
+For the rest of the sub-system I will be using primarily Django’s, User classes and functionality to build my authentication system for the client application and the server, and will be nested inside a singletonpattern for added security, these will work in tandem using HTML to request authentication tokens to allow the user to login and/or create an account in Pathway. The accounts sub-system will also use HTML to request up to date statistical analysis and saved user routes from the database and statistical analysis sub-systems. 
 
 \paragraph{Use Cases}
 \begin{enumerate}
