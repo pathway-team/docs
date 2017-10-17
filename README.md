@@ -6,7 +6,7 @@ This repository contains the latex source and figures for all of the Pathway app
 
 You should follow these steps in order to contribute to the documentation.
 1. Clone the repo to your machine with `git clone https://github.com/pathway-team/docs`.
-2. Create a new branch named as follows `<section_or_doctitle>_<yourgithubusername>`
+2. Create a new branch named as follows `git checkout -b <section_or_doctitle>_<yourgithubusername>`
 3. If you are creating a new document, then create a folder named after that document
     * keep the source for this doc in it's folder
 4. Use a latex editor/ide to modify the source file, I personally use neovim and pandoc
