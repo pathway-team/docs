@@ -537,9 +537,9 @@ There are many programs and applications that offer similar functionality to thi
 
 \subsubsection{System Analysis}
 \paragraph{Introduction}
-For the statistics/metrics subsystem, I plan to utilize a python module specifically built to perform the necessary statistical operations, such as numpy. 
-This will be the most appropriate way to run the analysis as such modules are both efficient, fast, and well tested. This reduces the need to develop mathematical and statistical algorithms. 
-However the need to develop an efficient approach for handling the reports is necessary. For this reason I plan to implement the Factory method design pattern. This will allow the server to 
+For the statistics/metrics subsystem, the plan to utilize a python module specifically built to perform the necessary statistical operations, such as numpy. 
+This will be the most appropriate way to run the analysis as such modules are both efficient, fast, and well tested. This reduces the need to develop mathematical and statistical algorithms. This system will also use the json module to parse any JSON formatted data that is necessary to perform the calculations required of the system. The Python library Geopy will be used to determine distances for GPS points. On the client side, we will utilize a widely used library called Android Plot to render plots.
+However the need to develop an efficient approach for handling the reports is necessary. For this reason we plan to implement the Factory method design pattern. This will allow the server to 
 simply pass a small amount of data to an object called a factory which contains methods that generate objects. This factory then gathers the necessary data from the database and performs the 
 various statistical calculations, such as determining averages and standard deviations, and passes this report to the server.
 
@@ -591,9 +591,17 @@ Generate Report
 \begin{figure}[H]
     \centering
     \begin{center}
-        \makebox[\textwidth]{\includegraphics[width=\paperwidth]{westUML.png}}
+        \makebox[\textwidth]{\includegraphics[width=\paperwidth]{westUML1.png}}
     \end{center}
-    \caption{Statistics system UML}
+    \caption{Statistics system UML:Report Classes}
+    \label{fig:my_label}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \begin{center}
+        \makebox[\textwidth]{\includegraphics[width=\paperwidth]{westUML2.png}}
+    \end{center}
+    \caption{Statistics system UML: Utility Classes}
     \label{fig:my_label}
 \end{figure}
 \pagebreak

@@ -1,0 +1,4 @@
+https://geopy.readthedocs.io/en/1.10.0/
+https://docs.scipy.org/doc/numpy/reference/routines.statistics.html
+http://www.android-graphview.org/
+https://github.com/halfhp/androidplot
