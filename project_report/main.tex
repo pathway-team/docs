@@ -1,4 +1,4 @@
-﻿\documentclass{article}
+\documentclass{article}
 \usepackage[utf8]{inputenc}
 \usepackage{graphicx}
 \usepackage{float}
@@ -70,15 +70,17 @@ Pathway is a generic software, green-field development project of a native andro
     \item The system must generate reports that should be easily readable and detailed while avoiding being confusing to users.
     \item System will use device sensors to record GPS data in a Latitude/Longitude format.
     \item System will use device sensors to record user elevation.
-    \item System will plot Geolocation data against a google provided background map.
-    \item System will record relative timestamps to use in calculation of speed and direction.
-    \item System will display user activity duration, speed, distance, current elevation, and coordinates.
+    \item System will plot Geolocation data against a Google provided background map.
+    \item System will record relative time stamps to use in calculation of speed and direction.
+    \item System will display user activity duration, speed, distance, current elevation, and coordinates during data collection.
     \item System will display user routes clearly and in real-time as data is being collected.
     \item System will allow the user to save individual routes to a comma-delimited file for personal use.
-    \item System will allow the user to maintain a copy of a mapped area for use offline, allowing the Geolocation system to function with only the GPS enabled.
+    \item System will display traversed routes in the User's immediate vicinity.
+    \item System will allow a user to tap on a route to retrieve and view information associated with that route.
     \item System will store a user’s routes in a particular format for use in Pathway.
+    \item System will maintain a local device database to store a user's route data.
     \item System will be available as long as a persistent data connection is allowed.
-    \item System will be made available in a limited capacity while no data connection exists.
+    \item System will be made available in a limited capacity with reduced accuracy and no map service while no data connection exists.
     \item System will accurately and precisely locate the user’s position within an acceptable margin of error, allowing for a larger margin where service is weak or none exists.
     \item The System will allow the user to create an account that will be kept up to date by the system.
     \item The system for user accounts will keep track of a user's life time statistics and display them in an always up to date state, statistics include, life time steps, distance, best course, best time, etc.
@@ -608,27 +610,30 @@ Generate Report
 %======================================================================
 
 \subsection{Geolocation Collection and Plotting - Johnny Bragg}
-This sub-system, referred to as the Geolocation sub-system, will manage the collection, plotting, and storage of geospatial data that will comprise routes taken by the user. This data will include WGS 1983 Latitude and Longitude coordinates, elevation as measured in feet, time-stamp information in a 24Hr hh:mm:ss format, and additional derived attributes from the aforementioned data, such as speed, direction, etc.
-The sub-system will collect data and write it into JSON format for use in the statistics sub-system. Route data will also be accessible by other systems as needed whenever a mapped route needs to be displayed.Additionally, the sub-system will employ two main UI screens. The first UI screen will allow a user to track their path as it appears on a web service provided background map in approximately real-time. The second UI will provide a more data-centric synopsis of the user’s current speed, elevation, and coordinates. User’s will have the option of exporting data in a comma delimited format for personal use. Other information may be included as the project is revised. The Geolocation sub-system will transmit data to the database backend for storage.
+This sub-system, referred to as the Geolocation sub-system, will manage the collection, plotting, and storage of geospatial data that will comprise routes traversed by the user. This data will include: WGS 1984 Latitude and Longitude coordinates, expressed in degrees, minutes, and seconds, Elevation as measured in feet, relative time-stamp information in a 24Hr hh:mm:ss format, and additional derived attributes from the aforementioned data, such as speed, direction, etc.
+
+The sub-system will collect data and write it into an extended JSON format called GeoJSON for use in the statistics sub-system. Route data will also be accessible by other systems as needed whenever a mapped route needs to be displayed. Additionally, the sub-system will employ two main UI fragments. The first UI fragment will allow a user to track their path as it appears on a web service provided background map in approximately real-time. The second UI will provide a more data oriented synopsis of the user’s current speed, elevation, and coordinates, and will be accessed using a slide up panel visible during data collection. User’s will have the option of exporting data in a comma delimited format for personal use. Other information may be included as the project is revised. The Geolocation sub-system will transmit data to the database back-end for storage and store a local copy of the user's route data on a SQLite database instance on the device.
 
 \subsubsection{User Requirements}
 \begin{itemize}
     \item System will use device sensors to record GPS data in a Latitude/Longitude format.
     \item System will use device sensors to record user elevation.
-    \item System will plot Geolocation data against a google provided background map.
-    \item System will record relative timestamps to use in calculation of speed and direction.
-    \item System will display user activity duration, speed, distance, current elevation, and coordinates.
+    \item System will plot Geolocation data against a Google provided background map.
+    \item System will record relative time stamps to use in calculation of speed and direction.
+    \item System will display user activity duration, speed, distance, current elevation, and coordinates during data collection.
     \item System will display user routes clearly and in real-time as data is being collected.
     \item System will allow the user to save individual routes to a comma-delimited file for personal use.
-    \item System will allow the user to maintain a copy of a mapped area for use offline, allowing the Geolocation system to function with only the GPS enabled.
+    \item System will display traversed routes in the User's immediate vicinity.
+    \item System will allow a user to tap on a route to retrieve and view information associated with that route.
     \item System will store a user’s routes in a particular format for use in Pathway.
+    \item System will maintain a local device database to store a user's route data.
     \item System will be available as long as a persistent data connection is allowed.
-    \item System will be made available in a limited capacity while no data connection exists.
+    \item System will be made available in a limited capacity with reduced accuracy and no map service while no data connection exists.
     \item System will accurately and precisely locate the user’s position within an acceptable margin of error, allowing for a larger margin where service is weak or none exists.
 \end{itemize}
 
 \subsubsection{Process}
-The system will be completed an tested over the course of the Fall 2017 semester, with regualr updates to follow.
+The system will be completed an tested over the course of the Fall 2017 semester, with regular updates to follow.
 
 \subsubsection{Domain Analysis}
 \paragraph{Introduction}
@@ -679,8 +684,9 @@ included in the Google Maps API. The mapping functionality of the subsystem will
 the Google Maps API and as such will not require extensive coding to achieve the desired functionality and layout. 
 This functionality would include map display, panning, zoom, and drawing of features on the map.
 
+
 \paragraph{Algorithms}
-To implement the route comparison feature, I have reviewed two algorithms that break the problem down into a comparison of ordered sets of pairs: 
+To implement the route comparison feature, we have reviewed two algorithms that break the problem down into a comparison of ordered sets of pairs: 
 Hausdorff distance and Fréchete distance. Between these two algorithms, there is a tradeoff of complexity versus versatility, 
 which can be summarized as below, with included pseudocode for Hausdorff.
 
@@ -688,7 +694,8 @@ which can be summarized as below, with included pseudocode for Hausdorff.
 \SetAlgoLined
 $h \gets 0$\\
 \For{point $a_i$ in $A$}{
-    $shortest \gets \infty$
+    $shortest \gets \infty$ 
+    
     \For{point $b_j$ in $B$}{
         $d_{ij} \gets d(a_i,b_j)$\\
         \If{$d_{ij} \< shortest$}{
@@ -699,7 +706,7 @@ $h \gets 0$\\
         $h \gets shortest$
     }
 }
-\caption{Hausdorff algorithm for geographic coordinate comparison}
+\caption{Hausdorff distance for ordered sets of coordinate pairs.}
 \end{algorithm}
 
 Fréchete: More complex and harder to implement, much more useful. Supports backtracking. Pseudo code omitted due to complexity.
@@ -707,7 +714,7 @@ Fréchete: More complex and harder to implement, much more useful. Supports back
 At this stage of the project, we plan to implement both algorithms and compare their accuracy against a series of test cases designed to assess the correctness and flexibility of each algorithm.
 
 \paragraph{Tool Selection}
-Due to the reliance of my system on an existing API, my tool selection will be limited to the Google Maps API and the development tools and language that were selected for the project as a whole. The system will be coded entirely in Java, using the Google Maps API and leveraging Android Studio to more easily create the application layout. Pending further investigation, a SQLite database may be created on the local device to store information until a connection can be established with the Pathway server. At this time, there are no concrete plans to implement such a structure, but that is subject to change. The above mentioned algorithms will be coded as a method within the RouteOverlay class, which will be responsible for drawing the routes to the display. Currently, my design will employ 4 classes, which is subject to change as development continues. 
+Due to the reliance of the geolocation system on an existing API, our tool selection will include the Google Maps API, Google Elevation API, the Google Maps Utility Library, and the development tools and language that were selected for the project as a whole. The system will be coded entirely in Java, primarily using the Google Maps API and leveraging Android Studio to more easily create the application layout. A SQLite database will be created on the local device to store information until a connection can be established with the Pathway server. At this time, there are no concrete plans to implement such a structure, but that is subject to change. The above mentioned algorithms will be coded as a method within the RouteOverlay class, which will be responsible for drawing the routes to the display. Currently, the geolocation system design will employ at least 4 classes, with additional classes likely being added in the course of development. 
 
 \paragraph{Use Cases}
 
@@ -716,7 +723,7 @@ Due to the reliance of my system on an existing API, my tool selection will be l
     \begin{center}
         \makebox[\textwidth]{\includegraphics[width=0.8\paperwidth]{braggUseCaseDaig.jpg}}
     \end{center}
-    \caption{Geographic system usecase diagram}
+    \caption{Geographic system use case diagram}
     \label{fig:my_label}
 \end{figure}
 % \begin{figure}
