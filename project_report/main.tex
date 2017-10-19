@@ -223,6 +223,7 @@ system objects belong to which tools.
 
 <<<<<<< HEAD
 \paragraph{Detailed Model}
+<<<<<<< HEAD
  infrastructure really comes down to describing how the
 ver itself communicates with the database via and ORM system, which is built into
 te}
@@ -246,6 +247,42 @@ work and a DBMS which means that
 \paragraph{System Analysis}
 Since this subsystem relies heavily on both a webserver framework and a DBMS which means that
 >>>>>>> parent of 3a27296... Implementation of FB Login and Achievement system
+=======
+Detailing the model of the infrastructure really comes down to describing how the
+various components communicate with one another, and with other systems.
+The server itself communicates with the database via and ORM system, which is built into
+Django. The server can be communicated with the following example API;
+
+\begin{enumerate}
+  \item API Example (not a full definition of the API)
+    \begin{enumerate}
+      \item /auth - handle user authentication and deauthentication
+        \begin{enumerate}
+          \item /login - POST the user login data
+          \item /logout - POST request to logout current user, destroys session.
+          \item /create - POST create an account from posted data
+          \item /deactivate - POST deactivate user account (requires authentication)
+        \end{enumerate}
+      \item /users - GET all users
+        \begin{enumerate}
+          \item /[userName] - GET user summary belonging to userName
+          \item /[userName]/[routes,stats,profile] - GET routes or stats or profile of userName
+        \end{enumerate}
+      \item /routes - GET all routes (paginated)
+        \begin{enumerate}
+          \item /[routeId] - GET specific route
+        \end{enumerate}
+    \end{enumerate}
+\end{enumerate}
+
+Clients may directly craft and send http requests to the API endpoints, or java based
+applications may leverage the java library which is a wrapper to the server's API. This is
+the recommended approach, as it abstracts the work of making http requests and handling the
+responses into a native library which exposes an interface of functions and it's own types.
+
+\paragraph{System Analysis}
+Since this subsystem relies heavily on both a webserver framework and a DBMS which means that
+>>>>>>> parent of 6802924... Implementation of FB login and achievment system
 we do not face the same challenges in determining efficient solutions that we do when we define
 and develop algorithms. The implementation of the webserver and the DBMS are hidden away from us,
 therefore we must consider which tools at our disposal are the best for our purposes. Rather
@@ -364,10 +401,14 @@ it. Amazon Elastic Beanstalk also has support for deploying dockerized applicati
 \subsection{Social - Chris Carney}
 \subsubsection{Introduction}
 <<<<<<< HEAD
+<<<<<<< HEAD
 The Social subsystem will utilize some simplistic features that enable the user to interact with other users using the app within their local area. We will be implementing certain aspects from a Facebook API that will allow the user to integrate their Facebook profile when they first create an account that will let them expand their use of the app to include others. The user will also have a form based alternative to make a profile which would give the user an opportunity to create a profile straight from the app but would limit its inclusivity of other users and just be used to keep records of their routes that they recorded without any social aspect in place.
 The app will give the users an option to choose a route in their specified location which will then list the top times that the route was traveled, then the user will be able to choose a top time that is displayed in the list and will be able to implement the “Challenge” function, which is similar to a “poke” on Facebook. After the user picks the time they want to “challenge” on a certain route, and they complete it, the person that the user chose to challenge would be notified if their time was beaten depending on if the user completed that route in a faster time.
 =======
 The Social subsystem will utilize some simplistic features that enable the user to interact with other users using the app within their local area. We will be implementing certain aspects from a Facebook API that will allow the user to integrate their Facebook profile when they first create an account that will let them expand their use of the app to include others. The user will also have a form based alternative to make a profile which would give the user an opportunity to create a profile straight from the app but would limit how inclusive it is to other users and just be used to keep records of their routes that they recorded without any social aspect in place.
+=======
+The Social subsystem will utilize some simplistic features that enable the user to interact with other users using the app within their local area. We will be implementing certain aspects from a Facebook API that will allow the user to integrate their Facebook profile when they first create an account that will let them expand their use of the app to include others. The user will also have a form based alternative to make a profile which would give the user an opportunity to create a profile straight from the app but would limit its inclusivity of other users and just be used to keep records of their routes that they recorded without any social aspect in place.
+>>>>>>> parent of 6802924... Implementation of FB login and achievment system
 The app will give the users an option to choose a route in their specified location which will then list the top times that the route was traveled, then the user will be able to choose a top time that is displayed in the list and will be able to implement the “Challenge” function, which is similar to a “poke” on Facebook. After the user picks the time they want to “challenge” on a certain route, and they complete it, the person that the user chose to challenge would be notified if their time was beaten depending on if the user completed that route in a faster time.
 We will also include an achievement system feature that will give incentives the user based on certain accomplishments within the app.
 >>>>>>> parent of 3a27296... Implementation of FB Login and Achievement system
@@ -443,7 +484,7 @@ In order to do this, we will first need to utilize a program called OpenSSL. Ope
 
 After establishing the connection to the users Facebook account, we will be implementing the CallbackManager class provided by the Facebook API which determines how methods are called and what values are returned from those methods which will interact with other classes within the Social subsystem while also interacting with each of the other subsystems. During this process, we have the option to list what permissions the app will have access to such as the user's basic profile information, email, or list of friends. This is how we plan to get access to the user's list of friends that also have the app installed which is already determined through the Facebook API.
 
-This subsystem will also be responsible for implementing an achievement system that will act as incentives for the users to help them become more immersed in the app. The Facebook API provides an implementation of an achievement system that may be used with the app but with limited flexibility in functionality. So to make sure we are not limiting our scope of functionality, we would also be adopting the Google Play Game Services Management API which also implements an achievement system that would let us work with more flexibility
+In order to do this,I will be implementing the CallbackManager class provided by the Facebook API which determines how methods are called and what values are returned from those methods which will interact with other classes within the Social subsystem while also interacting with each of the other subsystems.
 
 \begin{figure}[H]
     \centering
