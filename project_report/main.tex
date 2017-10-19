@@ -93,9 +93,9 @@ Pathway is a generic software, green-field development project of a native andro
     \item The system must be energy efficient with respect to the mobile device.
     \item The system must be efficient with respect with to cellular data consumption.
     \item The system must generate reports that should be easily readable and detailed while avoiding being confusing to users.
-    
-    
-    
+
+
+
 
 \end{enumerate}
 \subsection{Quality}
@@ -110,12 +110,12 @@ Specific technologies should be listed here, including version numbers of langua
 
 \subsection{Process}
 The project will be completed over the course of the Fall 2017 semester, with regular progress updates provided every few weeks. We are currently deciding upon a software engineering methodology to follow, such as agile methodologies. As we near the actual development phase we will settle upon a methodology to adhere to.
-    
+
 \section{Sub-Systems}
 
 \subsection{Back-end Infrastructure - Cory Sabol}
 \subsubsection{Introduction}
-The Infrastructure subsystem of the Pathway application is responsible for providing a stable API by which the client application 
+The Infrastructure subsystem of the Pathway application is responsible for providing a stable API by which the client application
 can access, create, and update data stored in the database, which is also a part of the infrastructure subsystem. The API exposed also
 provided a means for the client application to query for various statistics that are calculated server side. However these functions aren't
 a part of the subsystem, they are their own subsystem which is merely housed on the server.
@@ -145,7 +145,7 @@ way to establish RESTful architecture. That is why the following tools have been
     \item MySQL, to provide the database to house all user and application data.
     \item SqlAlchemy, to provide an Object Relational Mapper (ORM) for accessing the database in a more efficient and secure manner.
     \item Docker, to isolate the application in a consistent environment which can easily be moved from development to deployment.
-    \item Amazon Web Services (AWS), to provide the physical server architecture needed to host a centralized server application. 
+    \item Amazon Web Services (AWS), to provide the physical server architecture needed to host a centralized server application.
 \end{itemize}
 
 \subsubsection{Domain Analysis}
@@ -154,10 +154,10 @@ way to establish RESTful architecture. That is why the following tools have been
 The following sections are devoted to examining the domain which the infrastructural subsystems of the Pathway application reside.
 
 \paragraph{Extensions}
-The infrastructure for the Pathway project isn't necessarily extensible in the same way that the other subsystems are. 
+The infrastructure for the Pathway project isn't necessarily extensible in the same way that the other subsystems are.
 However, it could be extended by making it more scalable. This would allow the system to be
-more redundant and support a larger volume of users. In addition to scalability, the system by it's nature, will have to be extended 
-along with most extensions that could take place within the other subsystems. 
+more redundant and support a larger volume of users. In addition to scalability, the system by it's nature, will have to be extended
+along with most extensions that could take place within the other subsystems.
 
 \paragraph{General Domain Knowledge}
 This susbsytem falls into the category of backend web development, which is a domain that the developer already has a sizable amount of professional exeperience in.
@@ -173,11 +173,11 @@ The only clients that this subsystem can have are any applications which consume
 of the other subsystems which make up the native Android application.
 
 \paragraph{The Environment}
-The computing environment for this subsystem will be an Ubuntu 14.04 instance which has been dockerized. This will be deployed to an AWS instance. The purpose of running the server side code in a docker container is that docker allows us to tailor the OS environment 
-to cater specifically to the application. Which provides a more isolated development and production environment for the code, minimizing variables which could contribute to bugs and other such undesirable behaviors. 
+The computing environment for this subsystem will be an Ubuntu 14.04 instance which has been dockerized. This will be deployed to an AWS instance. The purpose of running the server side code in a docker container is that docker allows us to tailor the OS environment
+to cater specifically to the application. Which provides a more isolated development and production environment for the code, minimizing variables which could contribute to bugs and other such undesirable behaviors.
 
 \paragraph{Tasks and Procedures}
-This subsystem does not replace an real world tasks or procedures. It is more like the glue which allows the application to 
+This subsystem does not replace an real world tasks or procedures. It is more like the glue which allows the application to
 network with other instances of the application and to house and retrieve data.
 \begin{itemize}
     \item Receive incoming HTTP requests.
@@ -192,7 +192,7 @@ Because this subsystem, by nature of it's purpose, is customized to facilitate t
 application provides, there is not necessarily any competing software.
 
 \paragraph{Domain Similarities}
-Other applications may require a backend which is similar to the backend for Pathway. 
+Other applications may require a backend which is similar to the backend for Pathway.
 \begin{itemize}
     \item Other fitness applications such as Strava.
     \item Other social applications such as Facebook, or Twitter may have similar backend logic.
@@ -200,14 +200,14 @@ Other applications may require a backend which is similar to the backend for Pat
 
 \subsubsection{System Analysis}
 \paragraph{Introduction}
-This document describes the planning and analysis of the infrastructural subsystem of the 
+This document describes the planning and analysis of the infrastructural subsystem of the
 Pathway project. Which encompasses the database, server logic and houses several other subsystems
 by providing an interface for various client side systems to access.
 
 \paragraph{Process Model}
 Since this subsystem is not necessarily an entirely programmer created system, but rather a
-composition of application environments and configurations as well as primarily declarative 
-logic to handle server routing, the high-level behaviour and structure of the system is best 
+composition of application environments and configurations as well as primarily declarative
+logic to handle server routing, the high-level behaviour and structure of the system is best
 described using a sequence diagram rather than UML class descriptions. \textbf{Figure 2} shows
 a sequence diagram of the backend systems. It also describes environment encapsulation and which
 system objects belong to which tools.
@@ -221,7 +221,9 @@ system objects belong to which tools.
     \label{fig:my_label}
 \end{figure}
 
+<<<<<<< HEAD
 \paragraph{Detailed Model}
+<<<<<<< HEAD
  infrastructure really comes down to describing how the
 ver itself communicates with the database via and ORM system, which is built into
 te}
@@ -240,14 +242,54 @@ irectly craft and send http requests to the API endpoints, or java based
 is is
 e
 
-work and a DBMS which means that 
+work and a DBMS which means that
+=======
+\paragraph{System Analysis}
+Since this subsystem relies heavily on both a webserver framework and a DBMS which means that
+>>>>>>> parent of 3a27296... Implementation of FB Login and Achievement system
+=======
+Detailing the model of the infrastructure really comes down to describing how the
+various components communicate with one another, and with other systems.
+The server itself communicates with the database via and ORM system, which is built into
+Django. The server can be communicated with the following example API;
+
+\begin{enumerate}
+  \item API Example (not a full definition of the API)
+    \begin{enumerate}
+      \item /auth - handle user authentication and deauthentication
+        \begin{enumerate}
+          \item /login - POST the user login data
+          \item /logout - POST request to logout current user, destroys session.
+          \item /create - POST create an account from posted data
+          \item /deactivate - POST deactivate user account (requires authentication)
+        \end{enumerate}
+      \item /users - GET all users
+        \begin{enumerate}
+          \item /[userName] - GET user summary belonging to userName
+          \item /[userName]/[routes,stats,profile] - GET routes or stats or profile of userName
+        \end{enumerate}
+      \item /routes - GET all routes (paginated)
+        \begin{enumerate}
+          \item /[routeId] - GET specific route
+        \end{enumerate}
+    \end{enumerate}
+\end{enumerate}
+
+Clients may directly craft and send http requests to the API endpoints, or java based
+applications may leverage the java library which is a wrapper to the server's API. This is
+the recommended approach, as it abstracts the work of making http requests and handling the
+responses into a native library which exposes an interface of functions and it's own types.
+
+\paragraph{System Analysis}
+Since this subsystem relies heavily on both a webserver framework and a DBMS which means that
+>>>>>>> parent of 6802924... Implementation of FB login and achievment system
 we do not face the same challenges in determining efficient solutions that we do when we define
-and develop algorithms. The implementation of the webserver and the DBMS are hidden away from us, 
+and develop algorithms. The implementation of the webserver and the DBMS are hidden away from us,
 therefore we must consider which tools at our disposal are the best for our purposes. Rather
 than analyze specifically for algorithm efficiency (although we will do this should the need
 arise), we will focus on issues such as scalability, redundancy in the database, environment set up,
 resource size (how much data are we sending to the client and vice versa), concurrent connections, and
-many other challenges to explore. 
+many other challenges to explore.
 
 \paragraph{Use Cases}
 With respect to this subsystem a client refers to any application which interfaces with this subsystem.
@@ -289,34 +331,34 @@ With respect to this subsystem a client refers to any application which interfac
 \paragraph{Scalability}
 Scalability is one of the largest challenges that is faced when developing a web based application
 as well as development time. For this system, it needs to provide access to a database as well as
-expose a RESTful API and an admin page. There are two choices that make sense here with respect to 
+expose a RESTful API and an admin page. There are two choices that make sense here with respect to
 providing these features and reducing development time; Django and Flask. These two tools imply that
 we have decided to utilize Python3 on the server side, for it's ease of use. Django and Flask are
-both python based web frameworks, which provide essential HTTP functionality. However, Flask is 
+both python based web frameworks, which provide essential HTTP functionality. However, Flask is
 much smaller than Django and provides less out of the box. Meaning that more developer effort is
-required to implement the features that we desire. Django on the other hand, is very much a 
+required to implement the features that we desire. Django on the other hand, is very much a
 "batteries included" framework. It provides several key things out right; an ORM, REST plugin,
-admin tools/pages, and deep database integration, and robust security options. This makes it the 
-choice of web framework for the Pathway project (other security implications?). Django is also 
-built with scalability in mind. 
+admin tools/pages, and deep database integration, and robust security options. This makes it the
+choice of web framework for the Pathway project (other security implications?). Django is also
+built with scalability in mind.
 
 \paragraph{Hosting}
 When developing an application which requires a back end server, it's also important to realize that
 hardware is required in order to actually host the application. The choices for this come down to
-Amazon Elastic Beanstalk or Heroku. Both of these services provide similar things. Hosting of 
+Amazon Elastic Beanstalk or Heroku. Both of these services provide similar things. Hosting of
 web applications, and their databases, as well as management/admin tools. However, Elastic Beanstalk
-is somewhat cheaper as a student, and provides better load balancing tools, which is important 
+is somewhat cheaper as a student, and provides better load balancing tools, which is important
 should the service ever need to scale according it's userbase. There is a big difference between
 1000 concurrent users, and 10,000. Amazon web services has a great track record of being an
-industry standard when it comes to deploying hosting applications which may need to scale and 
-handle large numbers of connections. The drawback to Beanstalk versus Heroku is that Heroku is 
+industry standard when it comes to deploying hosting applications which may need to scale and
+handle large numbers of connections. The drawback to Beanstalk versus Heroku is that Heroku is
 vastly easier to use and interface with from a developer standpoint.
 
 \paragraph{Database}
 Choice of database is a very important choice as well. For this decision however we have opted to
 go with the choice which aligns best with ease of setup and lowering developer time. PostgreSQL
 has very tight integration with Django, and there are extensive community resources with regard to
-it. At this stage of the project, the database schema is relatively simple, and it will certainly 
+it. At this stage of the project, the database schema is relatively simple, and it will certainly
 be expanded upon as we continue to develop. \textbf{Figure 2} shows the database schema.
 
 \begin{figure}
@@ -329,22 +371,22 @@ be expanded upon as we continue to develop. \textbf{Figure 2} shows the database
 \end{figure}
 
 \paragraph{Classes}
-There isn't much to discuss here, the only classes which will be developed for the infrastructure 
-will be classes for the ORM (object relational mapper). These classes will be essentially be 1:1 
+There isn't much to discuss here, the only classes which will be developed for the infrastructure
+will be classes for the ORM (object relational mapper). These classes will be essentially be 1:1
 with the tables described in \textbf{Figure 2}. These classes will make use of the Django models
 library, and will be used in the actual construction and initialization of the database.
 
 \paragraph{Deployment}
 Lastly deployment from development to production is a complex topic worth study of it's own.
-For this challenge we could either create an isolated development environment with a tool like 
+For this challenge we could either create an isolated development environment with a tool like
 Docker, which will allow us to have a localized development environment which can mimic the
 production environment as well as being fully scriptable, or we could have each developer install
 python3, Django, PostgreSQL and any other tools to their machine and fight with inconsistencies
-across each machine. The choice here is pretty obvious. We have opted to utilize Docker to 
+across each machine. The choice here is pretty obvious. We have opted to utilize Docker to
 provide an isoloated development and testing environment which contains exactly the tools necessary
-for the server applicaiton and database to run. This would only require that each developer 
+for the server applicaiton and database to run. This would only require that each developer
 use the Docker build script to build the image on their machine, and then develop and test against
-it. Amazon Elastic Beanstalk also has support for deploying dockerized applications. 
+it. Amazon Elastic Beanstalk also has support for deploying dockerized applications.
 
 \paragraph{Tool Selection}
 \begin{itemize}
@@ -358,9 +400,22 @@ it. Amazon Elastic Beanstalk also has support for deploying dockerized applicati
 
 \subsection{Social - Chris Carney}
 \subsubsection{Introduction}
-The Social subsystem will utilize some simplistic features that enable the user to interact with other users using the app within their local area. We will be implementing certain aspects from a Facebook API that will allow the user to integrate their Facebook profile when they first create an account that will let them expand their use of the app to include others. The user will also have a form based alternative to make a profile which would give the user an opportunity to create a profile straight from the app but would limit its inclusivity of other users and just be used to keep records of their routes that they recorded without any social aspect in place. 
+<<<<<<< HEAD
+<<<<<<< HEAD
+The Social subsystem will utilize some simplistic features that enable the user to interact with other users using the app within their local area. We will be implementing certain aspects from a Facebook API that will allow the user to integrate their Facebook profile when they first create an account that will let them expand their use of the app to include others. The user will also have a form based alternative to make a profile which would give the user an opportunity to create a profile straight from the app but would limit its inclusivity of other users and just be used to keep records of their routes that they recorded without any social aspect in place.
+The app will give the users an option to choose a route in their specified location which will then list the top times that the route was traveled, then the user will be able to choose a top time that is displayed in the list and will be able to implement the “Challenge” function, which is similar to a “poke” on Facebook. After the user picks the time they want to “challenge” on a certain route, and they complete it, the person that the user chose to challenge would be notified if their time was beaten depending on if the user completed that route in a faster time.
+=======
+The Social subsystem will utilize some simplistic features that enable the user to interact with other users using the app within their local area. We will be implementing certain aspects from a Facebook API that will allow the user to integrate their Facebook profile when they first create an account that will let them expand their use of the app to include others. The user will also have a form based alternative to make a profile which would give the user an opportunity to create a profile straight from the app but would limit how inclusive it is to other users and just be used to keep records of their routes that they recorded without any social aspect in place.
+=======
+The Social subsystem will utilize some simplistic features that enable the user to interact with other users using the app within their local area. We will be implementing certain aspects from a Facebook API that will allow the user to integrate their Facebook profile when they first create an account that will let them expand their use of the app to include others. The user will also have a form based alternative to make a profile which would give the user an opportunity to create a profile straight from the app but would limit its inclusivity of other users and just be used to keep records of their routes that they recorded without any social aspect in place.
+>>>>>>> parent of 6802924... Implementation of FB login and achievment system
 The app will give the users an option to choose a route in their specified location which will then list the top times that the route was traveled, then the user will be able to choose a top time that is displayed in the list and will be able to implement the “Challenge” function, which is similar to a “poke” on Facebook. After the user picks the time they want to “challenge” on a certain route, and they complete it, the person that the user chose to challenge would be notified if their time was beaten depending on if the user completed that route in a faster time.
 We will also include an achievement system feature that will give incentives the user based on certain accomplishments within the app.
+>>>>>>> parent of 3a27296... Implementation of FB Login and Achievement system
+
+\subsubsection{User Requirements}
+\begin{itemize}
+    \item The user will be able to link their Facebook account with the app to create an account
     \item The user will be able to fill out a form based application to create an account
     \item The system will allow the user to challenge other users within their area through the application interface
     \item Users will be able to compete for best time on routes in their area
@@ -390,7 +445,7 @@ We will also include an achievement system feature that will give incentives the
 \paragraph{General Domain Knowledge}
 While many individuals like to share their workout information on social media sites, there does not currently exist an integrated fitness oriented social networking option.
 
-\paragraph{Clients and Users}                                                                                                                                                            
+\paragraph{Clients and Users}
 \begin{itemize}
     \item Targets users capable of operating a compatible device that this application could be installed on.
     \item Facebook Users.
@@ -403,8 +458,8 @@ Primary functionality will be coded in Android 5.0 (Lollipop) and as such will b
 \begin{itemize}
     \item Linking Facebook account to the app: The app will ask if the user has a Facebook account they would like to link upon account creation.
         \subitem This will prompt Facebook to authorize permission for the app to access its functionality such as sharing posts straight from the app.
-    
-    \item User “Challenges” a record time on the leaderboard for a route: User chooses a route within their area, which then lists the top times that the route was completed. 
+
+    \item User “Challenges” a record time on the leaderboard for a route: User chooses a route within their area, which then lists the top times that the route was completed.
         \subitem User has option of picking what time they would like to challenge.
         \subitem Upon completion of the route, if the user who challenged the time completes the course in a shorter time, then the user that was challenged would receive a notification that their time was beaten.
 \end{itemize}
@@ -422,25 +477,15 @@ The following applications/software may fulfill similar roles or offer similar f
 Many applications are similar to Pathway in the sense that they make use of geospatial data location and/or social networking user accounts. While no other application we found combines all aspects of our project in the same way we do, it will be worthwhile to look at other applications, such as Waze, Facebook, and other apps to gather some understanding of how to efficiently implement these systems.
 
 \subsubsection{System Analysis}
-<<<<<<< HEAD
 \paragraph{Introduction}
 Since the User Accounts subsystem will be focusing on implementing the choice to create a profile through the app, the Facebook API will be the majority of what we will be using in this subsystem to help authorize a user’s profile and also gain access to the users profile information given the option to control what permissions the user will be able to access from the app whether it be from their personal info to their friends lists.
-	
-In order to do this, we will first need to utilize a program called OpenSSL. OpenSSL is a software library for applications that secure communications over computer networks from being accessed by unauthorized users. It contains an open-source implementation of SSL and TLS protocols. It's core library implements cryptographic functions and provides various utility functions. OpenSSL also utilizes wrappers which allows its library to be used across many different computer languages so that there are no compatibility issues. With OpenSSL, we will be able to obtain a key hash. A key hash is a 28-character string that Facebook uses to authenticate any type of exchanges of information in between Facebook and the Pathway app. If a key hash is not obtained, there will be no possibility of Facebook integration within the app. 
+
+In order to do this, we will first need to utilize a program called OpenSSL. OpenSSL is a software library for applications that secure communications over computer networks from being accessed by unauthorized users. It contains an open-source implementation of SSL and TLS protocols. It's core library implements cryptographic functions and provides various utility functions. OpenSSL also utilizes wrappers which allows its library to be used across many different computer languages so that there are no compatibility issues. With OpenSSL, we will be able to obtain a key hash. A key hash is a 28-character string that Facebook uses to authenticate any type of exchanges of information in between Facebook and the Pathway app. If a key hash is not obtained, there will be no possibility of Facebook integration within the app.
 
 After establishing the connection to the users Facebook account, we will be implementing the CallbackManager class provided by the Facebook API which determines how methods are called and what values are returned from those methods which will interact with other classes within the Social subsystem while also interacting with each of the other subsystems. During this process, we have the option to list what permissions the app will have access to such as the user's basic profile information, email, or list of friends. This is how we plan to get access to the user's list of friends that also have the app installed which is already determined through the Facebook API.
 
-This subsystem will also be responsible for implementing an achievement system that will act as incentives for the users to help them become more immersed in the app. The Facebook API provides an implementation of an achievement system that may be used with the app but with limited flexibility in functionality. So to make sure we are not limiting our scope of functionality, we would also be adopting the Google Play Game Services Management API which also implements an achievement system that would let us work with more flexibility
-=======
-\paragraph{Introduction}                                                                                                                                                                 
-Since the User Accounts subsystem will be focusing on implementing the choice to create a profile through the app, the Facebook API will be the majority of what we will be using in this subsystem to help authorize a user’s profile and also gain access to the users profile information given the option to control what permissions the user will be able to access from the app whether it be from their personal info to their friends lists.
+In order to do this,I will be implementing the CallbackManager class provided by the Facebook API which determines how methods are called and what values are returned from those methods which will interact with other classes within the Social subsystem while also interacting with each of the other subsystems.
 
-In order to do this, we will first need to utilize a program called OpenSSL. OpenSSL is a software library for applications that secure communications over computer networks from being accessed by unauthorized users. It contains an open-source implementation of SSL and TLS protocols. It's core library implements cryptographic functions and provides various utility functions. OpenSSL also utilizes wrappers which allows its library to be used across many different computer languages so that there are no compatibility issues. With OpenSSL, we will be able to obtain a key hash. A key hash is a 28-character string that Facebook uses to authenticate any type of exchanges of information in between Facebook and the Pathway app. If a key hash is not obtained, there will be no possibility of Facebook integration within the app. 
-
-After establishing the connection to the users Facebook account, we will be implementing the CallbackManager class provided by the Facebook API which determines how methods are called and what values are returned from those methods which will interact with other classes within the Social subsystem while also interacting with each of the other subsystems. During this process, we have the option to list what permissions the app will have access to such as the user's basic profile information, email, or list of friends. This is how we plan to get access to the user's list of friends that also have the app installed which is already determined through the Facebook API.
->>>>>>> cmcarneybranch
-
-This subsystem will also be responsible for implementing an achievement system that will act as incentives for the users to help them become more immersed in the app. The Facebook API provides an implementation of an achievement system that may be used with the app but with limited flexibility in functionality. So to make sure we are not limiting our scope of functionality, we would also be adopting the Google Play Game Services Management API which also implements an achievement system that would let us work with more flexibility
 \begin{figure}[H]
     \centering
     \begin{center}
@@ -552,7 +597,7 @@ Few people have the knowledge or desire to manually formulate statistcs about th
     \item The function will perform the analysis
     \item Determine average speed, distance, steps, etc.
     \item Analyze the routes gps points to determine the data points needed to plot a graph of distance over time
-    \item Any extra data analysis involving previous route data 
+    \item Any extra data analysis involving previous route data
     \item Prepare information to be sent back to user
     \item Server sends the analysis data back to the user’s device
     \item Device will process the analysis data to generate a report for the user
@@ -568,10 +613,10 @@ There are many programs and applications that offer similar functionality to thi
 
 \subsubsection{System Analysis}
 \paragraph{Introduction}
-For the statistics/metrics subsystem, the plan to utilize a python module specifically built to perform the necessary statistical operations, such as numpy. 
+For the statistics/metrics subsystem, the plan to utilize a python module specifically built to perform the necessary statistical operations, such as numpy.
 This will be the most appropriate way to run the analysis as such modules are both efficient, fast, and well tested. This reduces the need to develop mathematical and statistical algorithms. This system will also use the json module to parse any JSON formatted data that is necessary to perform the calculations required of the system. The Python library Geopy will be used to determine distances for GPS points. On the client side, we will utilize a widely used library called Android Plot to render plots.
-However the need to develop an efficient approach for handling the reports is necessary. For this reason we plan to implement the Factory method design pattern. This will allow the server to 
-simply pass a small amount of data to an object called a factory which contains methods that generate objects. This factory then gathers the necessary data from the database and performs the 
+However the need to develop an efficient approach for handling the reports is necessary. For this reason we plan to implement the Factory method design pattern. This will allow the server to
+simply pass a small amount of data to an object called a factory which contains methods that generate objects. This factory then gathers the necessary data from the database and performs the
 various statistical calculations, such as determining averages and standard deviations, and passes this report to the server.
 
 \paragraph{Use Cases}
@@ -591,7 +636,7 @@ Generate Report
 \item ReportFactory produces report with appropriate fields and plot values
     \begin{enumerate}
     \item ReportFactory determines behavior based on ReportRequest
-    \item Requisite data is gathered by ReportFactory 
+    \item Requisite data is gathered by ReportFactory
     \item All necessary calculations are performed
     \item ReportFactory passes these values in a corresponding report-type object
     \end{enumerate}
@@ -604,7 +649,7 @@ Generate Report
     \begin{enumerate}
     \item Report data is processed and passed into a structure to store and organize.
     \end{enumerate}
-\item Processed report is displayed to the user. 
+\item Processed report is displayed to the user.
     \begin{enumerate}
     \item Android activity will pull data from storage structure and fill in appropriate GUI components.
     \end{enumerate}
@@ -707,24 +752,24 @@ Mapping applications like the one we envision are common, and the usefulness of 
 
 \subsubsection{System Analysis}
 \paragraph{Introduction}
-The geolocation subsystem is relatively isolated from other subsystem within the Pathway project. The primary interaction between the geolocation 
-subsystem and other subsystems will be in the passing of an instance of the Route class, which will extend functionality of the GeoJSON datatype 
-included in the Google Maps API. The mapping functionality of the subsystem will be implemented by leveraging existing classes and objects within 
-the Google Maps API and as such will not require extensive coding to achieve the desired functionality and layout. 
+The geolocation subsystem is relatively isolated from other subsystem within the Pathway project. The primary interaction between the geolocation
+subsystem and other subsystems will be in the passing of an instance of the Route class, which will extend functionality of the GeoJSON datatype
+included in the Google Maps API. The mapping functionality of the subsystem will be implemented by leveraging existing classes and objects within
+the Google Maps API and as such will not require extensive coding to achieve the desired functionality and layout.
 This functionality would include map display, panning, zoom, and drawing of features on the map.
 
 
 \paragraph{Algorithms}
-To implement the route comparison feature, we have reviewed two algorithms that break the problem down into a comparison of ordered sets of pairs: 
-Hausdorff distance and Fréchete distance. Between these two algorithms, there is a tradeoff of complexity versus versatility, 
+To implement the route comparison feature, we have reviewed two algorithms that break the problem down into a comparison of ordered sets of pairs:
+Hausdorff distance and Fréchete distance. Between these two algorithms, there is a tradeoff of complexity versus versatility,
 which can be summarized as below, with included pseudocode for Hausdorff.
 
 \begin{algorithm}[h]
 \SetAlgoLined
 $h \gets 0$\\
 \For{point $a_i$ in $A$}{
-    $shortest \gets \infty$ 
-    
+    $shortest \gets \infty$
+
     \For{point $b_j$ in $B$}{
         $d_{ij} \gets d(a_i,b_j)$\\
         \If{$d_{ij} \< shortest$}{
@@ -743,7 +788,7 @@ Fréchete: More complex and harder to implement, much more useful. Supports back
 At this stage of the project, we plan to implement both algorithms and compare their accuracy against a series of test cases designed to assess the correctness and flexibility of each algorithm.
 
 \paragraph{Tool Selection}
-Due to the reliance of the geolocation system on an existing API, our tool selection will include the Google Maps API, Google Elevation API, the Google Maps Utility Library, and the development tools and language that were selected for the project as a whole. The system will be coded entirely in Java, primarily using the Google Maps API and leveraging Android Studio to more easily create the application layout. A SQLite database will be created on the local device to store information until a connection can be established with the Pathway server. At this time, there are no concrete plans to implement such a structure, but that is subject to change. The above mentioned algorithms will be coded as a method within the RouteOverlay class, which will be responsible for drawing the routes to the display. Currently, the geolocation system design will employ at least 4 classes, with additional classes likely being added in the course of development. 
+Due to the reliance of the geolocation system on an existing API, our tool selection will include the Google Maps API, Google Elevation API, the Google Maps Utility Library, and the development tools and language that were selected for the project as a whole. The system will be coded entirely in Java, primarily using the Google Maps API and leveraging Android Studio to more easily create the application layout. A SQLite database will be created on the local device to store information until a connection can be established with the Pathway server. At this time, there are no concrete plans to implement such a structure, but that is subject to change. The above mentioned algorithms will be coded as a method within the RouteOverlay class, which will be responsible for drawing the routes to the display. Currently, the geolocation system design will employ at least 4 classes, with additional classes likely being added in the course of development.
 
 \paragraph{Use Cases}
 
@@ -906,7 +951,7 @@ The system will be comprised of 4 classes, aside from strictly UI classes. Class
     \begin{center}
         \makebox[\textwidth]{\includegraphics[width=0.8\paperwidth]{braggActivity.jpg}}
     \end{center}
-    \caption{Geolocation activity diagram} 
+    \caption{Geolocation activity diagram}
     \label{fig:my_label}
 \end{figure}
 
@@ -980,7 +1025,7 @@ Many applications are similar to Pathways user accounts in the sense that they m
 
 \subsubsection{System Analysis}
 For the user accounts sub-system, since it relies heavily on the database and the statistical sub-systems for its information that it will display to the user. The matter of analysis will not be so much on the algorithms that will be implemented, other than what encryption algorithm will be used, but more on what tools through Android 5(Java) will be used/more useful. As I mentioned before the only real real decision algorithm wise will be the decision on what encryption algorithm will be used to encrypt user credentials for storage in the database. For the sake of this project I wanted to select an algorithm that was both secure and used widely throughout the field of security as a way of preparing myself for the field at large, and also wanted an algorithm that would be able to be easily and timely implemented in the time remaining for the project. In light of all of these necessities I have chosen to use the AES encryption algorithm for the safe transmission and storage of user credentials.
-For the rest of the sub-system I will be using primarily Django’s, User classes and functionality to build my authentication system for the client application and the server, and will be nested inside a singletonpattern for added security, these will work in tandem using HTML to request authentication tokens to allow the user to login and/or create an account in Pathway. The accounts sub-system will also use HTML to request up to date statistical analysis and saved user routes from the database and statistical analysis sub-systems. 
+For the rest of the sub-system I will be using primarily Django’s, User classes and functionality to build my authentication system for the client application and the server, and will be nested inside a singletonpattern for added security, these will work in tandem using HTML to request authentication tokens to allow the user to login and/or create an account in Pathway. The accounts sub-system will also use HTML to request up to date statistical analysis and saved user routes from the database and statistical analysis sub-systems.
 
 \paragraph{Use Cases}
 \begin{enumerate}
@@ -1073,7 +1118,7 @@ This document serves as an overview for the planned development of a software sy
     \item More detailed performance analytics.
     \item A companion website for profile management, advanced performance display options and tools.
     \item Additional functionality to allow a user to track nutrition intake and plan meals.
-    \item Addition of workout tracking and planning such as weight lifting routines. 
+    \item Addition of workout tracking and planning such as weight lifting routines.
 \end{itemize}
 
 \paragraph{Pathway - General Domain Knowledge}
@@ -1140,7 +1185,7 @@ Many applications are similar to Pathway in the sense that they make use of geos
     \item \textbf{Docker} - The Docker Engine is the underlying client-server tool that supports container technology to handle the tasks and workflows involved in building container-based applications.
     \item \textbf{Amazon Web Services (AWS)} - Amazon Web Services (AWS) is a comprehensive, evolving cloud computing platform provided by Amazon.com.
     \item \textbf{scalable} - It is the ability of a computer application or product (hardware or software) to continue to function well when it (or its context) is changed in size or volume in order to meet a user need.
-    \item \textbf{dockerize} - The act of containing a piece of software within a docker container. 
+    \item \textbf{dockerize} - The act of containing a piece of software within a docker container.
     \item \textbf{Route} - A Route in Pathway will be the geometric representation of a user’s tracked traversal path and will include data that defines an exact geographic position through XY coordinates and elevation.
     \itme \textbf{Challenge} - A Challenge in Pathway will be the primary means of social interaction between users, acting as a prompt from User A to User B to encourage participation in an exercise activity.
     \item \textbf{Statistics} - branch of mathematics dealing with the collection, analysis, interpretation, presentation, and organization of data.
