@@ -39,6 +39,57 @@ Pathway is a generic software, green-field development project of a native andro
 
 \pagebreak
 
+
+\section{Application Structure And Flow}
+\subsection{Pathway Structure}
+
+Pathway will be comprised of five primary components, as shown in the System Model in Figure 1:
+\begin{enumerate}
+    \item Database Backend
+    \item User Accounts
+    \item Social Interaction
+    \item Geolocation
+    \item Statistics
+\end{enumerate}
+The above systems are detailed in full in their respective subsections in Section 3: Sub-Systems of this report, but will we will briefly outline the functionality of each here and discuss their high-level interaction with one another.
+
+The Database backend subsystem will serve as the data foundation for the application by providing data storage and look-up crucial for the functionality of all other subsystems. Each subsystem will interact with the database through an API developed for the application to facilitate passing of data back and forth.
+
+The User Account subsystem will provide each user with a persistent experience across the application while maintaining account security for each user, ensuring that user data is correct, retrievable, and secure.
+
+The Geolocation module will provide the primary functionality of the application, which is the collection of geographic route data associated with a user account and used in the Statistics subystem. This subsystem relies heavily on device sensors to generate accurate data as well as several web services to supplement the collected data.
+
+The Social system will make use of the Facebook API to provide social networking features to users of the app, and is the primary avenue of motivation provided by the app, through social interaction.
+
+Finally, the Statistics subsystem will be how the application allows users to derive and track useful information from repeated workouts. Using collected route data, users will be able to analyze performance metrics.
+
+\subsection{Pathway Flow}
+The Database system will necessarily communicate with systems at some point in the execution cycle of the application. Further, the Social and User systems will be dependent on each other, while also retrieving information from Statistics as needed.
+The Statistics module will rely on data collected by the Geolocation module and saved account data from the Users module to calculate metrics.
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=\textwidth]{systemFlow.jpg}
+    \caption{System Flow}
+    \label{fig:my_label}
+\end{figure}
+
+\subsection{UI Description}
+Figure 2. may also be used to describe a general flow of the user interface, which is as follows:
+\begin{enumerate}
+    \item Upon loading the application, the user is met with a login screen and prompted to login.
+    \item If the user has an account, they may login directly.
+    \subitem If unsuccessful, the user is returned to the login prompt.
+    \subitem If successful, the user is taken to the main UI fragment, the geolocation fragment.
+    \item New users will be prompted to register, using either Pathway or Facebook.
+    \item The geolocation module depicts a map with the users location, routes in the immediate vicinity, and a start button.
+    \item If the user presses start, the application begins recording user location and draws it to the map.
+    \subitem User can record from the start of an existing route if tapped.
+    \item From the map view, the user may use a drawer panel to navigate to their profile, a summary of their social page, or metrics for the user and/or current route.
+    \item From any of these views, the user may navigate to all other views using the navigation drawer.
+    \item From the navigation view, user may select logout to be taken back to the login screen.
+\end{enumerate}
+
 \section{User Requirements}
 \subsection{Functional}
 \begin{enumerate}
@@ -1067,14 +1118,14 @@ For the rest of the sub-system I will be using primarily Django’s, User classe
 
 \newpage
 
-\subsection{Pathway - Platform}
+\section{Pathway - Platform}
 \begin{itemize}
     \item The system will be developed using Android v5 (Lollipop).
     \item The system will be developed in Android Studio.
     \item The system will employ the Google Maps API in development.
 \end{itemize}
 
-\subsection{Pathway - Domain Analysis}
+\section{Pathway - Domain Analysis}
 This document serves as an overview for the planned development of a software system, named Pathway, that is intended to address the difficulties in staying motivated to exercise by incorporating elements of social interaction and friendly competition as a means to motivate through a mobile application interface.
 
 \paragraph{Pathway - Extensions}
