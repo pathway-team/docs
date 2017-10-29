@@ -437,6 +437,11 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
   class Meta:
     model = Group
     fields = ('url', 'name')
+
+class RoutrSerializer(serializers.HyperlinkedModelSerializer):
+  class Meta:
+    model = Route
+    fields = ('routeID', 'dateCreated', 'creator', 'geoData')
 \end{lstlisting}
 
 \subsubsection{Views}
@@ -461,6 +466,12 @@ class GroupViewSet(viewsets.ModelViewSet):
   '''
   queryset = Group.objects.all()
   serializer_class = GroupSerializer
+
+class RouteViewSet(viewsets.ModelViewSet):
+  '''
+  API Endpoing to handle creation and viewing of routes
+  This is currently undefined.
+  '''
 \end{lstlisting}
 
 \paragraph{Docker File}
@@ -493,6 +504,32 @@ services:
     depends_on:
       -db
 \end{lstlisting}
+
+\paragraph{Test Cases}
+We can see that the selected code snippets satisfy several of the test cases, which we define
+as use cases that have been backed by working code. Currently the code for the infrastructure
+subsystem satisfies several test cases, some more concrete than others.
+\begin{itemize}
+\item The system accepts HTTP requests and is capable of responding via HTTP.
+\item The system is able to handle the creation of a user.
+\item Viewing of users in serialized json format is also handled.
+\item Groups may also be created.
+\item Groups may also be viewed.
+\item The system has communication with the database.
+\item The system satisfies the need for administration with admin users and an admin portal.
+\item The system supplies a contained development environment which mimics production.
+      i.e the system is deployable and meets the criteria for a sane development pipeline.
+\end{itemize}
+
+While this is not a full overview of the system, it is fully ready to supply a robust
+API and backing for the Pathway mobile application. The API only needs to be defined
+from it's current point. Team member which need to develop applications against the API
+or develop systems which run on the server need only run a local instance by utilizing
+Docker which is configure to run a version of the server application that is local to the
+developers machine and a database which is a clean slate for every developer. Once
+a version of the application is complete, the source and the docker configs can be deployed
+to an AWS instance, where the docker image will be built and the application server started.
+
 %=====================================================================================
 
 \subsection{Social - Chris Carney}
