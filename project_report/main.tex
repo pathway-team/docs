@@ -501,8 +501,19 @@ In order to do this, we will first need to utilize a program called OpenSSL. Ope
 
 After establishing the connection to the users Facebook account, we will be implementing the CallbackManager class provided by the Facebook API which determines how methods are called and what values are returned from those methods which will interact with other classes within the Social subsystem while also interacting with each of the other subsystems. During this process, we have the option to list what permissions the app will have access to such as the user's basic profile information, email, or list of friends. This is how we plan to get access to the user's list of friends that also have the app installed which is already determined through the Facebook API.
 
+\begin{figure}[H]
+	    \centering
+	    \begin{center}
+		        \makebox[\textwidth]{\includegraphics[width=0.8\paperwidth]{carney01.jpg}}
+		    \end{center}
+	    \caption{Pathway social sequence diagram}
+	    \label{fig:my_label}
+	\end{figure}
 
-xtwidth]{\includegraphics[width=0.8\paperwidth]{carney02.jpg}}
+\begin{figure}[H]
+	    \centering
+	    \begin{center}
+		        \makebox[\textwidth]{\includegraphics[width=0.8\paperwidth]{carney02.jpg}}
     \end{center}
     \caption{Pathway social UML diagram}
     \label{fig:my_label}
