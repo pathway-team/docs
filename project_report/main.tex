@@ -501,7 +501,6 @@ In order to do this, we will first need to utilize a program called OpenSSL. Ope
 
 After establishing the connection to the users Facebook account, we will be implementing the CallbackManager class provided by the Facebook API which determines how methods are called and what values are returned from those methods which will interact with other classes within the Social subsystem while also interacting with each of the other subsystems. During this process, we have the option to list what permissions the app will have access to such as the user's basic profile information, email, or list of friends. This is how we plan to get access to the user's list of friends that also have the app installed which is already determined through the Facebook API.
 
-In order to do this,I will be implementing the CallbackManager class provided by the Facebook API which determines how methods are called and what values are returned from those methods which will interact with other classes within the Social subsystem while also interacting with each of the other subsystems.
 
 \begin{figure}[H]
     \centering
@@ -567,6 +566,78 @@ In order to do this,I will be implementing the CallbackManager class provided by
     \item The user hits the friends tab, and it loads all of their friends that also have the app installed on their device
     \end{enumerate}
 \end{enumerate}
+\pagebreak
+
+
+\subsubsection{Social Subsystem Subsystem Code}
+\paragraph{Facebook Login Code}
+\begin{lstlisting}
+
+import android.content.Intent;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import com.facebook.AccessToken;
+import com.facebook.AccessTokenTracker;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
+
+public class MainActivity extends AppCompatActivity {
+
+LoginButton loginButton;
+CallbackManager callbackManager;
+
+ protected void onCreate(Bundle savedInstanceState) {
+ super.onCreate(savedInstanceState);
+ setContentView(R.layout.activity_main);
+ 
+ //bind UI component to LoginButton variable
+ loginButton = (LoginButton)findViewById(R.id.login_button);
+ callbackManager = CallbackManager.Factory.create();
+ 
+ //sets permissions so that data from user's profile can be accessed
+ loginButton.setReadPermissions("email", "public_profile", "user_friends");
+ 
+ loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+ 
+ //When login is successful
+ @Override
+ public void onSuccess(LoginResult loginResult) {
+//code goes here
+ }
+ 
+ //When user cancels login
+ @Override
+ public void onCancel() {
+ //code goes here
+ }
+ 
+ //When an error occurs during login
+ @Override
+ public void onError(FacebookException error) {
+ //code goes here
+ }
+ 
+ });
+
+ }
+
+@Override
+protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+super.onActivityResult(requestCode, resultCode, data);
+
+//callback manager gets response code to determine what next activity is
+callbackManager.onActivityResult(requestCode, resultCode, data);
+}
+
+}
+
+\end{lstlisting}
+
+
+
 
 \newpage
 %=======================================================================================
