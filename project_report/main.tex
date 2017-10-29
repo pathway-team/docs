@@ -1,4 +1,4 @@
-\documentclass{article}
+﻿\documentclass{article}
 \usepackage[utf8]{inputenc}
 \usepackage{graphicx}
 \usepackage{float}
@@ -1563,6 +1563,248 @@ For the rest of the sub-system I will be using primarily Django’s, User classe
 \end{figure}
 
 \newpage
+
+\subsubsection{Test Cases}
+\begin{itemize}
+\item TC-01: Login/Create account
+\subitem Requirements Fulfilled:
+\subsubitem System has implemented UI for login screen and account creation screen and will be connected to singleton authentication method
+\subsubitem Singleton authentication system still needs to be linked to database and account creation/login
+\subitem Test Steps:
+\subsubitem 1. App is started.
+\subsubitem 2. Press login after filling valid fields, or press the register link to register then fill the valid fields there and press the register button.
+\subsubitem 3. singleton checks the database for user specified by login and returns an accept token to user or if new user registers their info into the database and logs them in with an accept token.
+\subitem Expected Result: User is logged in/registered and is added to the database via singleton
+\subitem Actual Result: with none of the code linked yet the ui is navigateable and interactable but nothing is added to the database and the user is not actually logged in.
+\item TC-02: User account
+\subitem Requirements Fulfilled:
+\subsubitem User info, stats, and routes page UI all exist.
+\subsubitem User info page will display pertinent user account info.
+\subsubitem Stats page still in progress on connecting to statistics sub-system and displying information
+\subsubitem Routes page has code for route pop up selection will connect to mapping sub-system to allow user to save routes to it as buttons that produce pop ups.
+\subitem Test Steps:
+\subsubitem 1. App starts.
+\subsubitem 2. User logs in/registers.
+\subsubitem 3. User is shown account info page.
+\subsubitem 4. User selects Stats page and stats are displayed if they have any.
+\subsubitem 5. User selects routes page and can tap a saved route veiw a pop up version of it if they have any saved
+\subitem Expected Result: the above functionality of the test steps works.
+\subitem Actual Result: Stats page does not display stats because not yet linked to stats subsystem, Routes page and pop up work do not display saved routes yet as it is not given a route to display yet, User account page functions as it should.
+\end{itemize}
+
+\subsubsection{Login Code so Far}
+\begin{lstlisting}[language = Java]
+package com.example.daniel.loginregister;
+
+import android.content.Intent;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+
+public class LoginActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
+
+        final EditText etUsername = (EditText) findViewById(R.id.etUsername);
+        final EditText etPassword = (EditText) findViewById(R.id.etPassword);
+        final Button bLogin = (Button) findViewById(R.id.bLogin);
+        final TextView registerLink = (TextView) findViewById(R.id.tvRegisterHere);
+
+        registerLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v){
+                Intent registerIntent = new Intent(LoginActivity.this, RegisterActivity.class);
+                LoginActivity.this.startActivity(registerIntent);
+            }
+        });
+    }
+}
+\end{lstlisting}
+
+\subsubsection{Registration Code So Far}
+\begin{lstlisting}[language = Java]
+package com.example.daniel.loginregister;
+
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.widget.Button;
+import android.widget.EditText;
+
+public class RegisterActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_register);
+
+        final EditText etUsername = (EditText) findViewById(R.id.etUsername);
+        final EditText etAge = (EditText) findViewById(R.id.etAge);
+        final EditText etEmail = (EditText) findViewById(R.id.etEmail);
+        final EditText etWeight = (EditText) findViewById(R.id.etWeight);
+        final EditText etSex = (EditText) findViewById(R.id.etSex);
+        final EditText etPassword = (EditText) findViewById(R.id.etPassword);
+        final Button bRegister = (Button) findViewById(R.id.bRegister);
+    }
+}
+\end{lstlisting}
+
+\subsubsection{User Account Info Page Code So Far}
+\begin{lstlisting}[language = Java]
+package com.example.daniel.loginregister;
+
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.widget.EditText;
+
+public class UserPage extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_user_page);
+
+        final EditText etEmail = (EditText) findViewById(R.id.etEmail);
+        final EditText etUsername = (EditText) findViewById(R.id.etUsername);
+        final EditText etAge = (EditText) findViewById(R.id.etAge);
+        final EditText etSex = (EditText) findViewById(R.id.etSex);
+        final EditText etWeight = (EditText) findViewById(R.id.etWeight);
+    }
+}
+\end{lstlisting}
+
+\subsubsection{Routes Page and Button Pop Up Code So Far}
+\begin{lstlisting}[language = Java]
+package com.pathway.pathway_android;
+
+import android.content.Intent;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+
+public class routespopup extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_routespopup);
+        Button route = (Button) findViewById(R.id.route);
+        route.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                startActivity(new Intent(routespopup.this, routepop.class));
+            }
+        });
+    }
+}
+
+package com.pathway.pathway_android;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.util.DisplayMetrics;
+
+/**
+ * Created by Daniel on 10/20/2017.
+ */
+
+public class routepop extends Activity {
+    @Override
+    protected void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.routepopwin);
+        DisplayMetrics dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+        int width = dm.widthPixels;
+        int height = dm.heightPixels;
+        getWindow().setLayout((int)(width*.8), (int)(height*.6));
+    }
+}
+\end{lstlisting}
+
+\subsubsection{Singleton Code So Far}
+\begin{lstlisting}[language = Python]
+import django
+
+
+class OnlyOne:
+    
+	class __OnlyOne:
+        
+		def __init__(self, arg):
+            
+			self.val = arg
+        
+		def __str__(self):
+            
+			return repr(self) + self.val
+    
+	instance = None
+    
+	def __init__(self, arg):
+        
+		if not OnlyOne.instance:
+            
+			OnlyOne.instance = OnlyOne.__OnlyOne(arg)
+        
+		else:
+            
+			OnlyOne.instance.val = arg
+    
+	def __getattr__(self, name):
+        
+		return getattr(self.instance, name)
+    
+	def createuser(username, password):
+        
+		user = User.object.create_user(username, password)
+        
+		user = authenticate(username, password)
+        
+		if user is not None:
+            
+			login(request, user)
+            
+			#backend authenticates
+        
+		#else:
+            
+    
+	def userlogin(request, username, password):
+        
+		user = authenticate(username, password)
+        
+		if user is not None:
+            
+			login(request, user)
+            
+			#backend authenticates
+        
+		#else:
+    
+    
+	def passwordchange(username, password):
+        
+		user = User.objects.get(username)
+        
+		user.set_password(password)
+        
+		user.save()
+    
+	def logout_view(request):
+        
+		logout(request)
+        
+		#redirect goes here
+    
+
+\end{lstlisting}
 
 \section{Pathway - Platform}
 \begin{itemize}
