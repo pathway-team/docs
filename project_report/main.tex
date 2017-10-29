@@ -4,6 +4,7 @@
 \usepackage{float}
 \usepackage{titlesec}
 \usepackage{algorithm2e}
+\usepackage{listings}
 
 \setcounter{secnumdepth}{4}
 
@@ -697,6 +698,60 @@ Generate Report
     \label{fig:my_label}
 \end{figure}
 \pagebreak
+
+\subsubsection{Statistics Subsystem Code}
+\paragraph{ReportFactory Code}
+\begin{lstlisting}[language=Python]
+import report as rep;
+import json;
+import numpy as np;
+import statistics as stats;
+from geopy.distance import vincenty;
+
+class ReportFactory:
+    def generate_report(self, request):
+        if request.report_type == rep.report_type.basic_report:
+            return self.doBasicReport(request.userid, request.routeid);
+        elif report_request.report_type == rep.report_type.total_report:
+            return self.doTotalReport(request.userid, request.routeid);
+        elif report_request.report_type == rep.report_type.full_report:
+            return self.doFullReport(request.userid, request.routeid);
+        return None;
+    
+    def doTotalReport(self, uid, rid):
+        #code here...
+    
+    def doBasicReport(self, uid, rid):
+        #code here...
+    
+    def doFullReport(self, uid, rid):
+        #code here...
+\end{lstlisting}
+
+\paragraph{Report Code}
+\begin{lstlisting}[language=Python]
+class report:
+    def __init__(self, uid, rid, s_t_plots, pace_speed, avgSpd, 
+    medSpd, maxSpd, currTime, calories_burned):
+        self.userid = uid;
+        self.routeid = rid;
+        self.s_t_plotsx = s_t_plots;
+        self.pace_speed = pace_speed;
+        self.avgSpeed = avgSpd;
+        self.medSpeed = medSpd;
+        self.maxSpeed = maxSpd;
+
+    def audit(self):
+        return true;
+
+    def sendToDatabase(self):
+        return "";
+
+    def sendToUser(self):
+        return str(self.userid) + "," + str(self.routeid) + "," + ...;
+\end{lstlisting}
+
+
 %======================================================================
 
 \subsection{Geolocation Collection and Plotting - Johnny Bragg}
@@ -1203,7 +1258,7 @@ Many applications are similar to Pathway in the sense that they make use of geos
     \item \textbf{scalable} - It is the ability of a computer application or product (hardware or software) to continue to function well when it (or its context) is changed in size or volume in order to meet a user need.
     \item \textbf{dockerize} - The act of containing a piece of software within a docker container.
     \item \textbf{Route} - A Route in Pathway will be the geometric representation of a user’s tracked traversal path and will include data that defines an exact geographic position through XY coordinates and elevation.
-    \itme \textbf{Challenge} - A Challenge in Pathway will be the primary means of social interaction between users, acting as a prompt from User A to User B to encourage participation in an exercise activity.
+    \item \textbf{Challenge} - A Challenge in Pathway will be the primary means of social interaction between users, acting as a prompt from User A to User B to encourage participation in an exercise activity.
     \item \textbf{Statistics} - branch of mathematics dealing with the collection, analysis, interpretation, presentation, and organization of data.
     \item \textbf{Database} - application that contains organized collections of data in tables
     \item \textbf{Geolocation} – A specific pair of x and y coordinates as plotted on a spherical surface, allowing the description of an exact geographic location on that sphere.
