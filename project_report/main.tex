@@ -1242,6 +1242,190 @@ The system will be comprised of 4 classes, aside from strictly UI classes. Class
 %=====================================================
 
 \newpage
+\subsection{Testing Plan}
+\subsubsection{Test Overview}
+In order to test the geolocation functionality of our application, we have derived a series of test cases, corresponding to specific requirements in the User Requirements section of the Geolocation subsystem. Tests were performed on an emulated Nexus 5 running Android 5.0 and on an LG G3 device running Android 6.0. The primary goal of the tests were to ensure correct operation of GPS sensors and utilization of device location data. The following tests do not comprise an exhaustive list of all tests to be performed and do not satisfy all User Requirements of the Subsystem. Additional tests will be performed as development continues to satisfy all remaining requirements.
+Test Cases:
+\begin{itemize}
+\item TC-01 - Get Device Location
+\item TC-02 - Draw User Route
+\item TC-03 - Functionality With No Data Access
+\end {itemize}
+The following terms are used in describing these tests:
+\begin{itemize}
+\item Camera - Refers to the overhead view within the map frame.
+\item MyLocation - Standard Map API control to query for device location.
+\end {itemize}
+
+\subsubsection{Test Cases}
+\begin {itemize}
+\item TC-01: Get Device Location
+\subitem Requirement(s) Fulfilled:
+\subsubitem System will use device sensors to record GPS data in a Latitude and Longitude format.
+\subsubitem System will plot Geolocation data against a Google provided background map.
+\subitem Description: The device retrieves the current location and centers the map on that position. For the test, the map begins centered on a marker placed at Sydney Australia. Upon pressing the My Location button in the upper corner, the map is recentered to the current location.
+\subitem Precondition: User has logged into Pathway.
+\subitem Test Steps:
+\subsubitem 1. Application is started.
+\subsubitem 2. Press MyLocation Button
+\subsubitem 3. Map pans to user.
+\subsubitem 3. Observe Results Of Location Change.
+\subitem Expected Result: Current Location of the User is shown.
+\subitem Actual Result: Map view pans to current location, as shown in Figures 17 and 18.
+\subsubitem Additionally, manually moving camera and clicking MyLocation successfully recenters view on the User's location.
+\subitem Related Code:
+\begin{lstlisting}[
+basicstyle=\small
+]
+public void onMapReady(GoogleMap googleMap) {
+    // Add a marker in Sydney, Australia,
+    // and move the map's camera to the same location.
+    mMap = googleMap;
+    LatLng sydney = new LatLng(-33.852, 151.211);
+    googleMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+    googleMap.addMarker(new MarkerOptions().position(sydney)
+    .title("Marker in Sydney"));
+    googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+    if (ActivityCompat.checkSelfPermission(this,
+    Manifest.permission.ACCESS_FINE_LOCATION)
+    != PackageManager.PERMISSION_GRANTED) {
+
+    ActivityCompat.requestPermissions(this,
+        new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+    return;
+    }
+    googleMap.setOnMyLocationButtonClickListener(this);
+    googleMap.setMyLocationEnabled(true);
+}
+\end{lstlisting}
+
+
+\item TC-02: Draw User Route
+\subitem Requirement(s) Fulfilled:
+\subsubitem System will plot Geolocation data against a Google provided background map.
+\subsubitem System will display user routes clearly and in real-time as data is being collected.
+\subitem Description: Draws the users route on the map as a path is traversed, updating the current position at regular intervals.
+\subitem Precondition: User's location has been found, and the Start Button has been pressed. GPS must be enabled.
+\subitem Test Steps:
+\subsubitem 1. User presses Start
+\subsubitem 2. User begins traversing an area.
+\subitem Expected Result: Route is drawn on screen.
+\subitem Actual Result: Route is successfully drawn on screen. Figures 18 and 19 show traversals in a localized area (roughly 100 ft) and across approximately 4 miles, respectively.
+\subitem Related Code:
+Code fires when Start button is pressed.
+\begin{lstlisting}[
+basicstyle=\small
+]
+public void onStartPressed(View v) {
+    if (runState == RunStates.OFF) {
+        btnStart.setText("Stop");
+        Snackbar.make(v, "Recording...", Snackbar.LENGTH_LONG)
+        .setAction("Action", null).show();
+
+        runState = RunStates.RUN;
+        PolylineOptions routeOptions = new PolylineOptions()
+        .color(Color.RED)
+        .width(12)
+        .startCap(new RoundCap())
+        .endCap(new RoundCap());
+        timerRoute.setBase(SystemClock.elapsedRealtime());
+        timerRoute.start();
+        userRoute = mMap.addPolyline(routeOptions);
+        startLocationUpdates();
+    }
+    else if(runState == RunStates.RUN) {
+        btnStart.setText("Start");
+        Snackbar.make(v, "Recording Stopped.", Snackbar.LENGTH_LONG)
+        .setAction("Action", null).show();
+
+        runState = RunStates.OFF;
+        userRoute.remove();
+        userRoute = null;
+        timerRoute.stop();
+        stopLocationUpdates();
+    }
+}
+\end{lstlisting}
+Code responsible for adding most recent location to Polyline and displaying on screen.
+\begin{lstlisting}[
+basicstyle=\small
+]
+public void onLocationChanged(Location location) {
+    lastLoc = new LatLng(
+    location.getLatitude(),
+    location.getLongitude()
+    );
+    if (userRoute != null) {
+        List<LatLng> points = userRoute.getPoints();
+        points.add(lastLoc);
+        userRoute.setPoints(points);
+    }
+    coordMsg = String.format("XY: %s.", lastLoc.toString());
+    mMap.animateCamera(CameraUpdateFactory.newLatLng(lastLoc));
+    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lastLoc, 16));
+}
+\end{lstlisting}
+
+\item TC-03: Functionality With No Data Access
+\subitem Requirement(s) Fulfilled: 
+\subsubitem System will be available as long as a persistent data connection is allowed.
+\subsubitem System will be made available in a limited capacity with reduced accuracy and no map service while no data connection exists.
+\subitem Description: The system will make use of GPS sensors when a data connection isn't available. In the event of sudden data loss, the system continues to track and draw User location.
+\subitem Precondition: System has a GPS signal and Route is being recorded.
+\subitem Test Steps:
+\subsubitem 1. User presses Start.
+\subsubitem 2. System begins recording with no data connection, or data connection is lost during recording.
+\subitem Expected Result: Application continues collecting GPS data and plotting route. Background map will not be available while data is unavailable.
+\subitem Actual Result: Route continued to record while data was unavailable (Figures 19 and 20). Quality of data suffered, and was noisy when the User was stationary, due to resolution of GPS sensor, which produced false movement along the route. (Figure 21).
+\subitem Related Code: No specific code was needed to ensure this functionality.
+\end {itemize}
+\subsubsection{Test Case Figures}
+\begin{figure}[H]
+    \centering
+    \begin{center}
+        \makebox[\textwidth]{\includegraphics[totalheight=0.40\textheight]{GeoTestDev1.png}}
+    \end{center}
+    \caption{Initial Location - Sydney, Australia}
+    \label{fig:my_label}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{center}
+        \makebox[\textwidth]{\includegraphics[totalheight=0.4\textheight]{GeoTestDev2.png}}
+    \end{center}
+    \caption{Current Location - Includes depiction of test route.}
+    \label{fig:my_label}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \begin{center}
+        \makebox[\textwidth]{\includegraphics[totalheight=0.4\textheight]{GeoTestNoDataDev1.png}}
+    \end{center}
+    \caption{Map showing traversal through area after data loss.}
+    \label{fig:my_label}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \begin{center}
+        \makebox[\textwidth]{\includegraphics[totalheight=0.4\textheight]{GeoTestNoDataDev2.png}}
+    \end{center}
+    \caption{Traversed same area several times to show variance along route.}
+    \label{fig:my_label}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \begin{center}
+        \makebox[\textwidth]{\includegraphics[totalheight=0.4\textheight]{GeoTestNoDataDev3.png}}
+    \end{center}
+    \caption{"Bunched" data, collected while stationary without data connection. Shows GPS variance.}
+    \label{fig:my_label}
+\end{figure}
+
+\subsubsection{Test Summary}
+Tests performed to ensure accuracy of geolocation were largely successful. Latitude and Longitude values were within expected deviations from actual values as provided by Google Maps each time. While generally accurate, situations where data connection is lost produce less than ideal coordinate values and as such shall be avoided when possible. Prolonged loss of data connection would likely produce unusable data sets, but temporary outages should be able to be handled by the system.
+B
+\pagebreak
 
 \subsection{User Accounts - Daniel Cregan}
 This Sub-System focuses on user accounts and the aspects that go along with such a sub-system, such as security for the user and the storing of that users info for their use/consumption in the moment or for later.
