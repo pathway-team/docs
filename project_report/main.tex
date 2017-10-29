@@ -421,6 +421,78 @@ it. Amazon Elastic Beanstalk also has support for deploying dockerized applicati
     \item PostgreSQL
     \item Amazon Elastic Beanstalk
 \end{itemize}
+
+\subsubsection{Selected Source Code}
+\paragraph{Serializers}
+\begin{lstlisting}[language=Python]
+from django.contrib.auth.models import User, Group
+from rest_framework import serializers
+
+class UserSerializer(serializers.HyperlinkedModelSerializer):
+  class Meta:
+    model = User
+    fields = ('url', 'username', 'email', 'groups')
+
+class GroupSerializer(serializers.HyperlinkedModelSerializer):
+  class Meta:
+    model = Group
+    fields = ('url', 'name')
+\end{lstlisting}
+
+\subsubsection{Views}
+\begin{lstlisting}[langauge=Python]
+from django.shortcuts import render
+from django.contrib.auth.models import User, Group
+from rest_framework import viewsets
+from pathwayserv.api.serializers import UserSerializer, GroupSerializer
+
+# Create your views here.
+
+class UserViewSet(viewsets.ModelViewSet):
+  '''
+  API Endpoint that allows users to be viewed or edited.
+  '''
+  queryset = User.objects.all().order_by('-date_joined')
+  serializer_class = UserSerializer
+
+class GroupViewSet(viewsets.ModelViewSet):
+  '''
+  API Endpoint that allows groups to viewd or edited.
+  '''
+  queryset = Group.objects.all()
+  serializer_class = GroupSerializer
+\end{lstlisting}
+
+\paragraph{Docker File}
+\begin{lstlisting}[language=Bash]
+FROM python:3
+
+MAINTAINER Cory Sabol
+ENV PYTHONUNBUFFERED 1
+RUN mkdir /code
+WORKDIR /code
+ADD requirements.txt .
+RUN pip install -r requirements.txt
+ADD . /code/
+\end{lstlisting}
+
+\paragraph{Docker-compose File}
+\begin{lstlisting}
+version '2'
+
+services:
+  db:
+    image: postgres
+  web:
+    build .
+    command: python3 manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      -db
+\end{lstlisting}
 %=====================================================================================
 
 \subsection{Social - Chris Carney}
