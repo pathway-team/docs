@@ -1173,6 +1173,34 @@ For the rest of the sub-system I will be using primarily Django’s, User classe
 
 \newpage
 
+\subsubsection{Test Cases}
+\begin{itemize}
+\item TC-01: Login/Create account
+\subitem Requirements Fulfilled:
+\subsubitem System has implemented UI for login screen and account creation screen and will be connected to singleton authentication method
+\subsubitem Singleton authentication system still needs to be linked to database and account creation/login
+\subitem Test Steps:
+\subsubitem 1. App is started.
+\subsubitem 2. Press login after filling valid fields, or press the register link to register then fill the valid fields there and press the register button.
+\subsubitem 3. singleton checks the database for user specified by login and returns an accept token to user or if new user registers their info into the database and logs them in with an accept token.
+\subitem Expected Result: User is logged in/registered and is added to the database via singleton
+\subitem Actual Result: with none of the code linked yet the ui is navigateable and interactable but nothing is added to the database and the user is not actually logged in.
+\item TC-02: User account
+\subitem Requirements Fulfilled:
+\subsubitem User info, stats, and routes page UI all exist.
+\subsubitem User info page will display pertinent user account info.
+\subsubitem Stats page still in progress on connecting to statistics sub-system and displying information
+\subsubitem Routes page has code for route pop up selection will connect to mapping sub-system to allow user to save routes to it as buttons that produce pop ups.
+\subitem Test Steps:
+\subsubitem 1. App starts.
+\subsubitem 2. User logs in/registers.
+\subsubitem 3. User is shown account info page.
+\subsubitem 4. User selects Stats page and stats are displayed if they have any.
+\subsubitem 5. User selects routes page and can tap a saved route veiw a pop up version of it if they have any saved
+\subitem Expected Result: the above functionality of the test steps works.
+\subitem Actual Result: Stats page does not display stats because not yet linked to stats subsystem, Routes page and pop up work do not display saved routes yet as it is not given a route to display yet, User account page functions as it should.
+\end{itemize}
+
 \subsubsection{Login Code so Far}
 \begin{lstlisting}[language = Java]
 package com.example.daniel.loginregister;
