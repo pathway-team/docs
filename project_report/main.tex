@@ -6,6 +6,12 @@
 \usepackage{algorithm2e}
 \usepackage{listings}
 
+
+ 
+\title{Bibliography management:BibTeX}
+\author{Share\LaTeX}
+
+
 \setcounter{secnumdepth}{4}
 
 \titleformat{\paragraph}
@@ -76,6 +82,7 @@ The Statistics module will rely on data collected by the Geolocation module and 
 \end{figure}
 
 \subsection{UI Description}
+Pathway will rely on 
 Figure 2. may also be used to describe a general flow of the user interface, which is as follows:
 \begin{enumerate}
     \item Upon loading the application, the user is met with a login screen and prompted to login.
@@ -1047,7 +1054,9 @@ class report:
 \subsection{Geolocation Collection and Plotting - Johnny Bragg}
 This sub-system, referred to as the Geolocation sub-system, will manage the collection, plotting, and storage of geospatial data that will comprise routes traversed by the user. This data will include: WGS 1984 Latitude and Longitude coordinates, expressed in degrees, minutes, and seconds, Elevation as measured in feet, relative time-stamp information in a 24Hr hh:mm:ss format, and additional derived attributes from the aforementioned data, such as speed, direction, etc.
 
-The sub-system will collect data and write it into an extended JSON format called GeoJSON for use in the statistics sub-system. Route data will also be accessible by other systems as needed whenever a mapped route needs to be displayed. Additionally, the sub-system will employ two main UI fragments. The first UI fragment will allow a user to track their path as it appears on a web service provided background map in approximately real-time. The second UI will provide a more data oriented synopsis of the user’s current speed, elevation, and coordinates, and will be accessed using a slide up panel visible during data collection. User’s will have the option of exporting data in a comma delimited format for personal use. Other information may be included as the project is revised. The Geolocation sub-system will transmit data to the database back-end for storage and store a local copy of the user's route data on a SQLite database instance on the device.
+The sub-system will collect data and write it into an standardized JSON format called GeoJSON for use in the statistics sub-system and storage in the database. Route data will also be accessible by other systems as needed whenever a mapped route needs to be displayed. Additionally, the sub-system will employ two main UI fragments. The first UI fragment will allow a user to track their path as it appears on a web service provided background map in approximately real-time. The second UI will provide a more data oriented synopsis of the user’s current speed, elevation, and coordinates, and will be accessed using a slide up panel visible during data collection. User’s will have the option of exporting data in a comma delimited format for personal use. Other information may be included as the project is revised. The Geolocation sub-system will transmit data to the database back-end for storage and store a local copy of the user's route data on a SQLite database instance on the device to ensure functionality is retained when the User loses service. The DeviceDBHandler class will handle setup and interaction with the database on the device and will synchronize with the external database when needed.
+
+Sending and Receiving of Route information To and From the database server is accomplished by extending Java's AsyncTask\cite{g_AsyncTask} class to two new classes: FetchData and SendData and an interface in each class. An implementation of FetchData was found online and modified to handle POST requests as well as GETs.\cite{g_asyncget} The main map activity will implement interfaces for both classes to avoid blocking the UI during requests and while the application awaits a response from the server.
 
 \subsubsection{User Requirements}
 \begin{itemize}
@@ -1114,15 +1123,15 @@ Mapping applications like the one we envision are common, and the usefulness of 
 \subsubsection{System Analysis}
 \paragraph{Introduction}
 The geolocation subsystem is relatively isolated from other subsystem within the Pathway project. The primary interaction between the geolocation
-subsystem and other subsystems will be in the passing of an instance of the Route class, which will extend functionality of the GeoJSON datatype
-included in the Google Maps API. The mapping functionality of the subsystem will be implemented by leveraging existing classes and objects within
+subsystem and other subsystems will be in the passing of an instance of the Route class, which will extend functionality of the JSONObject datatype. The mapping functionality of the subsystem will be implemented by leveraging existing classes and objects within
 the Google Maps API and as such will not require extensive coding to achieve the desired functionality and layout.
 This functionality would include map display, panning, zoom, and drawing of features on the map.
 
 
 \paragraph{Algorithms}
 To implement the route comparison feature, we have reviewed two algorithms that break the problem down into a comparison of ordered sets of pairs:
-Hausdorff distance and Fréchete distance. Between these two algorithms, there is a tradeoff of complexity versus versatility,
+Hausdorff distance and Fréchet distance. 
+The Hausdorff measures how far two subsets of a metric are from each other. \cite{g_hausdorff}Between these two algorithms, there is a tradeoff of complexity versus versatility,
 which can be summarized as below, with included pseudocode for Hausdorff.
 
 \begin{algorithm}[h]
@@ -1144,12 +1153,30 @@ $h \gets 0$\\
 \caption{Hausdorff distance for ordered sets of coordinate pairs.}
 \end{algorithm}
 
-Fréchete: More complex and harder to implement, much more useful. Supports backtracking. Pseudo code omitted due to complexity.
+The Fréchet distance is a measure of similarity between curves that takes into account the location and ordering of the points along the curves.\cite{g_frechet} It is more complex and harder to implement, but generally more versatile and supports backtracking. Pseudo code omitted due to complexity.
 
 At this stage of the project, we plan to implement both algorithms and compare their accuracy against a series of test cases designed to assess the correctness and flexibility of each algorithm.
 
+Additionally, we have created a basic route comparison algorithm that will run first, saving computation time. The simple version of the algorithm takes two Routes as input and recursively compares start and end points of line segments within the route up to five recursions, beginning with the total route.
+\newline Note: n is the last element in the Route.\newline
+
+\begin{algorithm}[H]
+\SetAlgoLined
+\If{ \(counter < 10 \)}{
+\If{start $Route1$ near start $Route2$ AND 
+    end $Route1$ near end $Route2$}{
+    $counter \gets $counter + 1\\
+    $k \gets $floor(n/2)$\\
+    basicCompare($Route1[0:k]$, $Route2[0:k]$, $counter$)\\
+    basicCompare($Route1[k+1:n]$, $Route2[k+1:n]$, $counter)\\
+    }
+}
+\caption{basicCompare(Route 1, Route 2, counter)}
+\end{algorithm}
+
+\pagebreak
 \paragraph{Tool Selection}
-Due to the reliance of the geolocation system on an existing API, our tool selection will include the Google Maps API, Google Elevation API, the Google Maps Utility Library, and the development tools and language that were selected for the project as a whole. The system will be coded entirely in Java, primarily using the Google Maps API and leveraging Android Studio to more easily create the application layout. A SQLite database will be created on the local device to store information until a connection can be established with the Pathway server. At this time, there are no concrete plans to implement such a structure, but that is subject to change. The above mentioned algorithms will be coded as a method within the RouteOverlay class, which will be responsible for drawing the routes to the display. Currently, the geolocation system design will employ at least 4 classes, with additional classes likely being added in the course of development.
+Due to the reliance of the geolocation system on an existing API, our tool selection will include the Google Maps API\cite{G_API_Maps}, Google Elevation API\cite{g_API_Elev}, and code provided by the Google Maps Utility Library\cite{g_Util_Map}, and the development tools and language that were selected for the project as a whole. The system will be coded entirely in Java, primarily using the Google Maps API and leveraging Android Studio to more easily create the application layout. A SQLite database will be created on the local device to store information until a connection can be established with the Pathway server. The local database will closely mimic the structure of the external server. The above mentioned algorithms will be coded as methods within the Route class, which will store all representations of route data. Currently, the geolocation system design will employ at least 5 classes, with additional classes likely being added in the course of development. These classes may be altered or replaced as research into the API continues.
 
 \paragraph{Use Cases}
 
@@ -1167,7 +1194,7 @@ Due to the reliance of the geolocation system on an existing API, our tool selec
 %     \caption{Geolocation use case diagram}
 %     \label{fig:my_label}
 % \end{figure}
-
+\pagebreak
 \begin{enumerate}
 \item User starts a new route.
     \begin{enumerate}
@@ -1184,7 +1211,7 @@ Due to the reliance of the geolocation system on an existing API, our tool selec
 \item User starts an existing route.
     \begin{enumerate}
         \item Actors: User
-        \item Preconditions: User has selected an existing route from the map and is currently near       a point on the route.
+        \item Preconditions: User has selected an existing route from the map and is currently near the start of the route.
         \item Flow:
             \begin{enumerate}
                 \item User presses start existing route.
@@ -1199,14 +1226,13 @@ Due to the reliance of the geolocation system on an existing API, our tool selec
         \item Flow One: New Route.
             \begin{enumerate}
             \item User presses Stop and is prompted to name and save.
-            \item System determines if the current route matches an existing route.
             \item System stores Route information in database.
             \item System returns to idle.
             \end{enumerate}
         \item Flow Two: Existing Route.
             \begin{enumerate}
             \item User presses Stop and is prompted to name and save.
-            \item System verifies that traversal matches the intended route.
+            \item System verifies that traversal matches the selected Route.
             \item System stores Route information in database.
             \item System returns to idle.
             \end{enumerate}
@@ -1265,7 +1291,7 @@ Due to the reliance of the geolocation system on an existing API, our tool selec
         \item Flow:
             \begin{enumerate}
             \item System uses a naive method to assign difficulty rating, based on distance.
-            \item System uses a naive method to assign difficulty rating, based on elevation variability.
+            \item System uses a naive method to assign difficulty rating, based on length of route and elevation variability, which will be defined as the difference between maximum and minimum elevations.
             \end{enumerate}
         \item Postconditions: Route has an estimated difficulty assigned.
     \end{enumerate}
@@ -1289,7 +1315,7 @@ Classes, their interaction, and the general flow of the subsystem are depicted i
 %     \label{fig:my_label}
 % \end{figure}
 
-The system will be comprised of 4 classes, aside from strictly UI classes. Classes marked with * are classes from the Maps API. The MainActivity will maintain instances of the Tracker class and MapView* class, which will be used to retrieve user location and display the map, respectively. The RouteOverlay class will contain all Route objects currently displayed in the area. Each Route object will contain identifying information, location data, and additional attributes as necessary. Route will inherit from the GeoJSON datatype, allowing it to store geolocation information in a standard format.
+The system will be comprised of 5 classes, aside from strictly UI classes. Classes marked with * are classes from the Maps API. The MainActivity will maintain instances of the Location* class and GoogleMap* class, which will be used to retrieve user location and display the map, respectively. The Route class will handle storage and retrieval of information in conjunction with Google's Polyline class. Each Route object will contain identifying information, location data, and additional attributes as necessary. Routes will be retrieved from the database based on current geographic location. Route will inherit from the JSONObject datatype and will follow geojson conventions as described by Butler et al \cite{g_geojson_std}, allowing it to store geolocation information in a standard format.
 
 \begin{figure}[H]
     \centering
@@ -1327,7 +1353,8 @@ The system will be comprised of 4 classes, aside from strictly UI classes. Class
 \newpage
 \subsection{Testing Plan}
 \subsubsection{Test Overview}
-In order to test the geolocation functionality of our application, we have derived a series of test cases, corresponding to specific requirements in the User Requirements section of the Geolocation subsystem. Tests were performed on an emulated Nexus 5 running Android 5.0 and on an LG G3 device running Android 6.0. The primary goal of the tests were to ensure correct operation of GPS sensors and utilization of device location data. The following tests do not comprise an exhaustive list of all tests to be performed and do not satisfy all User Requirements of the Subsystem. Additional tests will be performed as development continues to satisfy all remaining requirements.
+In order to test the geolocation functionality of our application, we have derived a series of test cases, corresponding to specific requirements in the User Requirements section of the Geolocation subsystem.
+Tests were performed on an emulated Nexus 5 running Android 5.0 and on an LG G3 device running Android 6.0. The primary goal of the tests were to ensure correct operation of GPS sensors and utilization of device location data. The following tests do not comprise an exhaustive list of all tests to be performed and do not satisfy all User Requirements of the Subsystem. Additional tests will be performed as development continues to satisfy all remaining requirements.
 Test Cases:
 \begin{itemize}
 \item TC-01 - Get Device Location
@@ -1506,7 +1533,7 @@ public void onLocationChanged(Location location) {
 \end{figure}
 
 \subsubsection{Test Summary}
-Tests performed to ensure accuracy of geolocation were largely successful. Latitude and Longitude values were within expected deviations from actual values as provided by Google Maps each time. While generally accurate, situations where data connection is lost produce less than ideal coordinate values and as such shall be avoided when possible. Prolonged loss of data connection would likely produce unusable data sets, but temporary outages should be able to be handled by the system.
+Tests performed to ensure accuracy of geolocation on a handheld device were largely successful. Latitude and Longitude values were within expected deviations from actual values as provided by Google Maps each time. While generally accurate, situations where data connection is lost produce less than ideal coordinate values and as such shall be avoided when possible. Prolonged loss of data connection would likely produce unusable data sets, but temporary outages should be able to be handled by the system.
 B
 \pagebreak
 
@@ -1986,6 +2013,7 @@ Many applications are similar to Pathway in the sense that they make use of geos
     \item \textbf{Point} – A recorded location, being comprised of Latitude, Longitude, Elevation, and Time, relative to the first recorded point in the series.
 \end{itemize}
 
+
 \section{Bibliography}
 \begin{itemize}
     \item -  Django.readthedocs.io. (2017). Using the Django authentication system — Django 2.1.dev20171017153446 documentation. [online] Available at: http://django.readthedocs.io/en/latest/topics/auth/default.html#how-to-log-a-user-in [Accessed 17 Oct. 2017].
@@ -1994,5 +2022,11 @@ Many applications are similar to Pathway in the sense that they make use of geos
     \item - Python-3-patterns-idioms-test.readthedocs.io. (2017). The Singleton — Python 3 Patterns, Recipes and Idioms. [online] Available at: http://python-3-patterns-idioms-test.readthedocs.io/en/latest/Singleton.html [Accessed 17 Oct. 2017].
     \item - Developer.android.com. (2017). HttpURLConnection | Android Developers. [online] Available at: https://developer.android.com/reference/java/net/HttpURLConnection.html [Accessed 13 Nov. 2017].
 \end{itemize}
+
+
+\bibliographystyle{ieeetr}
+\bibliography{PathwayBibliography}
+
+
 
 \end{document}
