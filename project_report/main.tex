@@ -651,6 +651,20 @@ callbackManager.onActivityResult(requestCode, resultCode, data);
 
 \end{lstlisting}
 
+\paragraph{Achievement Implementation}
+We have implemented simple achievements using UI components from Android Studio that the user can unlock by completing various actions within the app.  Our initial approach was to implement an achievement system using the Facebook API but certain restrictions hindered us from doing so. We will be creating a database table to hold boolean variables that correspond to the different achievements and are originally set to false. The Social Subsystem will be pulling information from the Statistics Subsystem to keep up with the user's progress toward each achievement. Once the information pulled from the user's statistics satisfies the requirement for an achievement, it will become unlocked. Below is the pseudocode for how each achievement will check for the boolean variable and change the status of the achievement.
+
+\begin{lstlisting}
+//code will make an HTTP GET request to the server to retrieve boolean variable
+//then an if statement will check and see if requirements are satisfied for the achievement
+
+
+if boolean variable is true{
+	set achievement to "unlocked"
+}
+
+\end{lstlisting}
+
 \newpage
 %=======================================================================================
 
