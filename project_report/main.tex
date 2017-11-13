@@ -531,6 +531,24 @@ developers machine and a database which is a clean slate for every developer. On
 a version of the application is complete, the source and the docker configs can be deployed
 to an AWS instance, where the docker image will be built and the application server started.
 
+\paragraph{Data Conversion Plan}
+Since this subsystem is the one which houses the data and provides access of the data to other systems,
+a conversion to a new implementation system or even server hardware would not affect the other subsystems.
+Only an API revision would trigger a possible need for a change in the way that the other systems handle the
+data belonging to the Pathway application.
+
+This section is best explained with an example. If the need arose to build the server side
+API application in a new language, it would be trivial due to the decoupled nature of all the
+parts that comprise the entire subsystem. This is thanks to Docker, which allows the subsystem
+to be built in interchangeable layers. Each layer effectively has it's own isolated OS in the form of
+a docker image in which the relevant software runs. Each layer (container) communicates via a
+network constructed solely for the containers which make up the application as a whole. Consider
+an entire rewrite of the API layer from Python to Haskell (something which is plausible in the future).
+This event would in no way affect the existing data in the database container, as the database container
+is completely isolated from the API layer. The only changes that would cascade through all layers would
+be changes to the database schema itself. This is because every other part of this subsystem depends upon it.
+
+
 %=====================================================================================
 
 \subsection{Social - Chris Carney}
@@ -611,18 +629,18 @@ In order to do this, we will first need to utilize a program called OpenSSL. Ope
 After establishing the connection to the users Facebook account, we will be implementing the CallbackManager class provided by the Facebook API which determines how methods are called and what values are returned from those methods which will interact with other classes within the Social subsystem while also interacting with each of the other subsystems. During this process, we have the option to list what permissions the app will have access to such as the user's basic profile information, email, or list of friends. This is how we plan to get access to the user's list of friends that also have the app installed which is already determined through the Facebook API.
 
 \begin{figure}[H]
-	    \centering
-	    \begin{center}
-		        \makebox[\textwidth]{\includegraphics[width=0.8\paperwidth]{carney01.jpg}}
-		    \end{center}
-	    \caption{Pathway social sequence diagram}
-	    \label{fig:my_label}
-	\end{figure}
+      \centering
+      \begin{center}
+            \makebox[\textwidth]{\includegraphics[width=0.8\paperwidth]{carney01.jpg}}
+        \end{center}
+      \caption{Pathway social sequence diagram}
+      \label{fig:my_label}
+  \end{figure}
 
 \begin{figure}[H]
-	    \centering
-	    \begin{center}
-		        \makebox[\textwidth]{\includegraphics[width=0.8\paperwidth]{carney02.jpg}}
+      \centering
+      \begin{center}
+            \makebox[\textwidth]{\includegraphics[width=0.8\paperwidth]{carney02.jpg}}
     \end{center}
     \caption{Pathway social UML diagram}
     \label{fig:my_label}
@@ -678,18 +696,18 @@ After establishing the connection to the users Facebook account, we will be impl
 
 +\subsubsection{Test Cases}
 \begin{itemize}
-	\item TC-01: Linking Facebook profile to app
-	\subitem Requirements Fulfilled:
-	\subsubitem The user will be able to link their Facebook account with the app to create
-	an account.
-	\subsubitem The app will be able to access the user's Facebook data in order to utilize other social functionalities
-	\subitem Test Steps:
-	\subsubitem 1. App is started.
-	\subsubitem 2. Press "Connect with Facebook" button when prompted to login.
-	\subsubitem 3. Webview of Facebook login page appears where the user will be prompted to enter their account email and password.
-	\subsubitem 4. User will be directed back to app depending on whether the login was successful or not.
-	\subitem Expected Result: User is logged in/registered and is added to the database with accessibility to core data such as name, email, and friend's list from Facebook account (other data can be accessed optionally).
-	\subitem Actual Result: User is connected to their Facebook account but there is no UI set up for the main page of the app which is where the user will be directed once their Facebook login is successful.
+  \item TC-01: Linking Facebook profile to app
+  \subitem Requirements Fulfilled:
+  \subsubitem The user will be able to link their Facebook account with the app to create
+  an account.
+  \subsubitem The app will be able to access the user's Facebook data in order to utilize other social functionalities
+  \subitem Test Steps:
+  \subsubitem 1. App is started.
+  \subsubitem 2. Press "Connect with Facebook" button when prompted to login.
+  \subsubitem 3. Webview of Facebook login page appears where the user will be prompted to enter their account email and password.
+  \subsubitem 4. User will be directed back to app depending on whether the login was successful or not.
+  \subitem Expected Result: User is logged in/registered and is added to the database with accessibility to core data such as name, email, and friend's list from Facebook account (other data can be accessed optionally).
+  \subitem Actual Result: User is connected to their Facebook account but there is no UI set up for the main page of the app which is where the user will be directed once their Facebook login is successful.
 \end{itemize}
 \pagebreak
 
@@ -905,33 +923,33 @@ Our plan for testing the Statistics subsystem has been divided into three separa
 
 
 \paragraph{Testing Phase: Generating Reports}
-To test the functionality of this subsystem on the server we have designed three test cases and are currently planning to begin by testing them against using simulated route data to test the functionality these three cases are listed below and have a section that will follow describing them in more detail. After all test cases have passed using simulated data the subsystem will be tested against rotue data generated by our application using the same tests. 
+To test the functionality of this subsystem on the server we have designed three test cases and are currently planning to begin by testing them against using simulated route data to test the functionality these three cases are listed below and have a section that will follow describing them in more detail. After all test cases have passed using simulated data the subsystem will be tested against rotue data generated by our application using the same tests.
 
 \subparagraph{Test Cases}
 \begin{itemize}
 \item TC-01 Generate Basic Route Report
-	\subitem Requirements Fullfilled:
-	\begin{enumerate}
-		\item System can generate a basic report by using user generated data
-		\item The system will use collected geospatial data and user demographic information to present analysis of the user’s performance.
-		\item The system will generate a report after a run detailing the user’s performance with comparisons of previous runs.
-	\end{enumerate}
+  \subitem Requirements Fullfilled:
+  \begin{enumerate}
+    \item System can generate a basic report by using user generated data
+    \item The system will use collected geospatial data and user demographic information to present analysis of the user’s performance.
+    \item The system will generate a report after a run detailing the user’s performance with comparisons of previous runs.
+  \end{enumerate}
 \item TC-02 Generate Total Route Report
-	\subitem Requirements Fullfilled:
-	\begin{enumerate}
-		\item System can generate a total report by using user generated data
-		\item The system will use collected geospatial data and user demographic information to present analysis of the user’s performance.
-		\item The system will take user data and generate leaderboards for heavily used routes incertain areas, in order to allow users to compete for bragging rights on those routes.
-		\item The system will generate a report after a run detailing the user’s performance with comparisons of previous runs.
-	\end{enumerate}
+  \subitem Requirements Fullfilled:
+  \begin{enumerate}
+    \item System can generate a total report by using user generated data
+    \item The system will use collected geospatial data and user demographic information to present analysis of the user’s performance.
+    \item The system will take user data and generate leaderboards for heavily used routes incertain areas, in order to allow users to compete for bragging rights on those routes.
+    \item The system will generate a report after a run detailing the user’s performance with comparisons of previous runs.
+  \end{enumerate}
 \item TC-03 Generate Full User Report
-	\subitem Requirements Fullfilled:
-	\begin{enumerate}
-		\item System can generate a complete user report by using user generated data
-		\item The system will use collected geospatial data and user demographic information to present analysis of the user’s performance.
-		\item The system will take user data and generate leaderboards for heavily used routes incertain areas, in order to allow users to compete for bragging rights on those routes.
-		\item The system will generate a report after a run detailing the user’s performance with comparisons of previous runs.
-	\end{enumerate}
+  \subitem Requirements Fullfilled:
+  \begin{enumerate}
+    \item System can generate a complete user report by using user generated data
+    \item The system will use collected geospatial data and user demographic information to present analysis of the user’s performance.
+    \item The system will take user data and generate leaderboards for heavily used routes incertain areas, in order to allow users to compete for bragging rights on those routes.
+    \item The system will generate a report after a run detailing the user’s performance with comparisons of previous runs.
+  \end{enumerate}
 \end{itemize}
 
 \subparagraph{TC-01 Generate Basic Route Report}
@@ -949,20 +967,20 @@ This next part will be testing the functionality of auditing a report and delive
 \subparagraph{Test Cases}
 \begin{itemize}
 \item TC-04 Auditing Reports
-	\subitem Requirements Fullfilled:
-	\begin{enumerate}
-		\item Ensure reports are properly formatted before delivery
-		\item Ensure all report fields contain valid data
-		\item The system must generate reports that should be easily readable and detailed while avoiding being confusing to users.
-	\end{enumerate}
+  \subitem Requirements Fullfilled:
+  \begin{enumerate}
+    \item Ensure reports are properly formatted before delivery
+    \item Ensure all report fields contain valid data
+    \item The system must generate reports that should be easily readable and detailed while avoiding being confusing to users.
+  \end{enumerate}
 \item TC-05 Delivering Reports
-	\subitem Requirements Fullfilled:
-	\begin{enumerate}
-		\item Ensure reports objects can be converted to Java objects
-		\item Ensures that report can be delivered to the user's device
-		\item The system must generate reports that should be easily readable and detailed while avoiding being confusing to users.
-		\item The system will generate a report after a run detailing the user’s performance with comparisons of previous runs.
-	\end{enumerate}
+  \subitem Requirements Fullfilled:
+  \begin{enumerate}
+    \item Ensure reports objects can be converted to Java objects
+    \item Ensures that report can be delivered to the user's device
+    \item The system must generate reports that should be easily readable and detailed while avoiding being confusing to users.
+    \item The system will generate a report after a run detailing the user’s performance with comparisons of previous runs.
+  \end{enumerate}
 \end{itemize}
 
 \subparagraph{TC-04 Auditing Reports}
@@ -977,13 +995,13 @@ This final phase of testing will involve taking the user reports and processing 
 \subparagraph{Test Cases}
 \begin{itemize}
 \item TC-06 Presenting Report Data
-	\subitem Requirements Fullfilled:
-	\begin{enumerate}
-		\item Display report data to the user
-		\item Give user the visual aids and an interface to interact with report
-		\item The system must generate reports that should be easily readable and detailed while avoiding being confusing to users.
-		\item The system will generate a report after a run detailing the user’s performance with comparisons of previous runs.
-	\end{enumerate}
+  \subitem Requirements Fullfilled:
+  \begin{enumerate}
+    \item Display report data to the user
+    \item Give user the visual aids and an interface to interact with report
+    \item The system must generate reports that should be easily readable and detailed while avoiding being confusing to users.
+    \item The system will generate a report after a run detailing the user’s performance with comparisons of previous runs.
+  \end{enumerate}
 
 \end{itemize}
 
@@ -1006,22 +1024,22 @@ class ReportFactory:
         elif report_request.report_type == rep.report_type.full_report:
             return self.doFullReport(request.userid, request.routeid);
         return None;
-    
+
     def doTotalReport(self, uid, rid):
         #code here...
-    
+
     def doBasicReport(self, uid, rid):
         #code here...
-    
+
     def doFullReport(self, uid, rid):
         #code here...
 \end{lstlisting}
 
 \paragraph{Report Class Code}
-This is code snippet below is for the Python Report class. It is the base class from which all of our report types inherit from.  
+This is code snippet below is for the Python Report class. It is the base class from which all of our report types inherit from.
 \begin{lstlisting}[language=Python]
 class report:
-    def __init__(self, uid, rid, s_t_plots, pace_speed, avgSpd, 
+    def __init__(self, uid, rid, s_t_plots, pace_speed, avgSpd,
     medSpd, maxSpd, currTime, calories_burned):
         self.userid = uid;
         self.routeid = rid;
@@ -1450,7 +1468,7 @@ public void onLocationChanged(Location location) {
 \end{lstlisting}
 
 \item TC-03: Functionality With No Data Access
-\subitem Requirement(s) Fulfilled: 
+\subitem Requirement(s) Fulfilled:
 \subsubitem System will be available as long as a persistent data connection is allowed.
 \subsubitem System will be made available in a limited capacity with reduced accuracy and no map service while no data connection exists.
 \subitem Description: The system will make use of GPS sensors when a data connection isn't available. In the event of sudden data loss, the system continues to track and draw User location.
@@ -1817,75 +1835,75 @@ import django
 
 
 class OnlyOne:
-    
-	class __OnlyOne:
-        
-		def __init__(self, arg):
-            
-			self.val = arg
-        
-		def __str__(self):
-            
-			return repr(self) + self.val
-    
-	instance = None
-    
-	def __init__(self, arg):
-        
-		if not OnlyOne.instance:
-            
-			OnlyOne.instance = OnlyOne.__OnlyOne(arg)
-        
-		else:
-            
-			OnlyOne.instance.val = arg
-    
-	def __getattr__(self, name):
-        
-		return getattr(self.instance, name)
-    
-	def createuser(username, password):
-        
-		user = User.object.create_user(username, password)
-        
-		user = authenticate(username, password)
-        
-		if user is not None:
-            
-			login(request, user)
-            
-			#backend authenticates
-        
-		#else:
-            
-    
-	def userlogin(request, username, password):
-        
-		user = authenticate(username, password)
-        
-		if user is not None:
-            
-			login(request, user)
-            
-			#backend authenticates
-        
-		#else:
-    
-    
-	def passwordchange(username, password):
-        
-		user = User.objects.get(username)
-        
-		user.set_password(password)
-        
-		user.save()
-    
-	def logout_view(request):
-        
-		logout(request)
-        
-		#redirect goes here
-    
+
+  class __OnlyOne:
+
+    def __init__(self, arg):
+
+      self.val = arg
+
+    def __str__(self):
+
+      return repr(self) + self.val
+
+  instance = None
+
+  def __init__(self, arg):
+
+    if not OnlyOne.instance:
+
+      OnlyOne.instance = OnlyOne.__OnlyOne(arg)
+
+    else:
+
+      OnlyOne.instance.val = arg
+
+  def __getattr__(self, name):
+
+    return getattr(self.instance, name)
+
+  def createuser(username, password):
+
+    user = User.object.create_user(username, password)
+
+    user = authenticate(username, password)
+
+    if user is not None:
+
+      login(request, user)
+
+      #backend authenticates
+
+    #else:
+
+
+  def userlogin(request, username, password):
+
+    user = authenticate(username, password)
+
+    if user is not None:
+
+      login(request, user)
+
+      #backend authenticates
+
+    #else:
+
+
+  def passwordchange(username, password):
+
+    user = User.objects.get(username)
+
+    user.set_password(password)
+
+    user.save()
+
+  def logout_view(request):
+
+    logout(request)
+
+    #redirect goes here
+
 
 \end{lstlisting}
 
