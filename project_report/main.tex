@@ -124,7 +124,7 @@ Figure 2. may also be used to describe a general flow of the user interface, whi
     \item The system must be efficient with respect with to cellular data consumption.
     \item If Facebook is down the account integration feature in the app will be expected to have downtime as well.
     \item The system will use collected geospatial data and user demographic information to present analysis of the user�s performance.
-    \item The system will take user data and generate leaderboards for heavily used routes incertain areas, in order to allow users to compete for bragging rights on those routes.
+    \item The system will take user data and generate leaderboards for heavily used routes in certain areas, in order to allow users to compete for bragging rights on those routes.
     \item The system will generate a report after a run detailing the user�s performance with comparisons of previous runs.
     \item The system must generate reports that should be easily readable and detailed while avoiding being confusing to users.
     \item System will use device sensors to record GPS data in a Latitude/Longitude format.
@@ -219,9 +219,9 @@ more redundant and support a larger volume of users. In addition to scalability,
 along with most extensions that could take place within the other subsystems.
 
 \paragraph{General Domain Knowledge}
-This susbsytem falls into the category of backend web development, which is a domain that the developer already has a sizable amount of professional exeperience in.
+This susbsytem falls into the category of backend web development, which is a domain that the developer already has a sizable amount of professional experience in.
 \begin{itemize}
-    \item Because HTTP is transactional, a REST api incurrs some network overhead.
+    \item Because HTTP is transactional, a REST API incurs some network overhead.
     \item Python is a language which facilitates rapid development. Making it great for a web service.
     \item The flask framework isn't particularly well suited to handling large volumes of requests. Meaning we would
     need to port to a web server which scales better should we have a user base increase.
@@ -321,7 +321,7 @@ and develop algorithms. The implementation of the webserver and the DBMS are hid
 therefore we must consider which tools at our disposal are the best for our purposes. Rather
 than analyze specifically for algorithm efficiency (although we will do this should the need
 arise), we will focus on issues such as scalability, redundancy in the database, environment set up,
-resource size (how much data are we sending to the client and vice versa), concurrent connections, and
+resource size (how much data are we sending to the client and vice-versa), concurrent connections, and
 many other challenges to explore.
 
 \paragraph{Use Cases}
@@ -416,8 +416,8 @@ Docker, which will allow us to have a localized development environment which ca
 production environment as well as being fully scriptable, or we could have each developer install
 python3, Django, PostgreSQL and any other tools to their machine and fight with inconsistencies
 across each machine. The choice here is pretty obvious. We have opted to utilize Docker to
-provide an isoloated development and testing environment which contains exactly the tools necessary
-for the server applicaiton and database to run. This would only require that each developer
+provide an isolated development and testing environment which contains exactly the tools necessary
+for the server application and database to run. This would only require that each developer
 use the Docker build script to build the image on their machine, and then develop and test against
 it. Amazon Elastic Beanstalk also has support for deploying dockerized applications.
 
@@ -526,7 +526,7 @@ subsystem satisfies several test cases, some more concrete than others.
 \item The system has communication with the database.
 \item The system satisfies the need for administration with admin users and an admin portal.
 \item The system supplies a contained development environment which mimics production.
-      i.e the system is deployable and meets the criteria for a sane development pipeline.
+      i.e the system is deploy-able and meets the criteria for a sane development pipeline.
 \end{itemize}
 
 While this is not a full overview of the system, it is fully ready to supply a robust
@@ -572,7 +572,7 @@ service, platform. Because of this there are many options for what to use, how t
 configure it. This introduced unnecessary complexity into the subsystem's development compared to our
 hosting and deployment needs. So, the choice was made to utilize DigitalOcean instead. DigitalOcean, on top
 of being cheaper, was also much simpler to use, as they provide developers with a virtualized linux machine
-somewhere in their datacenters, and a developer is able to simple SSH into the machine and begin configuring
+somewhere in their data centers, and a developer is able to simple SSH into the machine and begin configuring
 the application. This was preferable because the developer of this subsystem was already familiar with this
 kind of work flow.
 
@@ -921,7 +921,7 @@ The statistics sub-system will perform analysis of user data generated by the Ge
 \subsubsection{User Requirement}
 \begin{itemize}
     \item The system will use collected geospatial data and user demographic information to present analysis of the user�s performance.
-    \item The system will take user data and generate leaderboards for heavily used routes incertain areas, in order to allow users to compete for bragging rights on those routes.
+    \item The system will take user data and generate leaderboards for heavily used routes in certain areas, in order to allow users to compete for bragging rights on those routes.
     \item The system will generate a report after a run detailing the user�s performance with comparisons of previous runs.
     \item The system must generate reports that should be easily readable and detailed while avoiding being confusing to users.
 \end{itemize}
@@ -929,7 +929,7 @@ The statistics sub-system will perform analysis of user data generated by the Ge
 \subsubsection{Platform}
 \begin{itemize}
     \item The system will be developed using Python 3.
-    \item The system will be a subservice housed along with the server application.
+    \item The system will be a sub-service housed along with the server application.
 \end{itemize}
 
 \subsubsection{Domain Analysis}
@@ -946,7 +946,7 @@ The following applications/software may fulfill similar roles or offer similar f
 For later versions of this service we may try to increase the variety of analysis. We may also offer a web service allowing a more complete analysis of the user�s performance and physical activities.
 
 \paragraph{General Domain Knowledge}
-Few people have the knowledge or desire to manually formulate statistcs about their fitness progress.
+Few people have the knowledge or desire to manually formulate statistics about their fitness progress.
 
 \paragraph{Tasks and Procedures}
 \begin{itemize}
@@ -974,7 +974,7 @@ There are many programs and applications that offer similar functionality to thi
 \subsubsection{System Analysis}
 \paragraph{Introduction}
 For the statistics/metrics subsystem, the plan to utilize a python module specifically built to perform the necessary statistical operations, such as numpy.
-This will be the most appropriate way to run the analysis as such modules are both efficient, fast, and well tested. This reduces the need to develop mathematical and statistical algorithms. This system will also use the json module to parse any JSON formatted data that is necessary to perform the calculations required of the system. The Python library Geopy will be used to determine distances for GPS points. On the client side, we will utilize a widely used library called Android Plot to render plots.
+This will be the most appropriate way to run the analysis as such modules are both efficient, fast, and well tested. This reduces the need to develop mathematical and statistical algorithms. This system will also use the JSON module to parse any JSON formatted data that is necessary to perform the calculations required of the system. The Python library Geopy will be used to determine distances for GPS points. On the client side, we will utilize a widely used library called Android Plot to render plots.
 However the need to develop an efficient approach for handling the reports is necessary. For this reason we plan to implement the Factory method design pattern. This will allow the server to
 simply pass a small amount of data to an object called a factory which contains methods that generate objects. This factory then gathers the necessary data from the database and performs the
 various statistical calculations, such as determining averages and standard deviations, and passes this report to the server.
@@ -1020,7 +1020,7 @@ Generate Report
     \begin{center}
         \makebox[\textwidth]{\includegraphics[width=\paperwidth]{westDF.png}}
     \end{center}
-    \caption{Statistics system dataflow}
+    \caption{Statistics system data flow}
     \label{fig:my_label}
 \end{figure}
 
@@ -1053,8 +1053,8 @@ Generate Report
 
 \subsubsection{Statistics Subsystem Testing}
 
-\paragraph{Introduciton}
-Our plan for testing the Statistics subsystem has been divided into three separate phases, which are listed and described in more detail in their own subsections below. These have been divdided into separate parts based upon the domains involved in each part. This is partly due to the issue of the data being passed through two different systems, one being a server the other being a mobile device. This also allows for testing to build off of one another.
+\paragraph{Introduction}
+Our plan for testing the Statistics subsystem has been divided into three separate phases, which are listed and described in more detail in their own subsections below. These have been divided into separate parts based upon the domains involved in each part. This is partly due to the issue of the data being passed through two different systems, one being a server the other being a mobile device. This also allows for testing to build off of one another.
 
 \paragraph{Test Plan Parts}
 \begin{enumerate}
@@ -1065,31 +1065,31 @@ Our plan for testing the Statistics subsystem has been divided into three separa
 
 
 \paragraph{Testing Phase: Generating Reports}
-To test the functionality of this subsystem on the server we have designed three test cases and are currently planning to begin by testing them against using simulated route data to test the functionality these three cases are listed below and have a section that will follow describing them in more detail. After all test cases have passed using simulated data the subsystem will be tested against rotue data generated by our application using the same tests.
+To test the functionality of this subsystem on the server we have designed three test cases and are currently planning to begin by testing them against using simulated route data to test the functionality these three cases are listed below and have a section that will follow describing them in more detail. After all test cases have passed using simulated data the subsystem will be tested against route data generated by our application using the same tests.
 
 \subparagraph{Test Cases}
 \begin{itemize}
 \item TC-01 Generate Basic Route Report
-  \subitem Requirements Fullfilled:
+  \subitem Requirements Fulfilled:
   \begin{enumerate}
     \item System can generate a basic report by using user generated data
     \item The system will use collected geospatial data and user demographic information to present analysis of the user’s performance.
     \item The system will generate a report after a run detailing the user’s performance with comparisons of previous runs.
   \end{enumerate}
 \item TC-02 Generate Total Route Report
-  \subitem Requirements Fullfilled:
+  \subitem Requirements Fulfilled:
   \begin{enumerate}
     \item System can generate a total report by using user generated data
     \item The system will use collected geospatial data and user demographic information to present analysis of the user’s performance.
-    \item The system will take user data and generate leaderboards for heavily used routes incertain areas, in order to allow users to compete for bragging rights on those routes.
+    \item The system will take user data and generate leaderboards for heavily used routes in certain areas, in order to allow users to compete for bragging rights on those routes.
     \item The system will generate a report after a run detailing the user’s performance with comparisons of previous runs.
   \end{enumerate}
 \item TC-03 Generate Full User Report
-  \subitem Requirements Fullfilled:
+  \subitem Requirements Fulfilled:
   \begin{enumerate}
     \item System can generate a complete user report by using user generated data
     \item The system will use collected geospatial data and user demographic information to present analysis of the user’s performance.
-    \item The system will take user data and generate leaderboards for heavily used routes incertain areas, in order to allow users to compete for bragging rights on those routes.
+    \item The system will take user data and generate leaderboards for heavily used routes in certain areas, in order to allow users to compete for bragging rights on those routes.
     \item The system will generate a report after a run detailing the user’s performance with comparisons of previous runs.
   \end{enumerate}
 \end{itemize}
@@ -1104,19 +1104,19 @@ This test case will involve simply taking a user route data from their most rece
 This test case will involve taking all route and usage data for a user and analyzing it to give that user a detailed performance and usage analysis. This analysis will then be stored in a Report derived object which will then be audited to ensure all fields contain valid format and content.
 
 \paragraph{Testing Phase: Auditing Reports and Delivery}
-This next part will be testing the functionality of auditing a report and delivering the report to the user's device. The first part of this test, auditing of the report, is necessary to ensure that the user is being given report data that is valid. Any inconsistencies will result in misleading data or issues with plotting graphs, so it is essential for reports to be complete and contain valid data and types in their repsective fields. The second part will be to ensure that the report data can be sent to the user's device in a format that their device will be able to extract all the report data from. As the reports are generated using Python and the language of the device we have been developing our application on executing Java, this will be an important test.
+This next part will be testing the functionality of auditing a report and delivering the report to the user's device. The first part of this test, auditing of the report, is necessary to ensure that the user is being given report data that is valid. Any inconsistencies will result in misleading data or issues with plotting graphs, so it is essential for reports to be complete and contain valid data and types in their respective fields. The second part will be to ensure that the report data can be sent to the user's device in a format that their device will be able to extract all the report data from. As the reports are generated using Python and the language of the device we have been developing our application on executing Java, this will be an important test.
 
 \subparagraph{Test Cases}
 \begin{itemize}
 \item TC-04 Auditing Reports
-  \subitem Requirements Fullfilled:
+  \subitem Requirements Fulfilled:
   \begin{enumerate}
     \item Ensure reports are properly formatted before delivery
     \item Ensure all report fields contain valid data
     \item The system must generate reports that should be easily readable and detailed while avoiding being confusing to users.
   \end{enumerate}
 \item TC-05 Delivering Reports
-  \subitem Requirements Fullfilled:
+  \subitem Requirements Fulfilled:
   \begin{enumerate}
     \item Ensure reports objects can be converted to Java objects
     \item Ensures that report can be delivered to the user's device
@@ -1126,7 +1126,7 @@ This next part will be testing the functionality of auditing a report and delive
 \end{itemize}
 
 \subparagraph{TC-04 Auditing Reports}
-This test case will involve taking reports that have been generated by the system and auditing them. The test will involve taking reports and formatting them into a appropriate data type, likely a string, for delivery to our user's device. Then it will then audit the report by checking to make sure taht all the fields that were in the Report object are in the object. We will begin the testing process by attempting this by using valid reports, reports with all their fields filled, then on invalid reports, reports missing one or more fields or has invalid fields.
+This test case will involve taking reports that have been generated by the system and auditing them. The test will involve taking reports and formatting them into a appropriate data type, likely a string, for delivery to our user's device. Then it will then audit the report by checking to make sure that all the fields that were in the Report object are in the object. We will begin the testing process by attempting this by using valid reports, reports with all their fields filled, then on invalid reports, reports missing one or more fields or has invalid fields.
 
 \subparagraph{TC-05 Delivering Reports}
 This part of this testing phase will involve taking the data type we generated and converting it to a Java equivalent object. Our first test will begin by reading in files containing the report data from storage on the device and converting them into their equivalent Java objects. We will then move to testing when report data is delivered by sending them through the server to client devices.
@@ -1137,7 +1137,7 @@ This final phase of testing will involve taking the user reports and processing 
 \subparagraph{Test Cases}
 \begin{itemize}
 \item TC-06 Presenting Report Data
-  \subitem Requirements Fullfilled:
+  \subitem Requirements Fulfilled:
   \begin{enumerate}
     \item Display report data to the user
     \item Give user the visual aids and an interface to interact with report
@@ -1202,9 +1202,9 @@ class report:
 \end{lstlisting}
 
 \subsubsection{System Conversion and Implementation}
-In the process of implementing the Statistics subsystem there was some changes to the system. One of these was to implement the report factory that was the primary part of the system on the android device rather than on the server. This change resulted in the subsytem to have to be coded in Java and utilize several features built in to the android system libraries.
+In the process of implementing the Statistics subsystem there was some changes to the system. One of these was to implement the report factory that was the primary part of the system on the android device rather than on the server. This change resulted in the subsystem having to be coded in Java and utilize several features built in to the android system libraries.
 
-It has als resulted in the addition of another feature to this subsystem, managing the local database on the android device. It was originally part of the Geolocaton subsystem until the redesign of this system required access to it. When it was migrated to the Statistics subsystem it was significantly expanded and additional features were added to handle the demands of both Statistics and the Geolocation subsystems as well as allow better integration with the other subsystems. The additional features required for the Statistics subsystem were to store basic and user reports. The Social and User subsystems required access to these reports to implement some of the features of offered by them.
+It has also resulted in the addition of another feature to this subsystem, managing the local database on the android device. It was originally part of the Geolocation subsystem until the redesign of this system required access to it. When it was migrated to the Statistics subsystem it was significantly expanded and additional features were added to handle the demands of both Statistics and the Geolocation subsystems as well as allow better integration with the other subsystems. The additional features required for the Statistics subsystem were to store basic and user reports. The Social and User subsystems required access to these reports to implement some of the features of offered by them.
 
 \subsubsection{Design Alternatives}
 We considered two different designs for this subsystem. One approach, the original, was to design and implement this subsystem on the server using Python. The second approach, was to implement the subsystem on the android device using Java.
