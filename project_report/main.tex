@@ -1216,28 +1216,30 @@ The second approach, which we decided to implement, was to implement the system 
 %======================================================================
 
 \subsection{Geolocation Collection and Plotting - Johnny Bragg}
-This sub-system, referred to as the Geolocation sub-system, will manage the collection, plotting, and storage of geospatial data that will comprise routes traversed by the user. This data will include: WGS 1984 Latitude and Longitude coordinates, expressed in degrees, minutes, and seconds, Elevation as measured in feet, relative time-stamp information in a 24Hr hh:mm:ss format, and additional derived attributes from the aforementioned data, such as speed, direction, etc.
+This sub-system, referred to as the Geolocation sub-system, will manage the collection, plotting, and storage of geospatial data that will comprise routes traversed by the user. This data will include: WGS 1984 Latitude and Longitude coordinates, expressed in decimal degrees, Elevation as measured in measures, 0 relative time-stamp information in a 24Hr hh:mm:ss format, and additional derived attributes from the aforementioned data, such as speed, direction, etc.
 
-The sub-system will collect data and write it into an standardized JSON format called GeoJSON for use in the statistics sub-system and storage in the database. Route data will also be accessible by other systems as needed whenever a mapped route needs to be displayed. Additionally, the sub-system will employ two main UI fragments. The first UI fragment will allow a user to track their path as it appears on a web service provided background map in approximately real-time. The second UI will provide a more data oriented synopsis of the user’s current speed, elevation, and coordinates, and will be accessed using a slide up panel visible during data collection. User’s will have the option of exporting data in a comma delimited format for personal use. Other information may be included as the project is revised. The Geolocation sub-system will transmit data to the database back-end for storage and store a local copy of the user's route data on a SQLite database instance on the device to ensure functionality is retained when the User loses service. The DeviceDBHandler class will handle setup and interaction with the database on the device and will synchronize with the external database when needed.
+The sub-system will collect data and write it into a standardized JSON format called GeoJSON\cite{g_geojson_std} for use in the statistics sub-system and storage in the database. Route data will also be accessible by other systems as needed whenever a mapped route needs to be displayed. Additionally, the sub-system will employ two main UI fragments. The first UI fragment will allow a user to track their path as it appears on a web service provided background map in approximately real-time. The second UI will provide a more data oriented synopsis of the user’s current speed, elevation, and coordinates, and will be accessed using a slide up panel visible during data collection. User’s will have the option of exporting data in a text file for personal use. Other information may be included as the project is revised.
 
-Sending and Receiving of Route information To and From the database server is accomplished by extending Java's AsyncTask\cite{g_AsyncTask} class to two new classes: FetchData and SendData and an interface in each class. An implementation of FetchData was found online and modified to handle POST requests as well as GETs.\cite{g_asyncget} The main map activity will implement interfaces for both classes to avoid blocking the UI during requests and while the application awaits a response from the server.
+The Geolocation sub-system will transmit data to the database back-end for storage and store a local copy of the user's route data on a SQLite database instance on the device to ensure functionality is retained when the User loses service. The DeviceDBHandler class will handle setup and interaction with the database on the device and will synchronize with the external database, by tracking time stamps, when needed. During development, it was determined that the statistics subsystem would benefit from local storage capabilities, so the device database was expanded to accommodate the needs of the statistics subsystem, as well as added tables for Users and Achievements. Please see the statistics subsystem for details regarding implementation of the local database system.  
+
+Sending and Receiving of Route information To and From the database server is accomplished by extending Java's AsyncTask\cite{g_AsyncTask} class to two new classes: FetchData and SendData. Both classes make use of an interface and Callback methods to send and retrieve data. An implementation of FetchData was found online and modified to handle POST requests as well as GETs.\cite{g_asyncget} The main map activity will implement interfaces for both classes to avoid blocking the UI during requests and while the application awaits a response from the server.
 
 \subsubsection{User Requirements}
 \begin{itemize}
     \item System will use device sensors to record GPS data in a Latitude/Longitude format.
-    \item System will use device sensors to record user elevation.
+    \item System will use device sensors to record user elevation or device altitude.
     \item System will plot Geolocation data against a Google provided background map.
     \item System will record relative time stamps to use in calculation of speed and direction.
     \item System will display user activity duration, speed, distance, current elevation, and coordinates during data collection.
     \item System will display user routes clearly and in real-time as data is being collected.
-    \item System will allow the user to save individual routes to a comma-delimited file for personal use.
+    \item System will allow the user to save individual routes to a file on the device for personal use.
     \item System will display traversed routes in the User's immediate vicinity.
     \item System will allow a user to tap on a route to retrieve and view information associated with that route.
-    \item System will store a user�s routes in a particular format for use in Pathway.
+    \item System will store a user's routes in a particular format for use in Pathway.
     \item System will maintain a local device database to store a user's route data.
     \item System will be available as long as a persistent data connection is allowed.
     \item System will be made available in a limited capacity with reduced accuracy and no map service while no data connection exists.
-    \item System will accurately and precisely locate the user�s position within an acceptable margin of error, allowing for a larger margin where service is weak or none exists.
+    \item System will accurately and precisely locate the user's position within an acceptable margin of error, allowing for a larger margin where service is weak or none exists.
 \end{itemize}
 
 \subsubsection{Process}
@@ -1252,7 +1254,7 @@ Possible extensions may include extension of data review to a website interface.
 
 \paragraph{General Domain Knowledge}
 \begin{itemize}
-    \item  Most mobile devices are GPS capable.
+    \item Most mobile devices are GPS capable.
     \item Most mobile devices include sensors to count steps and track speed.
     \item Many people who walk/run for fitness maintain some records of times/speeds to track progress.
     \item Fewer people maintain information regarding where they perform fitness activities outside of a gym or similar facility.
@@ -1264,12 +1266,13 @@ Possible extensions may include extension of data review to a website interface.
 The primary clients of the mapping sub-system will be the other sub-systems comprising Pathway, who will depend on the mapping sub-system to collect and store the data used in those sub-systems. Users of Pathway will interact with the Geolocation sub-system to initiate data collection, describe routes, and save completed routes.
 
 \paragraph{The Environment}
-All actors in this process will need access to a GPS enabled tablet or cell phone running Android v5 or later.  The final product will require an active data connection to write and retrieve data from the database and to retrieve base-map information from Google servers.
+All actors in this process will need access to a GPS enabled tablet or cell phone running Android v5 or later.  The final product will require an active data connection to write and retrieve data from the database and to retrieve base-map information from Google servers. 
+Offline functionality will be limited to viewing of User owned routes saved on the device.
 
 \paragraph{Tasks and Procedures}
 \begin{itemize}
 \item Finding user location using GPS: The sensors perform an initial ping of satellite locations to establish a start location.
-\item GPS accuracy is limited by device and location constraints. Specifically, mountainous or very built-up urban areas may produce signal �bouncing�, causing the GPS to lose accuracy.
+\item GPS accuracy is limited by device and location constraints. Specifically, mountainous or very built-up urban areas may produce signal “bouncing”, causing the GPS to lose accuracy.\cite{g_czerniak2002collecting}
 \item Subsequent positions are found by pinging the sensors every x seconds.
 \item GPS location may be supplemented using triangulation through wi-fi networks and cell towers.
 \item Recording the current user position: The information collected by the device sensors is in the form of Lat/Long coordinates and an elevation value, typically measured in feet.
@@ -1279,7 +1282,7 @@ All actors in this process will need access to a GPS enabled tablet or cell phon
 \end{itemize}
 
 \paragraph{Competing Software}
-Our research has discovered that many applications incorporate mapping information into their functionality. Due to the widespread usefulness of the system, the general nature of the software, and the fact that the api used is offered free of charge, it can be argued that there are no competitors. Similar software products exist but are marketed on their utility either outside of mapping or by some unique feature in tandem with mapping.
+Our research has discovered that many applications incorporate mapping information into their functionality. Due to the widespread usefulness of the system, the general nature of the software, and the fact that the API used is offered free of charge, it can be argued that there are no direct competitors. Similar software products exist but are marketed on their utility either outside of mapping or by some unique feature in tandem with mapping.
 
 \paragraph{Domain Similarities}
 Mapping applications like the one we envision are common, and the usefulness of geographic data is apparent in many fields and industries. There is no shortage of similar systems available for use, so documentation is both plentiful and current. Due to the general nature of this sub-system, we are not concerned that any similarities would constitute a duplication of an existing system. The widespread usage of similar systems does however provide us with a wealth of information to be used towards development of our own system.
@@ -1292,11 +1295,41 @@ the Google Maps API and as such will not require extensive coding to achieve the
 This functionality would include map display, panning, zoom, and drawing of features on the map.
 
 
-\paragraph{Algorithms}
-To implement the route comparison feature, we have reviewed two algorithms that break the problem down into a comparison of ordered sets of pairs:
-Hausdorff distance and Fréchet distance.
-The Hausdorff measures how far two subsets of a metric are from each other. \cite{g_hausdorff}Between these two algorithms, there is a tradeoff of complexity versus versatility,
-which can be summarized as below, with included pseudocode for Hausdorff.
+\paragraph{Design Analysis: Algorithms}
+To implement the route comparison feature, we have reviewed three algorithms that break the problem down into a comparison of ordered sets of pairs:
+Hausdorff distance and Fréchet distance, and a third algorithm that we have devised that will provide a simple comparison measure.
+
+
+\paragraph{Simple Line Comparison}
+We have created a basic route comparison algorithm that will run first, saving computation time. The simple version of the algorithm takes two Routes as input and recursively compares start and end points of line segments within the route, limiting the calls to five recursions, in a fashion similar to how a binary search is performed, beginning with the total route.
+\newline Note: n is the last element in the Route.\newline
+
+\begin{algorithm}[H]
+\SetAlgoLined
+match = false \\
+\If{ \(counter >= 5 \)}{
+match = true \\}
+\ElseIf{len($Route1$) == 0 OR len($Route2$) == 0}{return false}
+\ElseIf{len($Route1$) == 1 AND len($Route2$) == 1}{\If{start $Route1$ near start $Route2$ AND end $Route1$ near end $Route2$}{match = true}}
+\ElseIf{start $Route1$ near start $Route2$ AND \\
+    end $Route1$ near end $Route2$}{
+    $counter \gets $counter + 1\\
+    $k \gets $floor(n/2)$\\
+    match = (basicCompare($Route1[0:k]$, $Route2[0:k]$, $counter$) AND \\
+              basicCompare($Route1[k+1:n]$, $Route2[k+1:n]$, $counter))\\
+    }
+return match
+
+\caption{basicCompare(Route 1, Route 2, counter)}
+\end{algorithm}
+
+The above algorithm uses a counter to limit the number of times a recursive call is made, and therefore runs in O(1) time. Some possible drawbacks to the above algorithm are that two lines that intersect at key places but are otherwise very different may be considered a match. The Basic Line Comparison algorithm is unlikely to be useful for long or complex routes, but will serve as a good first comparison for less complex features. 
+\pagebreak
+
+
+
+\paragraph{Hausdorff Distance}
+The Hausdorff distance, named after Felix Hausdorff, measures how far two subsets of a metric are from each other. \cite{g_wiki_hausdorff_2017} The Hausdorff distance compares sets of points, and as such, is unaffected by the ordering of the sets. This makes it especially suitable for use in Pathway to determine if one traversed Route is the same as another, regardless of starting point along that Route. The following pseudocode was adapted from an online source.\cite{g_hausdorff_code}
 
 \begin{algorithm}[h]
 \SetAlgoLined
@@ -1317,26 +1350,80 @@ $h \gets 0$\\
 \caption{Hausdorff distance for ordered sets of coordinate pairs.}
 \end{algorithm}
 
-The Fréchet distance is a measure of similarity between curves that takes into account the location and ordering of the points along the curves.\cite{g_frechet} It is more complex and harder to implement, but generally more versatile and supports backtracking. Pseudo code omitted due to complexity.
+Hausdorff distance is the best candidate for our purposes, as it treats lines as sets of points with no particular order.It is also worth noting that H(A,B) != H(B,A), necessarily.\cite{g_hausdorff_code} The Hausdorff algorithm shown here clearly runs in O(mn) time. While the run time of the algorithm is expensive, the simplicity of the implementation and the relatively small data sets that will be compared make the run time an acceptable trade-off.
 
-At this stage of the project, we plan to implement both algorithms and compare their accuracy against a series of test cases designed to assess the correctness and flexibility of each algorithm.
+\pagebreak
 
-Additionally, we have created a basic route comparison algorithm that will run first, saving computation time. The simple version of the algorithm takes two Routes as input and recursively compares start and end points of line segments within the route up to five recursions, beginning with the total route.
-\newline Note: n is the last element in the Route.\newline
 
-\begin{algorithm}[H]
+\paragraph{Fréchet Distance}
+The Fréchet distance is a measure of similarity between curves that takes into account the location and ordering of the points along the curves.\cite{g_wiki_frechet_2017} It is more complex and harder to implement, but generally more versatile and supports backtracking. Unlike Hausdorff distance, Fréchet distance does consider ordering of points of when performing comparisons.
+
+
+\begin{algorithm}[h]
 \SetAlgoLined
-\If{ \(counter < 10 \)}{
-\If{start $Route1$ near start $Route2$ AND
-    end $Route1$ near end $Route2$}{
-    $counter \gets $counter + 1\\
-    $k \gets $floor(n/2)$\\
-    basicCompare($Route1[0:k]$, $Route2[0:k]$, $counter$)\\
-    basicCompare($Route1[k+1:n]$, $Route2[k+1:n]$, $counter)\\
-    }
-}
-\caption{basicCompare(Route 1, Route 2, counter)}
+\KwFunction dF(P,Q): real;\\
+\KwData{Polygonal Curves P = ($u_1$,...,$u_p$) and Q = ($u_1$,...,$u_q$)}\\
+\KwResult{dist(P,Q)}\\
+ca: array[1..p,1..q] of real;\\
+\Fn c(i,j): real;\\
+\For{i=1 to p}{\For{j=1 to q}{ca(i,j) \gets -1.0}}
+\caption{Fréchet distance for two polygonal curves.}
+\If{\(ca(i,j) > -1\)}{return ca(i,j)}
+\ElseIf{i = 1 AND j = 1}{ca(i,j) \gets d($u_1$, $v_1$)}
+\ElseIf{\(i > 1\) AND j = 1}{ca(i,j) \gets max(c(i-1,1), d($u_1$, $v_1$))}
+\ElseIf{ i = 1 AND \(j > 1\)}{ca(i,j) \gets max(c(1,j-1), d($u_1$, $v_1$))}
+\ElseIf{\(i > 1\) AND \(j > 1\)}{ca(i,j) \gets max(min(c(i-1,j),c(i-1,j-1), c(i, j-1)), d($u_1$, $v_1$))}
 \end{algorithm}
+
+The above implementation of the discrete Fréchet distance, as described by Eiter and Mannila\cite{g_frechetcompute_1994}, runs in O(pq) for initial assignment and  O(pq) for calculation of ca(p,q) for a total of O(pq) time. 
+
+\pagebreak
+\paragraph{Algorithms Testing}
+\begin{figure}[H]
+    \centering
+    \begin{center}
+        \makebox[\textwidth]{\includegraphics[width=0.5\paperwidth]{routesCompare.jpg}}
+    \end{center}
+    \caption{Test Routes For Comparison Algorithms}
+    \label{fig:my_label}
+\end{figure}
+The previously mentioned algorithms were tested against the above routes. Results are summarized in table form on the next page. Cells marked in grey represent where Routes were compared to themselves and are trivially true. Comparisons were performed with a 25m tolerance for comparison acceptance of points. Hausdorff and Fréchet algorithms return a distance value, which was then accepted if the distance was within the 25m tolerance.
+\pagebreak
+\begin{figure}[H]
+    \centering
+    \begin{center}
+        \makebox[\textwidth]{\includegraphics[width=0.5\paperwidth]{compareSimpleResults.jpg}}
+    \end{center}
+    \caption{Results for Simple Comparison}
+    \label{fig:my_label}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \begin{center}
+        \makebox[\textwidth]{\includegraphics[width=0.5\paperwidth]{compareHausdorffResults.jpg}}
+    \end{center}
+    \caption{Results for Hausdorff Comparison}
+    \label{fig:my_label}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \begin{center}
+        \makebox[\textwidth]{\includegraphics[width=0.5\paperwidth]{compareFrechetResults.jpg}}
+    \end{center}
+    \caption{Results for Fréchet Comparison}
+    \label{fig:my_label}
+\end{figure}
+
+
+\paragraph{Algorithm Results Summary}
+
+The Simple Comparison works as expected, correctly identifying similar routes Red and Blue and Routes Orange and Purple as similar. It also correctly marked Routes Green and Yellow as not matching. Routes Pink and White however were incorrectly marked as not matching. One obvious shortcoming of the simple comparison is that it adheres to a strict ordering of pairs, and so would not match a route to the reverse of itself.
+
+
+The Hausdorff comparison works as expected in all cases, correctly matching Red and Blue, Orange and Purple, and Pink and White as matching, and Yellow and Green as not matching. Further, the Hausdorff algorithm correctly identifies route similarity in cases where Routes are reversed. This most closely matches the needed functionality for Pathway's purposes.
+
+
+The Frechet comparison does a better job matching less linear features correctly, but also pays attention to point order within Routes. This gives it the same shortcoming as the Simple Comparison algorithm. While still useful, this shortcoming makes it less than ideal for use in Pathway.
 
 \pagebreak
 \paragraph{Tool Selection}
