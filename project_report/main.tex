@@ -696,8 +696,13 @@ After establishing the connection to the users Facebook account, we will be impl
     \end{enumerate}
 \item The user wishes to see friends from Facebook that also have the app:
     \begin{enumerate}
-    \item The user hits the friends tab, and it loads all of their friends that also have the app installed on their device
+    \item The user hits the "Friends" tab, and it loads all of their friends that also have the app installed on their device
     \end{enumerate}
+\item The user wishes to see the achievements they unlocked:
+	\begin{enumerate}
+	\item The user hits the "Achievements" tab, and it loads all of the application's achievements and displays what achievements the user has unlocked
+	\end{enumerate}
+
 \end{enumerate}
 \pagebreak
 
@@ -714,8 +719,59 @@ After establishing the connection to the users Facebook account, we will be impl
   \subsubitem 3. Webview of Facebook login page appears where the user will be prompted to enter their account email and password.
   \subsubitem 4. User will be directed back to app depending on whether the login was successful or not.
   \subitem Expected Result: User is logged in/registered and is added to the database with accessibility to core data such as name, email, and friend's list from Facebook account (other data can be accessed optionally).
-  \subitem Actual Result: User is connected to their Facebook account but there is no UI set up for the main page of the app which is where the user will be directed once their Facebook login is successful.
 \end{itemize}
+
+\begin{figure}[H]
+	\centering
+	\begin{center}
+		\makebox[\textwidth]{\includegraphics[width=0.8\paperwidth]{FBLoginScreenshot.png}}
+	\end{center}
+	\caption{User linking Facebook to app}
+	\label{fig:my_label}
+\end{figure}
+
+\begin{itemize}
+	\item TC-02: Viewing Achievements
+	\subitem Requirements Fulfilled:
+	\subsubitem The user will be able to see what achievements they have unlocked
+	\subitem Test Steps:
+	\subsubitem 1. App is started.
+	\subsubitem 2. After logging in open the navigation drawer
+	\subsubitem 3. Tap "Achievements"
+	\subsubitem 4. User will be directed to the achievements page to see what achievements they have unlocked
+	\subitem Expected Result: User displays list of achievements which will show if they are unlocked or not
+\end{itemize}
+
+\begin{figure}[H]
+	\centering
+	\begin{center}
+		\makebox[\textwidth]{\includegraphics[width=0.8\paperwidth]{AchievementsScreenshot.png}}
+	\end{center}
+	\caption{User displaying the achievements page}
+	\label{fig:my_label}
+\end{figure}
+
+\begin{itemize}
+	\item TC-02: Viewing Friends
+	\subitem Requirements Fulfilled:
+	\subsubitem The user will be able to see their Facebook friends that also have the app downloaded
+	\subitem Test Steps:
+	\subsubitem 1. App is started.
+	\subsubitem 2. Log in through Facebook
+	\subsubitem 3. Will be redirected to friends list after the login is complete
+	\subitem Expected Result: User displays list of Facebook friends who also use the app
+\end{itemize}
+
+\begin{figure}[H]
+	\centering
+	\begin{center}
+		\makebox[\textwidth]{\includegraphics[width=0.8\paperwidth]{FriendsListScreenshot.png}}
+	\end{center}
+	\caption{User displaying the achievements page}
+	\label{fig:my_label}
+\end{figure}
+
+
 \pagebreak
 
 \subsubsection{Social Subsystem Code}
@@ -785,17 +841,53 @@ callbackManager.onActivityResult(requestCode, resultCode, data);
 
 \end{lstlisting}
 
-\paragraph{Achievement Implementation}
-We have implemented simple achievements using UI components from Android Studio that the user can unlock by completing various actions within the app.  Our initial approach was to implement an achievement system using the Facebook API but certain restrictions hindered us from doing so. We will be creating a database table to hold boolean variables that correspond to the different achievements and are originally set to false. The Social Subsystem will be pulling information from the Statistics Subsystem to keep up with the user's progress toward each achievement. Once the information pulled from the user's statistics satisfies the requirement for an achievement, it will become unlocked. Below is the pseudocode for how each achievement will check for the boolean variable and change the status of the achievement.
+
+
+\subsubsection{Design Alternatives}
+For the social subsystem, the original plan was to utilize the Facebook API to set up an achievement system and a challenge function that would just essentially send a Facebook notification to the user being challenged. Even though the API has these utilities, they are not fully accessible to those creating an Android app. The notifications function was only allowed its by a web canvas app and since our project is a native app on an android device, it was not possible to implement.
+\paragraph{First Design Alternative: Achievements}
+Seeing as how the Facebook API gives applications in development such a restricted area to make implementations, we decided to create our own achievement system from the ground up. We did this by first creating a local database that stored set achievements with their names and a value that shows the activation of the achievement which means it has been unlocked. We then pull user data from the Statistics subsystem to help set conditions in which the user will unlock certain achievements once the requirements are met for each individual achievement. After the requirements are met, the value in the table for the corresponding achievement also changes to signify that it has been unlocked.
 
 \begin{lstlisting}
-//code will make an HTTP GET request to the server to retrieve boolean variable
-//then an if statement will check and see if requirements are satisfied for the achievement
+/*
+code will access a local database that has the achievements stored manually.
+Then we create an object of the class that the local database is created in to pull 
+user report data so that we can set if statements which will check and see if requirements are satisfied for the achievement
+*/
 
 
-if boolean variable is true{
-	set achievement to "unlocked"
+if user data meets the condition set{
+set achievement to "unlocked"
 }
+
+\end{lstlisting}
+
+
+
+\paragraph{Second Design Alternative: Challenging}
+Since the API also allows little room for development when trying to send notifications to users once they are challenged, we decided to take another approach. We agreed upon an implementation that instead of sending the notification to the user through Facebook, we will just use the SMS feature that is provided through Android Studios which is called the SMSManager. In order to utilize this function we had to include imports and permissions that would let us use it. So now when a user challenges someone, the application will make a GET request to the server for the phone number of the person that is being challenged and it will send a preset message notifying them that a user has challenged a route of theirs. 
+
+\begin{lstlisting}
+
+/*
+called after user chooses route to challenge and request is made to server to retrieve phone number
+*/
+public void sendText(){
+//request to use SMS permission during runtime
+requestSmsPermission();
+try {
+
+sendSms("User's number", "Your route has been Challenged!");
+
+} catch (Exception e) {
+e.printStackTrace();
+}
+
+}
+
+private void sendSms(String phoneNumber, String message){
+SmsManager sms = SmsManager.getDefault();
+sms.sendTextMessage(phoneNumber, null, message, null, null);
 
 \end{lstlisting}
 
