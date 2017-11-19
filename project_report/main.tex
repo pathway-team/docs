@@ -7,7 +7,7 @@
 \usepackage{listings}
 
 
- 
+
 \title{Bibliography management:BibTeX}
 \author{Share\LaTeX}
 
@@ -82,7 +82,7 @@ The Statistics module will rely on data collected by the Geolocation module and 
 \end{figure}
 
 \subsection{UI Description}
-Pathway will rely on 
+Pathway will rely on
 Figure 2. may also be used to describe a general flow of the user interface, which is as follows:
 \begin{enumerate}
     \item Upon loading the application, the user is met with a login screen and prompted to login.
@@ -555,6 +555,26 @@ This event would in no way affect the existing data in the database container, a
 is completely isolated from the API layer. The only changes that would cascade through all layers would
 be changes to the database schema itself. This is because every other part of this subsystem depends upon it.
 
+\paragraph{Design Choice}
+At the start of this project it was conceptualized that the user account and login system would handle
+user authentication and creation. However as the two systems were further developed it became evident that
+rather than writing a separate module which the sever would interface with for user authentication, it would
+be better to utilize the built in features that Django provides for user authentication, as they are
+better tested and already built, and simply expose an API. So, the functionality for user authentication
+was moved out of the User system, developed by Daniel Cregan, and into the Infrastructure system.
+This allowed the implementation of such functionality to be done more rapidly and allowed the development
+of the User system to focus on other aspects.
+
+We also had to make a change in what server infrastructure provider we utilized. The original design was to
+use AWS. AWS is extremely powerful and sees the most usage for hosting complex applications in the "cloud"
+\cite{aws_do}. However with that power comes complexity. AWS is an IaaS service, meaning infrastructure as a
+service, platform. Because of this there are many options for what to use, how to use it, and how to
+configure it. This introduced unnecessary complexity into the subsystem's development compared to our
+hosting and deployment needs. So, the choice was made to utilize DigitalOcean instead. DigitalOcean, on top
+of being cheaper, was also much simpler to use, as they provide developers with a virtualized linux machine
+somewhere in their datacenters, and a developer is able to simple SSH into the machine and begin configuring
+the application. This was preferable because the developer of this subsystem was already familiar with this
+kind of work flow.
 
 %=====================================================================================
 
@@ -794,7 +814,7 @@ We have implemented simple achievements using UI components from Android Studio 
 
 
 if boolean variable is true{
-	set achievement to "unlocked"
+  set achievement to "unlocked"
 }
 
 \end{lstlisting}
@@ -1096,11 +1116,11 @@ In the process of implementing the Statistics subsystem there was some changes t
 It has als resulted in the addition of another feature to this subsystem, managing the local database on the android device. It was originally part of the Geolocaton subsystem until the redesign of this system required access to it. When it was migrated to the Statistics subsystem it was significantly expanded and additional features were added to handle the demands of both Statistics and the Geolocation subsystems as well as allow better integration with the other subsystems. The additional features required for the Statistics subsystem were to store basic and user reports. The Social and User subsystems required access to these reports to implement some of the features of offered by them.
 
 \subsubsection{Design Alternatives}
-We considered two different designs for this subsystem. One approach, the original, was to design and implement this subsystem on the server using Python. The second approach, was to implement the subsystem on the android device using Java. 
+We considered two different designs for this subsystem. One approach, the original, was to design and implement this subsystem on the server using Python. The second approach, was to implement the subsystem on the android device using Java.
 \paragraph{First Design Alternative}
 The original approach was to integrate the subsystem on the server to be called when data for a route was being saved to the server's database. The subsystem would have called during the saving to create a report and then save the report to the server's database as well. The report would be saved for future requests. The subsystem was going to be implemented using a combination of the Factory Method and the Builder design patterns.
 \paragraph{Second Design Alternative}
-The second approach, which we decided to implement, was to implement the system on the android device. The system was implemented in very much the same manner as the original, however the reports were generated and stored on the android device's local SQLite database. This approach offered easier access and better security for the User's route data. It also made it easier for the Statistics subsystem to be intergrated with the other subsystem. 
+The second approach, which we decided to implement, was to implement the system on the android device. The system was implemented in very much the same manner as the original, however the reports were generated and stored on the android device's local SQLite database. This approach offered easier access and better security for the User's route data. It also made it easier for the Statistics subsystem to be intergrated with the other subsystem.
 
 %======================================================================
 
@@ -1183,7 +1203,7 @@ This functionality would include map display, panning, zoom, and drawing of feat
 
 \paragraph{Algorithms}
 To implement the route comparison feature, we have reviewed two algorithms that break the problem down into a comparison of ordered sets of pairs:
-Hausdorff distance and Fréchet distance. 
+Hausdorff distance and Fréchet distance.
 The Hausdorff measures how far two subsets of a metric are from each other. \cite{g_hausdorff}Between these two algorithms, there is a tradeoff of complexity versus versatility,
 which can be summarized as below, with included pseudocode for Hausdorff.
 
@@ -1216,7 +1236,7 @@ Additionally, we have created a basic route comparison algorithm that will run f
 \begin{algorithm}[H]
 \SetAlgoLined
 \If{ \(counter < 10 \)}{
-\If{start $Route1$ near start $Route2$ AND 
+\If{start $Route1$ near start $Route2$ AND
     end $Route1$ near end $Route2$}{
     $counter \gets $counter + 1\\
     $k \gets $floor(n/2)$\\
@@ -2074,6 +2094,7 @@ Many applications are similar to Pathway in the sense that they make use of geos
     \item - Docs.djangoproject.com. (2017). django.contrib.auth | Django documentation | Django. [online] Available at: https://docs.djangoproject.com/en/1.11/ref/contrib/auth/ [Accessed 17 Oct. 2017].
     \item - Python-3-patterns-idioms-test.readthedocs.io. (2017). The Singleton — Python 3 Patterns, Recipes and Idioms. [online] Available at: http://python-3-patterns-idioms-test.readthedocs.io/en/latest/Singleton.html [Accessed 17 Oct. 2017].
     \item - Developer.android.com. (2017). HttpURLConnection | Android Developers. [online] Available at: https://developer.android.com/reference/java/net/HttpURLConnection.html [Accessed 13 Nov. 2017].
+    \item - www.hackernoon.com. (2017). AWS vs. DigitalOcean. [online] Available at: https://hackernoon.com/aws-vs-digitalocean-which-cloud-server-is-better-1386499a6664 [Accessed 19 Nov. 2017].
 \end{itemize}
 
 
