@@ -1,0 +1,111 @@
+\contentsline {section}{\numberline {1}Project Definition}{4}
+\contentsline {section}{\numberline {2}Application Structure And Flow}{5}
+\contentsline {subsection}{\numberline {2.1}Pathway Structure}{5}
+\contentsline {subsection}{\numberline {2.2}Pathway Flow}{5}
+\contentsline {subsection}{\numberline {2.3}UI Description}{6}
+\contentsline {section}{\numberline {3}User Requirements}{7}
+\contentsline {subsection}{\numberline {3.1}Functional}{7}
+\contentsline {subsection}{\numberline {3.2}Quality}{9}
+\contentsline {subsection}{\numberline {3.3}Platform}{10}
+\contentsline {subsection}{\numberline {3.4}Process}{10}
+\contentsline {section}{\numberline {4}Sub-Systems}{10}
+\contentsline {subsection}{\numberline {4.1}Back-end Infrastructure - Cory Sabol}{10}
+\contentsline {subsubsection}{\numberline {4.1.1}Introduction}{10}
+\contentsline {subsubsection}{\numberline {4.1.2}User Requirements}{10}
+\contentsline {subsubsection}{\numberline {4.1.3}Platform Requirements}{11}
+\contentsline {subsubsection}{\numberline {4.1.4}Domain Analysis}{11}
+\contentsline {paragraph}{\numberline {4.1.4.1}Introduction}{11}
+\contentsline {paragraph}{\numberline {4.1.4.2}Extensions}{11}
+\contentsline {paragraph}{\numberline {4.1.4.3}General Domain Knowledge}{12}
+\contentsline {paragraph}{\numberline {4.1.4.4}Clients and Users}{12}
+\contentsline {paragraph}{\numberline {4.1.4.5}The Environment}{12}
+\contentsline {paragraph}{\numberline {4.1.4.6}Tasks and Procedures}{12}
+\contentsline {paragraph}{\numberline {4.1.4.7}Competing Software}{13}
+\contentsline {paragraph}{\numberline {4.1.4.8}Domain Similarities}{13}
+\contentsline {subsubsection}{\numberline {4.1.5}System Analysis}{13}
+\contentsline {paragraph}{\numberline {4.1.5.1}Introduction}{13}
+\contentsline {paragraph}{\numberline {4.1.5.2}Process Model}{13}
+\contentsline {paragraph}{\numberline {4.1.5.3}Detailed Model}{13}
+\contentsline {paragraph}{\numberline {4.1.5.4}System Analysis}{13}
+\contentsline {paragraph}{\numberline {4.1.5.5}System Analysis}{15}
+\contentsline {paragraph}{\numberline {4.1.5.6}Use Cases}{15}
+\contentsline {paragraph}{\numberline {4.1.5.7}Scalability}{16}
+\contentsline {paragraph}{\numberline {4.1.5.8}Hosting}{17}
+\contentsline {paragraph}{\numberline {4.1.5.9}Database}{17}
+\contentsline {paragraph}{\numberline {4.1.5.10}Classes}{17}
+\contentsline {paragraph}{\numberline {4.1.5.11}Deployment}{17}
+\contentsline {paragraph}{\numberline {4.1.5.12}Tool Selection}{19}
+\contentsline {subsection}{\numberline {4.2}Social - Chris Carney}{19}
+\contentsline {subsubsection}{\numberline {4.2.1}Introduction}{19}
+\contentsline {subsubsection}{\numberline {4.2.2}User Requirements}{19}
+\contentsline {subsubsection}{\numberline {4.2.3}Platform}{20}
+\contentsline {subsubsection}{\numberline {4.2.4}Domain Analysis}{20}
+\contentsline {paragraph}{\numberline {4.2.4.1}Extensions}{20}
+\contentsline {paragraph}{\numberline {4.2.4.2}General Domain Knowledge}{20}
+\contentsline {paragraph}{\numberline {4.2.4.3}Clients and Users}{20}
+\contentsline {paragraph}{\numberline {4.2.4.4}Computing Environment}{21}
+\contentsline {paragraph}{\numberline {4.2.4.5}Tasks and Procedures}{21}
+\contentsline {paragraph}{\numberline {4.2.4.6}Competing Software}{21}
+\contentsline {paragraph}{\numberline {4.2.4.7}Similar Domains}{21}
+\contentsline {subsubsection}{\numberline {4.2.5}System Analysis}{22}
+\contentsline {paragraph}{\numberline {4.2.5.1}Introduction}{22}
+\contentsline {paragraph}{\numberline {4.2.5.2}Use Cases}{28}
+\contentsline {subsection}{\numberline {4.3}Statistics/Metrics - Eric West}{29}
+\contentsline {subsubsection}{\numberline {4.3.1}Introduction}{29}
+\contentsline {subsubsection}{\numberline {4.3.2}User Requirement}{29}
+\contentsline {subsubsection}{\numberline {4.3.3}Platform}{29}
+\contentsline {subsubsection}{\numberline {4.3.4}Domain Analysis}{29}
+\contentsline {paragraph}{\numberline {4.3.4.1}Competing Software}{29}
+\contentsline {paragraph}{\numberline {4.3.4.2}Extensions}{30}
+\contentsline {paragraph}{\numberline {4.3.4.3}General Domain Knowledge}{30}
+\contentsline {paragraph}{\numberline {4.3.4.4}Tasks and Procedures}{30}
+\contentsline {paragraph}{\numberline {4.3.4.5}Clients and Users}{30}
+\contentsline {paragraph}{\numberline {4.3.4.6}Similar Domains}{31}
+\contentsline {subsubsection}{\numberline {4.3.5}System Analysis}{31}
+\contentsline {paragraph}{\numberline {4.3.5.1}Introduction}{31}
+\contentsline {paragraph}{\numberline {4.3.5.2}Use Cases}{31}
+\contentsline {subsection}{\numberline {4.4}Geolocation Collection and Plotting - Johnny Bragg}{36}
+\contentsline {subsubsection}{\numberline {4.4.1}User Requirements}{36}
+\contentsline {subsubsection}{\numberline {4.4.2}Process}{37}
+\contentsline {subsubsection}{\numberline {4.4.3}Domain Analysis}{37}
+\contentsline {paragraph}{\numberline {4.4.3.1}Introduction}{37}
+\contentsline {paragraph}{\numberline {4.4.3.2}Extensions}{37}
+\contentsline {paragraph}{\numberline {4.4.3.3}General Domain Knowledge}{37}
+\contentsline {paragraph}{\numberline {4.4.3.4}Clients and Users}{38}
+\contentsline {paragraph}{\numberline {4.4.3.5}The Environment}{38}
+\contentsline {paragraph}{\numberline {4.4.3.6}Tasks and Procedures}{38}
+\contentsline {paragraph}{\numberline {4.4.3.7}Competing Software}{38}
+\contentsline {paragraph}{\numberline {4.4.3.8}Domain Similarities}{39}
+\contentsline {subsubsection}{\numberline {4.4.4}System Analysis}{39}
+\contentsline {paragraph}{\numberline {4.4.4.1}Introduction}{39}
+\contentsline {paragraph}{\numberline {4.4.4.2}Algorithms}{39}
+\contentsline {paragraph}{\numberline {4.4.4.3}Tool Selection}{40}
+\contentsline {paragraph}{\numberline {4.4.4.4}Use Cases}{41}
+\contentsline {paragraph}{\numberline {4.4.4.5}Classes}{44}
+\contentsline {subsection}{\numberline {4.5}Testing Plan}{47}
+\contentsline {subsubsection}{\numberline {4.5.1}Test Overview}{47}
+\contentsline {subsubsection}{\numberline {4.5.2}Test Cases}{47}
+\contentsline {subsubsection}{\numberline {4.5.3}Test Case Figures}{51}
+\contentsline {subsubsection}{\numberline {4.5.4}Test Summary}{54}
+\contentsline {subsection}{\numberline {4.6}User Accounts - Daniel Cregan}{55}
+\contentsline {subsubsection}{\numberline {4.6.1}User Requirements}{55}
+\contentsline {subsubsection}{\numberline {4.6.2}Domain Analysis}{56}
+\contentsline {paragraph}{\numberline {4.6.2.1}Extensions}{56}
+\contentsline {paragraph}{\numberline {4.6.2.2}General Domain Knowledge}{56}
+\contentsline {paragraph}{\numberline {4.6.2.3}Clients and Users}{56}
+\contentsline {paragraph}{\numberline {4.6.2.4}Computing Environment}{56}
+\contentsline {paragraph}{\numberline {4.6.2.5}Tasks and Procedures}{57}
+\contentsline {paragraph}{\numberline {4.6.2.6}Similar Domains}{57}
+\contentsline {subsubsection}{\numberline {4.6.3}System Analysis}{57}
+\contentsline {paragraph}{\numberline {4.6.3.1}Use Cases}{58}
+\contentsline {section}{\numberline {5}Pathway - Platform}{63}
+\contentsline {section}{\numberline {6}Pathway - Domain Analysis}{63}
+\contentsline {paragraph}{\numberline {6.0.0.1}Pathway - Extensions}{63}
+\contentsline {paragraph}{\numberline {6.0.0.2}Pathway - General Domain Knowledge}{63}
+\contentsline {paragraph}{\numberline {6.0.0.3}Pathway - Clients and Users}{64}
+\contentsline {paragraph}{\numberline {6.0.0.4}Pathway - Computing Environment}{64}
+\contentsline {subsection}{\numberline {6.1}Pathway - Tasks and Procedures}{64}
+\contentsline {subsection}{\numberline {6.2}Pathway - Competing Software}{65}
+\contentsline {subsection}{\numberline {6.3}Pathway - Similar Domains}{65}
+\contentsline {section}{\numberline {7}Glossary}{65}
+\contentsline {section}{\numberline {8}Bibliography}{67}
