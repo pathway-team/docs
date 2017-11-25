@@ -1208,10 +1208,10 @@ It has also resulted in the addition of another feature to this subsystem, manag
 
 \subsubsection{Design Alternatives}
 We considered two different designs for this subsystem. One approach, the original, was to design and implement this subsystem on the server using Python. The second approach, was to implement the subsystem on the android device using Java.
-\paragraph{First Design Alternative}
+\paragraph{Design Alternative: Server-Side Implementation}
 The original approach was to integrate the subsystem on the server to be called when data for a route was being saved to the server's database. The subsystem would have called during the saving to create a report and then save the report to the server's database as well. The report would be saved for future requests. The subsystem was going to be implemented using a combination of the Factory Method and the Builder design patterns.
-\paragraph{Second Design Alternative}
-The second approach, which we decided to implement, was to implement the system on the android device. The system was implemented in very much the same manner as the original, however the reports were generated and stored on the android device's local SQLite database. This approach offered easier access and better security for the User's route data. It also made it easier for the Statistics subsystem to be intergrated with the other subsystem.
+\paragraph{Second Design Alternative: Client-Side Implementation}
+The second approach, which we decided to implement, was to implement the system on the android device. The system was implemented in very much the same manner as the original, however the reports were generated and stored on the android device's local SQLite database. This approach offered easier access to some of the resources the report system needed and better security for the User's route data. It also made it easier for the Statistics subsystem to be intergrated with the other subsystem. The reports could be immediately stored and retrieved from a local database implemented on the client device.
 
 %======================================================================
 
