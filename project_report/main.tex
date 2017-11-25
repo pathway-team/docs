@@ -1329,7 +1329,7 @@ The above algorithm uses a counter to limit the number of times a recursive call
 
 
 \paragraph{Hausdorff Distance}
-The Hausdorff distance, named after Felix Hausdorff, measures how far two subsets of a metric are from each other. \cite{g_wiki_hausdorff_2017} The Hausdorff distance compares sets of points, and as such, is unaffected by the ordering of the sets. This makes it especially suitable for use in Pathway to determine if one traversed Route is the same as another, regardless of starting point along that Route. The following pseudocode was adapted from an online source.\cite{g_hausdorff_code}
+The Hausdorff distance, named after Felix Hausdorff, measures how far two subsets of a metric are from each other. \cite{g_wiki_hausdorff_2017} The Hausdorff distance considers features as sets of points, and as such, is unaffected by the ordering of the points within the set. This makes it especially suitable for use in Pathway to determine if one traversed Route is the same as another, regardless of starting point along that Route. The following pseudocode was adapted from an online source.\cite{g_hausdorff_code}
 
 \begin{algorithm}[h]
 \SetAlgoLined
@@ -1356,7 +1356,7 @@ Hausdorff distance is the best candidate for our purposes, as it treats lines as
 
 
 \paragraph{Fréchet Distance}
-The Fréchet distance is a measure of similarity between curves that takes into account the location and ordering of the points along the curves.\cite{g_wiki_frechet_2017} It is more complex and harder to implement, but generally more versatile and supports backtracking. Unlike Hausdorff distance, Fréchet distance does consider ordering of points of when performing comparisons.
+The Fréchet distance is a measure of similarity between curves that takes into account the location and ordering of the points along the curves.\cite{g_wiki_frechet_2017} It is more complex and harder to implement, but generally more versatile and supports backtracking. Unlike Hausdorff distance, Fréchet distance does consider ordering of points of when performing comparisons, and as such, would be suitable for comparisons where two Users are simultaneously running against one another on the same Route. Pathway does not currently implement the functionality for that scenario at this time.
 
 
 \begin{algorithm}[h]
@@ -1375,7 +1375,7 @@ ca: array[1..p,1..q] of real;\\
 \ElseIf{\(i > 1\) AND \(j > 1\)}{ca(i,j) \gets max(min(c(i-1,j),c(i-1,j-1), c(i, j-1)), d($u_1$, $v_1$))}
 \end{algorithm}
 
-The above implementation of the discrete Fréchet distance, as described by Eiter and Mannila\cite{g_frechetcompute_1994}, runs in O(pq) for initial assignment and  O(pq) for calculation of ca(p,q) for a total of O(pq) time. 
+The above implementation of the discrete Fréchet distance, as described by Eiter and Mannila\cite{g_frechetcompute_1994}, runs in O(p x q) for initial assignment and  O(p x q) for calculation of ca(p,q) for a total of O(p x q) time. 
 
 \pagebreak
 \paragraph{Algorithms Testing}
@@ -1388,6 +1388,7 @@ The above implementation of the discrete Fréchet distance, as described by Eite
     \label{fig:my_label}
 \end{figure}
 The previously mentioned algorithms were tested against the above routes. Results are summarized in table form on the next page. Cells marked in grey represent where Routes were compared to themselves and are trivially true. Comparisons were performed with a 25m tolerance for comparison acceptance of points. Hausdorff and Fréchet algorithms return a distance value, which was then accepted if the distance was within the 25m tolerance.
+The following charts show the results of comparisons between pairs of Routes from Figure 17. Cells shaded in gray are cases where the comparisons are trivially true. i.e, the Route was compared to itself. No comparisons were performed in cases where there was no expectation of similarity, and such cases were left blank on the charts.
 \pagebreak
 \begin{figure}[H]
     \centering
@@ -1423,7 +1424,10 @@ The Simple Comparison works as expected, correctly identifying similar routes Re
 The Hausdorff comparison works as expected in all cases, correctly matching Red and Blue, Orange and Purple, and Pink and White as matching, and Yellow and Green as not matching. Further, the Hausdorff algorithm correctly identifies route similarity in cases where Routes are reversed. This most closely matches the needed functionality for Pathway's purposes.
 
 
-The Frechet comparison does a better job matching less linear features correctly, but also pays attention to point order within Routes. This gives it the same shortcoming as the Simple Comparison algorithm. While still useful, this shortcoming makes it less than ideal for use in Pathway.
+The Fréchet comparison does a better job matching less linear features correctly, but also pays attention to point order within Routes. This gives it the same shortcoming as the Simple Comparison algorithm. While still useful, this shortcoming makes it less than ideal for use in Pathway.
+
+
+For Pathway's purposes, the above implementation of Hausdorff distance seems to be the most useful and appropriate algorithm to determine similarity of two routes and is the one we have selected. However, the Fréchet distance could be useful in cases where point order, such as direct competition or Route racing scenarios that might be developed for Pathway in the future, and therefore could also be used at such time.
 
 \pagebreak
 \paragraph{Tool Selection}
@@ -2092,6 +2096,8 @@ The idea for the second design, which is what was used for the sub-system, was t
 \section{Pathway - Domain Analysis}
 This document serves as an overview for the planned development of a software system, named Pathway, that is intended to address the difficulties in staying motivated to exercise by incorporating elements of social interaction and friendly competition as a means to motivate through a mobile application interface.
 
+According to a recent study in the Journal for Preventive Medicine Reports, successful fitness programs can be linked to friendly competition and social support.\cite{g_zhang_support_2016} Pathway seeks to make use of these motivation mechanisms through by leveraging social networking to promote interaction and competition amongst users, while also allowing users to track progress of their fitness goals.
+
 \paragraph{Pathway - Extensions}
 \begin{itemize}
     \item Increased social networking functionality.
@@ -2118,12 +2124,12 @@ Target users would include all individuals that:
 \end{itemize}
 
 \paragraph{Pathway - Computing Environment}
-Primary functionality will be developed for Android 5.0 (Lollipop) and as such will be unsupported on version of Android prior to 5.0. Specific system requirements are not yet determined. No additional client requirements will be necessary for database and server access, other than an active network connection.
+Primary functionality will be developed for Android 5.0 (Lollipop) and as such will be unsupported on version of Android prior to 5.0. No additional client requirements will be necessary for database and server access, other than an active network connection.
 
 \subsection{Pathway - Tasks and Procedures}
 Currently the general process of selecting a route to traverse (walk, run, or cycle) and then sharing information goes as follows:
 \begin{enumerate}
-    \item A user solicits route information from friends and acquaintances.
+    \item A user solicits route information from friends and/or acquaintances.
         \begin{itemize}
             \item If successful, the user may use an existing application to log route and speed information.
             \item This information can be exported to an application, such as excel, and analyzed.
@@ -2137,15 +2143,15 @@ Currently the general process of selecting a route to traverse (walk, run, or cy
     \item A user may use a $3^rd$ party application to find a group with which to walk or run or bike with.
         \begin{itemize}
             \item This method has the advantage of added support from the group.
-            \item The user is more likely to finish and even more likely to perform better than if alone.
+            \item The user is more likely to finish and even more likely to perform better than if alone, according to current literature in the field.
         \end{itemize}
 \end{enumerate}
 
 \subsection{Pathway - Competing Software}
 The following applications/software may fulfill similar roles or offer similar functionality as that proposed in this document for Pathway:
 \begin{itemize}
-    \item MyTracks - Offers only basic data collection (Lat/Long position, elevation) dependent on device sensors, and no analysis options.
-    \item FitBit App - Offers data collection and basic analysis of user performance.
+    \item MyTracks - Offers only basic data collection (Lat/Long position, elevation) dependent on device sensors, and no analysis options. As of 2016, application is no longer available.
+    \item FitBit App - Offers data collection and basic analysis of user performance, requires fit-bit device.
     \item iOS Health - Offers basic data collection and limited analysis of performance.
     \item LG Health - Offers route tracking and calorie journal. Still lacks any social networking component.
 \end{itemize}
