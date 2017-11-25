@@ -232,7 +232,7 @@ The only clients that this subsystem can have are any applications which consume
 of the other subsystems which make up the native Android application.
 
 \paragraph{The Environment}
-The computing environment for this subsystem will be an Ubuntu 14.04 instance which has been dockerized. This will be deployed to an AWS instance. The purpose of running the server side code in a docker container is that docker allows us to tailor the OS environment
+The computing environment for this subsystem will be an Ubuntu 14.04 instance which has been dockerized. This will be deployed to a DigitalOcean droplet. The purpose of running the server side code in a docker container is that docker allows us to tailor the OS environment
 to cater specifically to the application. Which provides a more isolated development and production environment for the code, minimizing variables which could contribute to bugs and other such undesirable behaviors.
 
 \paragraph{Tasks and Procedures}
@@ -274,7 +274,7 @@ system objects belong to which tools.
 \begin{figure}
     \centering
     \begin{center}
-        \makebox[\textwidth]{\includegraphics[width=\paperwidth]{PWInfSeq.PNG}}
+        \makebox[\textwidth]{\includegraphics[width=\paperwidth]{infrastructure.png}}
     \end{center}
     \caption{Pathway Backend Sequence Diagram}
     \label{fig:my_label}
@@ -378,14 +378,13 @@ built with scalability in mind.
 \paragraph{Hosting}
 When developing an application which requires a back end server, it's also important to realize that
 hardware is required in order to actually host the application. The choices for this come down to
-Amazon Elastic Beanstalk or Heroku. Both of these services provide similar things. Hosting of
-web applications, and their databases, as well as management/admin tools. However, Elastic Beanstalk
-is somewhat cheaper as a student, and provides better load balancing tools, which is important
-should the service ever need to scale according it's userbase. There is a big difference between
-1000 concurrent users, and 10,000. Amazon web services has a great track record of being an
-industry standard when it comes to deploying hosting applications which may need to scale and
-handle large numbers of connections. The drawback to Beanstalk versus Heroku is that Heroku is
-vastly easier to use and interface with from a developer standpoint.
+Amazon Elastic Beanstalk or DigitalOcean. Both of these services provide similar things. Hosting of
+web applications, and their databases, as well as management/admin tools. However, DigitalOcean
+is somewhat cheaper as a student. While AWS provides stronger infrastructure such as better
+load balancing, the current alpha status of the app does not require such infrastructure.
+AWS as it turns out costs much more in terms of learning and configuration to deploy our app
+when compared to DigitalOcean. It is for this reason that using DigitalOcean alleviates a large
+portion of development time.
 
 \paragraph{Database}
 Choice of database is a very important choice as well. For this decision however we have opted to
@@ -424,10 +423,12 @@ it. Amazon Elastic Beanstalk also has support for deploying dockerized applicati
 \paragraph{Tool Selection}
 \begin{itemize}
     \item Docker
+    \item NGINX
+    \item Gunicorn
     \item Django
     \item Python3
     \item PostgreSQL
-    \item Amazon Elastic Beanstalk
+    \item DigitalOcean
 \end{itemize}
 
 \subsubsection{Selected Source Code}
@@ -517,6 +518,7 @@ services:
 We can see that the selected code snippets satisfy several of the test cases, which we define
 as use cases that have been backed by working code. Currently the code for the infrastructure
 subsystem satisfies several test cases, some more concrete than others.
+
 \begin{itemize}
 \item The system accepts HTTP requests and is capable of responding via HTTP.
 \item The system is able to handle the creation of a user.
