@@ -1296,142 +1296,6 @@ subsystem and other subsystems will be in the passing of an instance of the Rout
 the Google Maps API and as such will not require extensive coding to achieve the desired functionality and layout.
 This functionality would include map display, panning, zoom, and drawing of features on the map.
 
-
-\paragraph{Design Analysis: Algorithms}
-To implement the route comparison feature, we have reviewed three algorithms that break the problem down into a comparison of ordered sets of pairs:
-Hausdorff distance and Fréchet distance, and a third algorithm that we have devised that will provide a simple comparison measure.
-
-
-\paragraph{Simple Line Comparison}
-We have created a basic route comparison algorithm that will run first, saving computation time. The simple version of the algorithm takes two Routes as input and recursively compares start and end points of line segments within the route, limiting the calls to five recursions, in a fashion similar to how a binary search is performed, beginning with the total route.
-\newline Note: n is the last element in the Route.\newline
-
-\begin{algorithm}[H]
-\SetAlgoLined
-match = false \\
-\If{ \(counter >= 5 \)}{
-match = true \\}
-\ElseIf{len($Route1$) == 0 OR len($Route2$) == 0}{return false}
-\ElseIf{len($Route1$) == 1 AND len($Route2$) == 1}{\If{start $Route1$ near start $Route2$ AND end $Route1$ near end $Route2$}{match = true}}
-\ElseIf{start $Route1$ near start $Route2$ AND \\
-    end $Route1$ near end $Route2$}{
-    $counter \gets $counter + 1\\
-    $k \gets $floor(n/2)$\\
-    match = (basicCompare($Route1[0:k]$, $Route2[0:k]$, $counter$) AND \\
-              basicCompare($Route1[k+1:n]$, $Route2[k+1:n]$, $counter))\\
-    }
-return match
-
-\caption{basicCompare(Route 1, Route 2, counter)}
-\end{algorithm}
-
-The above algorithm uses a counter to limit the number of times a recursive call is made, and therefore runs in O(1) time. Some possible drawbacks to the above algorithm are that two lines that intersect at key places but are otherwise very different may be considered a match. The Basic Line Comparison algorithm is unlikely to be useful for long or complex routes, but will serve as a good first comparison for less complex features. 
-\pagebreak
-
-
-
-\paragraph{Hausdorff Distance}
-The Hausdorff distance, named after Felix Hausdorff, measures how far two subsets of a metric are from each other. \cite{g_wiki_hausdorff_2017} The Hausdorff distance considers features as sets of points, and as such, is unaffected by the ordering of the points within the set. This makes it especially suitable for use in Pathway to determine if one traversed Route is the same as another, regardless of starting point along that Route. The following pseudocode was adapted from an online source.\cite{g_hausdorff_code}
-
-\begin{algorithm}[h]
-\SetAlgoLined
-$h \gets 0$\\
-\For{point $a_i$ in $A$}{
-    $shortest \gets \infty$
-
-    \For{point $b_j$ in $B$}{
-        $d_{ij} \gets d(a_i,b_j)$\\
-        \If{$d_{ij} \< shortest$}{
-            $shortest \gets d_{ij}$\\
-        }
-    }
-    \If{$shortest \> h$}{
-        $h \gets shortest$
-    }
-}
-\caption{Hausdorff distance for ordered sets of coordinate pairs.}
-\end{algorithm}
-
-Hausdorff distance is the best candidate for our purposes, as it treats lines as sets of points with no particular order.It is also worth noting that H(A,B) != H(B,A), necessarily.\cite{g_hausdorff_code} The Hausdorff algorithm shown here clearly runs in O(mn) time. While the run time of the algorithm is expensive, the simplicity of the implementation and the relatively small data sets that will be compared make the run time an acceptable trade-off.
-
-\pagebreak
-
-
-\paragraph{Fréchet Distance}
-The Fréchet distance is a measure of similarity between curves that takes into account the location and ordering of the points along the curves.\cite{g_wiki_frechet_2017} It is more complex and harder to implement, but generally more versatile and supports backtracking. Unlike Hausdorff distance, Fréchet distance does consider ordering of points of when performing comparisons, and as such, would be suitable for comparisons where two Users are simultaneously running against one another on the same Route. Pathway does not currently implement the functionality for that scenario at this time.
-
-
-\begin{algorithm}[h]
-\SetAlgoLined
-\KwFunction dF(P,Q): real;\\
-\KwData{Polygonal Curves P = ($u_1$,...,$u_p$) and Q = ($u_1$,...,$u_q$)}\\
-\KwResult{dist(P,Q)}\\
-ca: array[1..p,1..q] of real;\\
-\Fn c(i,j): real;\\
-\For{i=1 to p}{\For{j=1 to q}{ca(i,j) \gets -1.0}}
-\caption{Fréchet distance for two polygonal curves.}
-\If{\(ca(i,j) > -1\)}{return ca(i,j)}
-\ElseIf{i = 1 AND j = 1}{ca(i,j) \gets d($u_1$, $v_1$)}
-\ElseIf{\(i > 1\) AND j = 1}{ca(i,j) \gets max(c(i-1,1), d($u_1$, $v_1$))}
-\ElseIf{ i = 1 AND \(j > 1\)}{ca(i,j) \gets max(c(1,j-1), d($u_1$, $v_1$))}
-\ElseIf{\(i > 1\) AND \(j > 1\)}{ca(i,j) \gets max(min(c(i-1,j),c(i-1,j-1), c(i, j-1)), d($u_1$, $v_1$))}
-\end{algorithm}
-
-The above implementation of the discrete Fréchet distance, as described by Eiter and Mannila\cite{g_frechetcompute_1994}, runs in O(p x q) for initial assignment and  O(p x q) for calculation of ca(p,q) for a total of O(p x q) time. 
-
-\pagebreak
-\paragraph{Algorithms Testing}
-\begin{figure}[H]
-    \centering
-    \begin{center}
-        \makebox[\textwidth]{\includegraphics[width=0.5\paperwidth]{routesCompare.jpg}}
-    \end{center}
-    \caption{Test Routes For Comparison Algorithms}
-    \label{fig:my_label}
-\end{figure}
-The previously mentioned algorithms were tested against the above routes. Results are summarized in table form on the next page. Cells marked in grey represent where Routes were compared to themselves and are trivially true. Comparisons were performed with a 25m tolerance for comparison acceptance of points. Hausdorff and Fréchet algorithms return a distance value, which was then accepted if the distance was within the 25m tolerance.
-The following charts show the results of comparisons between pairs of Routes from Figure 17. Cells shaded in gray are cases where the comparisons are trivially true. i.e, the Route was compared to itself. No comparisons were performed in cases where there was no expectation of similarity, and such cases were left blank on the charts.
-\pagebreak
-\begin{figure}[H]
-    \centering
-    \begin{center}
-        \makebox[\textwidth]{\includegraphics[width=0.5\paperwidth]{compareSimpleResults.jpg}}
-    \end{center}
-    \caption{Results for Simple Comparison}
-    \label{fig:my_label}
-\end{figure}
-\begin{figure}[H]
-    \centering
-    \begin{center}
-        \makebox[\textwidth]{\includegraphics[width=0.5\paperwidth]{compareHausdorffResults.jpg}}
-    \end{center}
-    \caption{Results for Hausdorff Comparison}
-    \label{fig:my_label}
-\end{figure}
-\begin{figure}[H]
-    \centering
-    \begin{center}
-        \makebox[\textwidth]{\includegraphics[width=0.5\paperwidth]{compareFrechetResults.jpg}}
-    \end{center}
-    \caption{Results for Fréchet Comparison}
-    \label{fig:my_label}
-\end{figure}
-
-
-\paragraph{Algorithm Results Summary}
-
-The Simple Comparison works as expected, correctly identifying similar routes Red and Blue and Routes Orange and Purple as similar. It also correctly marked Routes Green and Yellow as not matching. Routes Pink and White however were incorrectly marked as not matching. One obvious shortcoming of the simple comparison is that it adheres to a strict ordering of pairs, and so would not match a route to the reverse of itself.
-
-
-The Hausdorff comparison works as expected in all cases, correctly matching Red and Blue, Orange and Purple, and Pink and White as matching, and Yellow and Green as not matching. Further, the Hausdorff algorithm correctly identifies route similarity in cases where Routes are reversed. This most closely matches the needed functionality for Pathway's purposes.
-
-
-The Fréchet comparison does a better job matching less linear features correctly, but also pays attention to point order within Routes. This gives it the same shortcoming as the Simple Comparison algorithm. While still useful, this shortcoming makes it less than ideal for use in Pathway.
-
-
-For Pathway's purposes, the above implementation of Hausdorff distance seems to be the most useful and appropriate algorithm to determine similarity of two routes and is the one we have selected. However, the Fréchet distance could be useful in cases where point order, such as direct competition or Route racing scenarios that might be developed for Pathway in the future, and therefore could also be used at such time.
-
-\pagebreak
 \paragraph{Tool Selection}
 Due to the reliance of the geolocation system on an existing API, our tool selection will include the Google Maps API\cite{G_API_Maps}, Google Elevation API\cite{g_API_Elev}, and code provided by the Google Maps Utility Library\cite{g_Util_Map}, and the development tools and language that were selected for the project as a whole. The system will be coded entirely in Java, primarily using the Google Maps API and leveraging Android Studio to more easily create the application layout. A SQLite database will be created on the local device to store information until a connection can be established with the Pathway server. The local database will closely mimic the structure of the external server. The above mentioned algorithms will be coded as methods within the Route class, which will store all representations of route data. Currently, the geolocation system design will employ at least 5 classes, with additional classes likely being added in the course of development. These classes may be altered or replaced as research into the API continues.
 
@@ -1583,6 +1447,9 @@ The system will be comprised of 5 classes, aside from strictly UI classes. Class
     \label{fig:my_label}
 \end{figure}
 
+The above diagram shows the interaction between the classes detailed in Figure 18. Data sent to and retrieved from the database must move through the FetchData and SendData classes, which use asynchronous http url connections to send and received data.
+In the event of data loss, the system is still able to save and retrieve the User's Routes from the local database instance.
+
 % \begin{figure}[H]
 %     \centering
 %     \includegraphics[width=\textwidth]{braggSEQ.jpg}
@@ -1599,6 +1466,10 @@ The system will be comprised of 5 classes, aside from strictly UI classes. Class
     \label{fig:my_label}
 \end{figure}
 
+The above activity diagrams shows the flow of user interaction with the system. The system is in an idle state until the user presses Start to begin recording a Route, new or existing.
+From the map, a user can view info about a nearby Route.
+After traversal, a user saves the Route by giving it a name and activity type, and optionally exports the Route data to the device. (Export is currently not implemented completely).
+
 % \begin{figure}[H]
 %     \centering
 %     \includegraphics[width=\textwidth]{braggUML.jpg}
@@ -1607,11 +1478,161 @@ The system will be comprised of 5 classes, aside from strictly UI classes. Class
 % \end{figure}
 %=====================================================
 
+
+
 \newpage
-\subsection{Testing Plan}
-\subsubsection{Test Overview}
+\subsubsection{Design Analysis: Distance Algorithms}
+To implement the route comparison feature, we have reviewed three algorithms that break the problem down into a comparison of ordered sets of pairs:
+\begin{itemize}
+\item Simple End-to-End Comparison.
+\item Hausdorff distance.
+\item Fréchet distance.
+\end{itemize}
+The purpose of these algorithms is to determine which algorithm is most suitable for determining route similarity. These algorithms are crucial in determining whether or not a traversal of an existing Route by a user is similar enough to be considered the same Route.
+\newline
+\newline
+Route similarity for our purposes was defined as such for two Routes, Route 1 and Route 2: Every vertices in Route 1 is within 25m of a vertices or the line between two vertices of Route 2.
+Route 2 is by definition also similar to Route 1.
+\newline
+\newline
+Input for all algorithms was two Route features and near tolerance was set at 25m. Algorithms were tested within a Java project in NetBeans, and then adapted to Android Studio as needed.
+
+\pagebreak
+
+\paragraph{Simple End-to-End Comparison}
+We have created a basic route comparison algorithm that will run first, saving computation time. The simple version of the algorithm takes two Routes as input and recursively compares start and end points of line segments within the route, limiting the calls to five recursions, in a fashion similar to how a binary search is performed, beginning with the total route.
+\newline Note: n is the last element in the Route.\newline
+
+\begin{algorithm}[H]
+\SetAlgoLined
+match = false \\
+\If{ \(counter >= 5 \)}{
+match = true \\}
+\ElseIf{len($Route1$) == 0 OR len($Route2$) == 0}{return false}
+\ElseIf{len($Route1$) == 1 AND len($Route2$) == 1}{\If{start $Route1$ near start $Route2$ AND end $Route1$ near end $Route2$}{match = true}}
+\ElseIf{start $Route1$ near start $Route2$ AND \\
+    end $Route1$ near end $Route2$}{
+    $counter \gets $counter + 1\\
+    $k \gets $floor(n/2)$\\
+    match = (basicCompare($Route1[0:k]$, $Route2[0:k]$, $counter$) AND \\
+              basicCompare($Route1[k+1:n]$, $Route2[k+1:n]$, $counter))\\
+    }
+return match
+
+\caption{basicCompare(Route 1, Route 2, counter)}
+\end{algorithm}
+
+The above algorithm uses a counter to limit the number of times a recursive call is made, and therefore runs in O(1) time. Some possible drawbacks to the above algorithm are that two lines that intersect at key places but are otherwise very different may be considered a match. The Basic Line Comparison algorithm is unlikely to be useful for long or complex routes, but will serve as a good first comparison for less complex features. 
+\pagebreak
+
+
+
+\paragraph{Hausdorff Distance}
+The Hausdorff distance, named after Felix Hausdorff, measures how far two subsets of a metric are from each other. \cite{g_wiki_hausdorff_2017} The Hausdorff distance considers features as sets of points, and as such, is unaffected by the ordering of the points within the set. This makes it especially suitable for use in Pathway to determine if one traversed Route is the same as another, regardless of starting point along that Route. The following pseudocode was adapted from an online source.\cite{g_hausdorff_code}
+
+\begin{algorithm}[h]
+\SetAlgoLined
+$h \gets 0$\\
+\For{point $a_i$ in $A$}{
+    $shortest \gets \infty$
+
+    \For{point $b_j$ in $B$}{
+        $d_{ij} \gets d(a_i,b_j)$\\
+        \If{$d_{ij} \< shortest$}{
+            $shortest \gets d_{ij}$\\
+        }
+    }
+    \If{$shortest \> h$}{
+        $h \gets shortest$
+    }
+}
+\caption{Hausdorff distance for ordered sets of coordinate pairs.}
+\end{algorithm}
+
+Hausdorff distance is the best candidate for our purposes, as it treats lines as sets of points with no particular order.It is also worth noting that H(A,B) != H(B,A), necessarily.\cite{g_hausdorff_code} The Hausdorff algorithm shown here clearly runs in O(mn) time. While the run time of the algorithm is expensive, the simplicity of the implementation and the relatively small data sets that will be compared make the run time an acceptable trade-off.
+
+\pagebreak
+
+
+\paragraph{Fréchet Distance}
+The Fréchet distance is a measure of similarity between curves that takes into account the location and ordering of the points along the curves.\cite{g_wiki_frechet_2017} It is more complex and harder to implement, but generally more versatile and supports backtracking. Unlike Hausdorff distance, Fréchet distance does consider ordering of points of when performing comparisons, and as such, would be suitable for comparisons where two Users are simultaneously running against one another on the same Route. Pathway does not currently implement the functionality for that scenario at this time.
+
+
+\begin{algorithm}[h]
+\SetAlgoLined
+\KwFunction dF(P,Q): real;\\
+\KwData{Polygonal Curves P = ($u_1$,...,$u_p$) and Q = ($u_1$,...,$u_q$)}\\
+\KwResult{dist(P,Q)}\\
+ca: array[1..p,1..q] of real;\\
+\Fn c(i,j): real;\\
+\For{i=1 to p}{\For{j=1 to q}{ca(i,j) \gets -1.0}}
+\caption{Fréchet distance for two polygonal curves.}
+\If{\(ca(i,j) > -1\)}{return ca(i,j)}
+\ElseIf{i = 1 AND j = 1}{ca(i,j) \gets d($u_1$, $v_1$)}
+\ElseIf{\(i > 1\) AND j = 1}{ca(i,j) \gets max(c(i-1,1), d($u_1$, $v_1$))}
+\ElseIf{ i = 1 AND \(j > 1\)}{ca(i,j) \gets max(c(1,j-1), d($u_1$, $v_1$))}
+\ElseIf{\(i > 1\) AND \(j > 1\)}{ca(i,j) \gets max(min(c(i-1,j),c(i-1,j-1), c(i, j-1)), d($u_1$, $v_1$))}
+\end{algorithm}
+
+The above implementation of the discrete Fréchet distance, as described by Eiter and Mannila\cite{g_frechetcompute_1994}, runs in O(p x q) for initial assignment and  O(p x q) for calculation of ca(p,q) for a total of O(p x q) time. This implementation makes use of dynamic programming so that it's run-time is no worse than the Hausdorff implementation detailed in Algorithm 2.
+
+\pagebreak
+\paragraph{Algorithms Testing}
+\begin{figure}[H]
+    \centering
+    \begin{center}
+        \makebox[\textwidth]{\includegraphics[width=0.5\paperwidth]{routesCompare.jpg}}
+    \end{center}
+    \caption{Test Routes For Comparison Algorithms}
+    \label{fig:my_label}
+\end{figure}
+The previously mentioned algorithms were tested against the above routes. Results are summarized in table form on the next page. Cells marked in grey represent where Routes were compared to themselves and are trivially true. Comparisons were performed with a 25m tolerance for comparison acceptance of points. Hausdorff and Fréchet algorithms return a distance value, which was then accepted if the distance was within the 25m tolerance.
+The following charts show the results of comparisons between pairs of Routes from Figure 17. Cells shaded in gray are cases where the comparisons are trivially true. i.e, the Route was compared to itself. No comparisons were performed in cases where there was no expectation of similarity, and such cases were left blank on the charts.
+\pagebreak
+\begin{figure}[H]
+    \centering
+    \begin{center}
+        \makebox[\textwidth]{\includegraphics[width=0.5\paperwidth]{compareSimpleResults.jpg}}
+    \end{center}
+    \caption{Results for Simple Comparison}
+    \label{fig:my_label}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \begin{center}
+        \makebox[\textwidth]{\includegraphics[width=0.5\paperwidth]{compareHausdorffResults.jpg}}
+    \end{center}
+    \caption{Results for Hausdorff Comparison}
+    \label{fig:my_label}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \begin{center}
+        \makebox[\textwidth]{\includegraphics[width=0.5\paperwidth]{compareFrechetResults.jpg}}
+    \end{center}
+    \caption{Results for Fréchet Comparison}
+    \label{fig:my_label}
+\end{figure}
+
+
+\paragraph{Algorithm Results Summary}
+
+The Simple Comparison works as expected, correctly identifying similar routes Red and Blue and Routes Orange and Purple as similar. It also correctly marked Routes Green and Yellow as not matching. Routes Pink and White however were incorrectly marked as not matching. One obvious shortcoming of the simple comparison is that it adheres to a strict ordering of pairs, and so would not match a route to the reverse of itself. This means that the algorithm is not appropriate for the typical use-case of Route comparison.
+
+
+The Hausdorff comparison works as expected in all cases, correctly determining Red and Blue, Orange and Purple, and Pink and White as matching, and Yellow and Green as not matching. Further, the Hausdorff algorithm correctly identifies route similarity in cases where Routes are reversed. This most closely matches the needed functionality for Pathway's purposes.
+
+
+The Fréchet comparison does a better job matching less linear features correctly, but also pays attention to point order within Routes. This gives it the same shortcoming as the Simple Comparison algorithm. While still useful, this shortcoming makes it less than ideal for use in Pathway.
+
+
+For Pathway's purposes, the above implementation of Hausdorff distance seems to be the most useful and appropriate algorithm to determine similarity of two routes and is the one we have selected. However, the Fréchet distance could be useful in cases where point order, such as direct competition or Route racing scenarios that might be developed for Pathway in the future, and therefore could also be used at such time.
+
+\pagebreak
+
+\subsubsection{Testing Plan and Overview}
 In order to test the geolocation functionality of our application, we have derived a series of test cases, corresponding to specific requirements in the User Requirements section of the Geolocation subsystem.
-Tests were performed on an emulated Nexus 5 running Android 5.0 and on an LG G3 device running Android 6.0. The primary goal of the tests were to ensure correct operation of GPS sensors and utilization of device location data. The following tests do not comprise an exhaustive list of all tests to be performed and do not satisfy all User Requirements of the Subsystem. Additional tests will be performed as development continues to satisfy all remaining requirements.
+Tests were performed on an emulated Nexus 5 running Android 5.0 and on an LG G3 device running Android 6.0. The primary goal of the tests were to ensure correct operation of GPS sensors and utilization of device location data. The following tests do not comprise an exhaustive list of all tests to be performed but do satisfy the User Requirements necessary for core functionality of the system. Additional tests will be performed as development continues to satisfy all remaining requirements.
 Test Cases:
 \begin{itemize}
 \item TC-01 - Get Device Location
@@ -1896,7 +1917,7 @@ for (int i = 0; i < routesList.length(); i++) {
     \begin{center}
         \makebox[\textwidth]{\includegraphics[totalheight=0.7\textheight]{GeoTestEmu5.png}}
     \end{center}
-    \caption{Nearby Routes drawn on the map.}
+    \caption{Nearby Routes drawn on the map, depicted by Blue lines.}
     \label{fig:my_label}
 \end{figure}
 
@@ -2186,10 +2207,10 @@ public class routepop extends Activity {
         getWindow().setLayout((int)(width*.8), (int)(height*.6));...
 \end{lstlisting}
 
-\subsection{System Conversion and Implementation}
+\subsubsection{System Conversion and Implementation}
 During the process of designing the user account sub-system a couple of things changed. For one the creation of the user statistics page didn't happen due to time constraint and therefore was split up to be integrated into the user account page and the user routes page displaying necessary statistics on each. And lastly the designing of the singleton pattern was nixed and instead implemented on the server side by Cory's sub-system in order to take care of authentication. Other than those two things the implemenation of the user accounts sub-system remaind the same.
 
-\subsection{Design Alternatives}
+\subsubsection{Design Alternatives}
 There were two design ideas for this sub-system. The first of which was to pull all relavent information for the user from the server datbase. The second of which was to pull some data from the servers database and some from the the local database on the device. 
 
 \paragraph{First Design}
@@ -2275,17 +2296,15 @@ Many applications are similar to Pathway in the sense that they make use of geos
 \begin{itemize}
     \item \textbf{Route} - A Route in Pathway will be the geometric representation of a user�s tracked traversal path and will include geographic data that defines an exact geographic position through $XY$ coordinates and elevation.
     \item \textbf{Challenge} - A Challenge in Pathway will be the primary means of social interaction between users, acting as a prompt from User A to User B to encourage participation in an exercise activity.
-    \item REST API - Representational State Transfer, provides interoperability between systems through the web.
+    \item \textbf{REST API} - Representational State Transfer, provides interoperability between systems through the web.
     \item \textbf{Python} - Python is an interpreted, object-oriented programming language similar to PERL.
     \item \textbf{Flask} - Flask is a microframework for Python based on Werkzeug, Jinja 2 and good intentions.
     \item \textbf{MySQL} - MySQL is an open source relational database management system (RDBMS) based on Structured Query Language (SQL).
     \item \textbf{Object Relational Mapping (ORM)} - Object-relational mapping (ORM, O/RM, and O/R mapping tool) in computer science is a programming technique for converting data between incompatible type systems using object-oriented programming languages.
     \item \textbf{Docker} - The Docker Engine is the underlying client-server tool that supports container technology to handle the tasks and workflows involved in building container-based applications.
     \item \textbf{Amazon Web Services (AWS)} - Amazon Web Services (AWS) is a comprehensive, evolving cloud computing platform provided by Amazon.com.
-    \item \textbf{scalable} - It is the ability of a computer application or product (hardware or software) to continue to function well when it (or its context) is changed in size or volume in order to meet a user need.
-    \item \textbf{dockerize} - The act of containing a piece of software within a docker container.
-    \item \textbf{Route} - A Route in Pathway will be the geometric representation of a user�s tracked traversal path and will include data that defines an exact geographic position through XY coordinates and elevation.
-    \item \textbf{Challenge} - A Challenge in Pathway will be the primary means of social interaction between users, acting as a prompt from User A to User B to encourage participation in an exercise activity.
+    \item \textbf{Scalable} - It is the ability of a computer application or product (hardware or software) to continue to function well when it (or its context) is changed in size or volume in order to meet a user need.
+    \item \textbf{Dockerize} - The act of containing a piece of software within a docker container.
     \item \textbf{Statistics} - branch of mathematics dealing with the collection, analysis, interpretation, presentation, and organization of data.
     \item \textbf{Database} - application that contains organized collections of data in tables
     \item \textbf{Geolocation} � A specific pair of x and y coordinates as plotted on a spherical surface, allowing the description of an exact geographic location on that sphere.
@@ -2293,7 +2312,6 @@ Many applications are similar to Pathway in the sense that they make use of geos
     \item \textbf{Longitude} � The angular distance of a location in degrees, minutes, and seconds relative to the meridian at Greenwich, England. Long is shorthand.
     \item \textbf{Elevation} � A measurement of height above some arbitrary baseline, usually sea-level, expressed most often in feet or meters. Elev. is shorthand.
     \item \textbf{User} � An individual person who maintains a Pathway account.
-    \item \textbf{Route} � A series of two or more data points in sequence that comprise the path taken by a user and showing the user�s traversal across an area.
     \item \textbf{Point} � A recorded location, being comprised of Latitude, Longitude, Elevation, and Time, relative to the first recorded point in the series.
 \end{itemize}
 
@@ -2302,9 +2320,11 @@ Many applications are similar to Pathway in the sense that they make use of geos
 \begin{itemize}
     \item -  Django.readthedocs.io. (2017). Using the Django authentication system � Django 2.1.dev20171017153446 documentation. [online] Available at: http://django.readthedocs.io/en/latest/topics/auth/default.html#how-to-log-a-user-in [Accessed 17 Oct. 2017].
     \item -  Cohen, U. (2017). Write your own Android Authenticator. [online] Blog.udinic.com. Available at: http://blog.udinic.com/2013/04/24/write-your-own-android-authenticator/ [Accessed 17 Oct. 2017].
-    \item - Docs.djangoproject.com. (2017). django.contrib.auth | Django documentation | Django. [online] Available at: https://docs.djangoproject.com/en/1.11/ref/contrib/auth/ [Accessed 17 Oct. 2017].
+    \item - Docs.djangoproject.com. (2017). django.contrib.auth | Django documentation | Django. [online] Available at: https://docs.djangoproject.com/
+    en/1.11/ref/contrib/auth/ [Accessed 17 Oct. 2017].
     \item - Python-3-patterns-idioms-test.readthedocs.io. (2017). The Singleton � Python 3 Patterns, Recipes and Idioms. [online] Available at: http://python-3-patterns-idioms-test.readthedocs.io/en/latest/Singleton.html [Accessed 17 Oct. 2017].
-    \item - Developer.android.com. (2017). HttpURLConnection | Android Developers. [online] Available at: https://developer.android.com/reference/java/net/HttpURLConnection.html [Accessed 13 Nov. 2017].
+    \item - Developer.android.com. (2017). HttpURLConnection | Android Developers. [online] Available at: https://developer.android.com/reference/java/
+    net/HttpURLConnection.html [Accessed 13 Nov. 2017].
     \item - www.hackernoon.com. (2017). AWS vs. DigitalOcean. [online] Available at: https://hackernoon.com/aws-vs-digitalocean-which-cloud-server-is-better-1386499a6664 [Accessed 19 Nov. 2017].
 \end{itemize}
 
