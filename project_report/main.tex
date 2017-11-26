@@ -5,6 +5,7 @@
 \usepackage{titlesec}
 \usepackage{algorithm2e}
 \usepackage{listings}
+\usepackage{subcaption}
 
 
 
@@ -58,15 +59,17 @@ Pathway will be comprised of five primary components, as shown in the System Mod
     \item Geolocation
     \item Statistics
 \end{enumerate}
-The above systems are detailed in full in their respective subsections in Section 3: Sub-Systems of this report, but will we will briefly outline the functionality of each here and discuss their high-level interaction with one another.
+The above systems are detailed in full in their respective subsections in Section 4: Sub-Systems of this report, but will we will briefly outline the functionality of each here and discuss their high-level interaction with one another.
 
-The Database backend subsystem will serve as the data foundation for the application by providing data storage and look-up crucial for the functionality of all other subsystems. Each subsystem will interact with the database through an API developed for the application to facilitate passing of data back and forth.
+The Database back-end subsystem will serve as the data foundation for the application by providing data storage and look-up crucial for the functionality of all other subsystems. Each subsystem will interact with the database through an API developed for the application to facilitate passing of data back and forth.
 
 The User Account subsystem will provide each user with a persistent experience across the application while maintaining account security for each user, ensuring that user data is correct, retrievable, and secure.
 
-The Geolocation module will provide the primary functionality of the application, which is the collection of geographic route data associated with a user account and used in the Statistics subystem. This subsystem relies heavily on device sensors to generate accurate data as well as several web services to supplement the collected data.
-
 The Social system will make use of the Facebook API to provide social networking features to users of the app, and is the primary avenue of motivation provided by the app, through social interaction.
+
+The Geolocation module will provide the primary functionality of the application, which is the collection of geographic route data associated with a user account and used in the Statistics subsystem. This subsystem relies heavily on device sensors to generate accurate data as well as several web services to supplement the collected data.
+
+The Geolocation and Statistics systems also employ a device side database for the storage of user specific Route and report information.
 
 Finally, the Statistics subsystem will be how the application allows users to derive and track useful information from repeated workouts. Using collected route data, users will be able to analyze performance metrics.
 
@@ -93,7 +96,7 @@ Figure 2. may also be used to describe a general flow of the user interface, whi
     \item The geolocation module depicts a map with the users location, routes in the immediate vicinity, and a start button.
     \item If the user presses start, the application begins recording user location and draws it to the map.
     \subitem User can record from the start of an existing route if tapped.
-    \item From the map view, the user may use a drawer panel to navigate to their profile, a summary of their social page, or metrics for the user and/or current route.
+    \item From the map view, the user may use a navigation drawer panel to navigate to their profile, a summary of their social page, or metrics for the user and/or current route.
     \item From any of these views, the user may navigate to all other views using the navigation drawer.
     \item From the navigation view, user may select logout to be taken back to the login screen.
 \end{enumerate}
@@ -106,29 +109,23 @@ Figure 2. may also be used to describe a general flow of the user interface, whi
     %%
     \item Request an account be created.
     \item Request that an account be logged into.
-    \item request that an account be logged out.
-    \item delete/remove an account, with appropriate privilege levels.
-    \item update an account's information.
-    \item create a route in the database.
-    \item delete a route in the database.
-    \item update a route in the database.
-    \item query for statistical calculation on a user's data.
+    \item Request that an account be logged out.
+    \item Delete/remove an account, with appropriate privilege levels.
+    \item Update an account's information.
+    \item Create a route in the database.
+    \item Delete a route in the database.
+    \item Update a route in the database.
+    \item Query for statistical calculation on a user's data.
     \item The user will be able to link their Facebook account with the app to create an account
     \item The user will be able to fill out a form based application to create an account
     \item The system will allow the user to challenge other users within their area through the application interface
     \item Users will be able to compete for best time on routes in their area
-    \item The system will be designed to accommodate future updates and additional functionality as needed.
-    \item The system will be available for constant use, except during a small as of yet undetermined timeframe to allow for system maintenance and updates.
-    \item The system will be stable, minimizing application crashes, freezes, or �hang-ups�.
-    \item The system must be energy efficient with respect to the mobile device.
-    \item The system must be efficient with respect with to cellular data consumption.
     \item If Facebook is down the account integration feature in the app will be expected to have downtime as well.
     \item The system will use collected geospatial data and user demographic information to present analysis of the user�s performance.
     \item The system will take user data and generate leaderboards for heavily used routes in certain areas, in order to allow users to compete for bragging rights on those routes.
     \item The system will generate a report after a run detailing the user�s performance with comparisons of previous runs.
-    \item The system must generate reports that should be easily readable and detailed while avoiding being confusing to users.
     \item System will use device sensors to record GPS data in a Latitude/Longitude format.
-    \item System will use device sensors to record user elevation.
+    \item System will use device sensors to record user altitude.
     \item System will plot Geolocation data against a Google provided background map.
     \item System will record relative time stamps to use in calculation of speed and direction.
     \item System will display user activity duration, speed, distance, current elevation, and coordinates during data collection.
@@ -143,7 +140,7 @@ Figure 2. may also be used to describe a general flow of the user interface, whi
     \item System will accurately and precisely locate the user�s position within an acceptable margin of error, allowing for a larger margin where service is weak or none exists.
     \item The System will allow the user to create an account that will be kept up to date by the system.
     \item The system for user accounts will keep track of a user's life time statistics and display them in an always up to date state, statistics include, life time steps, distance, best course, best time, etc.
-    \item The user accounts system will save all user routes in the appearance of a fanned stack of cards.
+    \item The user accounts system will display a user's Routes in a list view on the Routes page.
     \item The system will allow the user to pull up these saved routes and see their best time or if that time has been beaten by anyone that they have shared it with.
     \item The system will also create graphs that display the user�s progression over time of running a route, that user can see.
     \item The system will be designed to accommodate future updates and additional functionality as needed.
@@ -746,7 +743,7 @@ After establishing the connection to the users Facebook account, we will be impl
 \begin{figure}[H]
 	\centering
 	\begin{center}
-		\makebox[\textwidth]{\includegraphics[width=0.8\paperwidth]{FBLoginScreenshot.png}}
+		\makebox[\textwidth]{\includegraphics[width=0.5\paperwidth]{FBLoginScreenshot.png}}
 	\end{center}
 	\caption{User linking Facebook to app}
 	\label{fig:my_label}
@@ -767,7 +764,7 @@ After establishing the connection to the users Facebook account, we will be impl
 \begin{figure}[H]
 	\centering
 	\begin{center}
-		\makebox[\textwidth]{\includegraphics[width=0.8\paperwidth]{AchievementsScreenshot.png}}
+		\makebox[\textwidth]{\includegraphics[width=0.5\paperwidth]{AchievementsScreenshot.png}}
 	\end{center}
 	\caption{User displaying the achievements page}
 	\label{fig:my_label}
@@ -787,7 +784,7 @@ After establishing the connection to the users Facebook account, we will be impl
 \begin{figure}[H]
 	\centering
 	\begin{center}
-		\makebox[\textwidth]{\includegraphics[width=0.8\paperwidth]{FriendsListScreenshot.png}}
+		\makebox[\textwidth]{\includegraphics[width=0.5\paperwidth]{FriendsListScreenshot.png}}
 	\end{center}
 	\caption{User displaying the achievements page}
 	\label{fig:my_label}
@@ -827,7 +824,8 @@ callbackManager = CallbackManager.Factory.create();
 //sets permissions so that data from user's profile can be accessed
 loginButton.setReadPermissions("email", "public_profile", "user_friends");
 
-loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+loginButton.registerCallback(callbackManager,
+    new FacebookCallback<LoginResult>() {
 
 //When login is successful
 @Override
@@ -852,12 +850,14 @@ public void onError(FacebookException error) {
 }
 
 @Override
-protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+protected void onActivityResult(int requestCode,
+                                int resultCode,
+                                Intent data) {
 super.onActivityResult(requestCode, resultCode, data);
 
-//callback manager gets response code to determine what next activity is
+//callback manager gets response code to determine next activity
 callbackManager.onActivityResult(requestCode, resultCode, data);
-}
+    }
 
 }
 
@@ -872,9 +872,11 @@ Seeing as how the Facebook API gives applications in development such a restrict
 
 \begin{lstlisting}
 /*
-code will access a local database that has the achievements stored manually.
-Then we create an object of the class that the local database is created in to pull 
-user report data so that we can set if statements which will check and see if requirements are satisfied for the achievement
+code will access a local database that has the achievements
+stored manually. Then we create an object of the class that
+the local database is created in to pull user report data
+so that we can set if statements which will check and see
+if requirements are satisfied for the achievement
 */
 
 
@@ -892,25 +894,23 @@ Since the API also allows little room for development when trying to send notifi
 \begin{lstlisting}
 
 /*
-called after user chooses route to challenge and request is made to server to retrieve phone number
+called after user chooses route to challenge and request
+is made to server to retrieve phone number
 */
 public void sendText(){
-//request to use SMS permission during runtime
-requestSmsPermission();
-try {
-
-sendSms("User's number", "Your route has been Challenged!");
-
-} catch (Exception e) {
-e.printStackTrace();
-}
-
+    //request to use SMS permission during runtime
+    requestSmsPermission();
+    try {
+        sendSms("User's number", "Your route has been Challenged!");
+    } catch (Exception e) {
+    e.printStackTrace();
+    }
 }
 
 private void sendSms(String phoneNumber, String message){
-SmsManager sms = SmsManager.getDefault();
-sms.sendTextMessage(phoneNumber, null, message, null, null);
-
+    SmsManager sms = SmsManager.getDefault();
+    sms.sendTextMessage(phoneNumber, null, message, null, null);
+}
 \end{lstlisting}
 
 \newpage
@@ -1617,13 +1617,16 @@ Test Cases:
 \item TC-01 - Get Device Location
 \item TC-02 - Draw User Route
 \item TC-03 - Functionality With No Data Access
+\item TC-04 - Save User Route
+\item TC-05 - Draw Nearby Routes
 \end {itemize}
 The following terms are used in describing these tests:
 \begin{itemize}
 \item Camera - Refers to the overhead view within the map frame.
 \item MyLocation - Standard Map API control to query for device location.
+\item Database - Refers to both the local device database and the external Pathway database.
 \end {itemize}
-
+\pagebreak
 \subsubsection{Test Cases}
 \begin {itemize}
 \item TC-01: Get Device Location
@@ -1638,7 +1641,7 @@ The following terms are used in describing these tests:
 \subsubitem 3. Map pans to user.
 \subsubitem 3. Observe Results Of Location Change.
 \subitem Expected Result: Current Location of the User is shown.
-\subitem Actual Result: Map view pans to current location, as shown in Figures 17 and 18.
+\subitem Actual Result: Map view pans to current location, as shown in Figure 25 a and b.
 \subsubitem Additionally, manually moving camera and clicking MyLocation successfully recenters view on the User's location.
 \subitem Related Code:
 \begin{lstlisting}[
@@ -1666,6 +1669,22 @@ public void onMapReady(GoogleMap googleMap) {
 }
 \end{lstlisting}
 
+\begin{figure}[H]
+    \begin{subfigure}{0.5\textwidth}
+    \includegraphics[width=0.9\linewidth]{GeoTestInitialEmu.png}
+    \caption{Start Location}
+    \label{fig:Start Location}
+    \end{subfigure}
+    \begin{subfigure}{0.5\textwidth}
+    \includegraphics[width=0.9\linewidth]{PathwayMainLayout.png}
+    \caption{Current Location}
+    \label{fig:Current Location}
+    \end{subfigure}
+    \caption{Initial Location and Location after button press.}
+    \label{fig:my_label}
+\end{figure}
+
+\pagebreak
 
 \item TC-02: Draw User Route
 \subitem Requirement(s) Fulfilled:
@@ -1677,7 +1696,7 @@ public void onMapReady(GoogleMap googleMap) {
 \subsubitem 1. User presses Start
 \subsubitem 2. User begins traversing an area.
 \subitem Expected Result: Route is drawn on screen.
-\subitem Actual Result: Route is successfully drawn on screen. Figures 18 and 19 show traversals in a localized area (roughly 100 ft) and across approximately 4 miles, respectively.
+\subitem Actual Result: Route is successfully drawn on screen. Figure 26 shows traversal in a localized area (roughly 100 ft).
 \subitem Related Code:
 Code fires when Start button is pressed.
 \begin{lstlisting}[
@@ -1733,6 +1752,16 @@ public void onLocationChanged(Location location) {
 }
 \end{lstlisting}
 
+\begin{figure}[H]
+    \centering
+    \begin{center}
+        \makebox[\textwidth]{\includegraphics[totalheight=0.5\textheight]{GeoTestEmu2.png}}
+    \end{center}
+    \caption{Drawing of Route during traversal.}
+    \label{fig:my_label}
+\end{figure}
+\pagebreak
+
 \item TC-03: Functionality With No Data Access
 \subitem Requirement(s) Fulfilled:
 \subsubitem System will be available as long as a persistent data connection is allowed.
@@ -1743,55 +1772,136 @@ public void onLocationChanged(Location location) {
 \subsubitem 1. User presses Start.
 \subsubitem 2. System begins recording with no data connection, or data connection is lost during recording.
 \subitem Expected Result: Application continues collecting GPS data and plotting route. Background map will not be available while data is unavailable.
-\subitem Actual Result: Route continued to record while data was unavailable (Figures 19 and 20). Quality of data suffered, and was noisy when the User was stationary, due to resolution of GPS sensor, which produced false movement along the route. (Figure 21).
+\subitem Actual Result: Route continued to record while data was unavailable (Figures 27 a and b). Quality of data suffered, and was noisy when the User was stationary, due to resolution of GPS sensor, which produced false movement along the route. (Figure 28).
 \subitem Related Code: No specific code was needed to ensure this functionality.
-\end {itemize}
-\subsubsection{Test Case Figures}
 \begin{figure}[H]
-    \centering
-    \begin{center}
-        \makebox[\textwidth]{\includegraphics[totalheight=0.40\textheight]{GeoTestDev1.png}}
-    \end{center}
-    \caption{Initial Location - Sydney, Australia}
-    \label{fig:my_label}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \begin{center}
-        \makebox[\textwidth]{\includegraphics[totalheight=0.4\textheight]{GeoTestDev2.png}}
-    \end{center}
-    \caption{Current Location - Includes depiction of test route.}
+    \begin{subfigure}{0.5\textwidth}
+    \includegraphics[width=0.9\linewidth]{GeoTestNoDataDev1.png}
+    \caption{After data loss.}
+    \label{fig:Start Location}
+    \end{subfigure}
+    \begin{subfigure}{0.5\textwidth}
+    \includegraphics[width=0.9\linewidth]{GeoTestNoDataDev2.png}
+    \caption{Variance along back and forth route.}
+    \label{fig:Current Location}
+    \end{subfigure}
+    \caption{Route Traversal after data loss.}
     \label{fig:my_label}
 \end{figure}
 \begin{figure}[H]
     \centering
     \begin{center}
-        \makebox[\textwidth]{\includegraphics[totalheight=0.4\textheight]{GeoTestNoDataDev1.png}}
-    \end{center}
-    \caption{Map showing traversal through area after data loss.}
-    \label{fig:my_label}
-\end{figure}
-\begin{figure}[H]
-    \centering
-    \begin{center}
-        \makebox[\textwidth]{\includegraphics[totalheight=0.4\textheight]{GeoTestNoDataDev2.png}}
-    \end{center}
-    \caption{Traversed same area several times to show variance along route.}
-    \label{fig:my_label}
-\end{figure}
-\begin{figure}[H]
-    \centering
-    \begin{center}
-        \makebox[\textwidth]{\includegraphics[totalheight=0.4\textheight]{GeoTestNoDataDev3.png}}
+        \makebox[\textwidth]{\includegraphics[totalheight=0.7\textheight]{GeoTestNoDataDev3.png}}
     \end{center}
     \caption{"Bunched" data, collected while stationary without data connection. Shows GPS variance.}
     \label{fig:my_label}
 \end{figure}
 
+
+\pagebreak
+
+\item TC-04: Save User Route
+\subitem Requirement(s) Fulfilled:
+\subsubitem System will store a user's routes in a particular format for use in Pathway.
+\subitem Description: The device saves a User's Route to the database.
+\subitem Precondition: User has traversed a Route.
+\subitem Test Steps:
+\subsubitem 1. User presses stop.
+\subsubitem 2. User enters name and selects activity type.
+\subsubitem 3. Route is saved to database.
+\subsubitem 4. Message shows that Route is saved.
+\subitem Expected Result: Message showing Route is has successfully saved is shown.
+\subitem Actual Result: Route is saved and message is displayed. as shown in Figure 29.
+\subitem Related Code:
+\begin{lstlisting}[
+basicstyle=\small
+]
+        @Override
+        public void onClick(View v) {
+            String rtName = routeName.getText().toString();
+            String actType = dropdown.getSelectedItem()
+            .toString().substring(0,1);
+            currentRoute.setName(rtName);
+            currentRoute.setActivity(actType);
+            currentRoute.buildJSON();
+            dbHandler.addNewRoute(currentRoute);
+
+            try {
+                currentRoute = new Route(dbHandler.getLastRoute());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            new SendData(getString(R.string.routesURL),
+            currentRoute, MainActivity.this).execute();
+
+            popupWindow.dismiss();
+
+\end{lstlisting}
+
+\begin{figure}[H]
+    \centering
+    \begin{center}
+        \makebox[\textwidth]{\includegraphics[totalheight=0.7\textheight]{GeoTestEmu4.png}}
+    \end{center}
+    \caption{Saving of Route.}
+    \label{fig:my_label}
+\end{figure}
+\pagebreak
+\item TC-05: Draw Nearby Routes
+\subitem Requirement(s) Fulfilled:
+\subsubitem System will display traversed routes in the User's immediate vicinity.
+\subsubitem System will allow a user to tap on a route to retrieve and view information associated with that route.
+\subitem Description: The device draws nearby Routes.
+\subitem Precondition: User has logged in.
+\subitem Test Steps:
+\subsubitem 1. User changes location enough to trigger redraw of routes.
+\subsubitem 2. Nearby Routes are drawn.
+\subsubitem 3. Nearby Routes can be selected to show information.
+\subitem Expected Result: Nearby Routes are shown after location change, as shown in Figure 30.
+\subitem Actual Result: Nearby Routes are displayed.
+\subitem Related Code:
+\end{itemize}
+\begin{lstlisting}[
+basicstyle=\small
+]
+for (int i = 0; i < routesList.length(); i++) {
+    try {
+            JSONObject tempJson = new JSONObject(routesList.getString(i));
+            if (tempJson.get("data") != "{}") {
+            Route tempRoute = new Route(tempJson.getString(
+            "data").replace("activity", "atype")
+            );
+            PolylineOptions routeOptions = new PolylineOptions()
+                    .color(Color.BLUE)
+                    .width(16)
+                    .startCap(new RoundCap())
+                    .endCap(new RoundCap())
+                    .clickable(true);
+
+            Polyline oldRoute = mMap.addPolyline(routeOptions);
+            oldRoute.setPoints(tempRoute.getDrawPoints());
+            oldRoute.setTag(areaRoutes.size());
+            areaRoutes.add(oldRoute);
+            nearbyRoutes.add(tempRoute);
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
+
+\end{lstlisting}
+
+\begin{figure}[H]
+    \centering
+    \begin{center}
+        \makebox[\textwidth]{\includegraphics[totalheight=0.7\textheight]{GeoTestEmu5.png}}
+    \end{center}
+    \caption{Nearby Routes drawn on the map.}
+    \label{fig:my_label}
+\end{figure}
+
 \subsubsection{Test Summary}
 Tests performed to ensure accuracy of geolocation on a handheld device were largely successful. Latitude and Longitude values were within expected deviations from actual values as provided by Google Maps each time. While generally accurate, situations where data connection is lost produce less than ideal coordinate values and as such shall be avoided when possible. Prolonged loss of data connection would likely produce unusable data sets, but temporary outages should be able to be handled by the system.
-B
 \pagebreak
 
 \subsection{User Accounts - Daniel Cregan}
