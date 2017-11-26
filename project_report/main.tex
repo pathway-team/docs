@@ -37,11 +37,11 @@
 \pagebreak
 
 \section{Project Definition}
-Pathway is a generic software, green-field development project of a native android application that we will be building with the idea of socializing the activity of exercise, in hopes of encouraging people to become more active. The application is targeted at users of all ages and levels of fitness. This task would be accomplished by the application by use of social features that would allow users that created accounts through the application to challenge those within a certain geographical distance of the user/s to beat their time on tracked, saved, and shared routes the user/s have walked, ran, etc. The application would solidify this by showing each user their improvement over the lifetime of usage of the application user on their account page within the application. It would also maintain leader-boards on popular routes in a user's current area encouraging the user to challenge and beat those above them to take their place on the leader-board.
+Pathway is a generic software, green-field development project of a native android application that we will be building with the idea of socializing the activity of exercise, in hopes of encouraging people to become more active. The application is targeted at users of all ages and levels of fitness. This task would be accomplished by the application by use of social features that would allow users that created accounts through the application to challenge those within a certain geographical distance of the user to beat their time on tracked, saved, and shared routes that the user has walked, ran, etc. The application would solidify this by showing each user their improvement over the lifetime of usage of the application user on their account page within the application. It would also maintain leader-boards on popular routes in a user's current area encouraging the user to challenge and beat those above them to take their place on the leader-board.
 \begin{figure}[!htb]
     \centering
     \includegraphics[width=\textwidth]{system_model.jpg}
-    \caption{System Model}
+    \caption{System Model showing high level overview of Pathway}
     \label{fig:my_label}
 \end{figure}
 
@@ -59,7 +59,7 @@ Pathway will be comprised of five primary components, as shown in the System Mod
     \item Geolocation
     \item Statistics
 \end{enumerate}
-The above systems are detailed in full in their respective subsections in Section 4: Sub-Systems of this report, but will we will briefly outline the functionality of each here and discuss their high-level interaction with one another.
+The above systems are detailed in full in their respective subsections in Section 4: Sub-Systems of this report, but we will briefly outline the functionality of each here and discuss their high-level interaction with one another.
 
 The Database back-end subsystem will serve as the data foundation for the application by providing data storage and look-up crucial for the functionality of all other subsystems. Each subsystem will interact with the database through an API developed for the application to facilitate passing of data back and forth.
 
@@ -67,11 +67,13 @@ The User Account subsystem will provide each user with a persistent experience a
 
 The Social system will make use of the Facebook API to provide social networking features to users of the app, and is the primary avenue of motivation provided by the app, through social interaction.
 
-The Geolocation module will provide the primary functionality of the application, which is the collection of geographic route data associated with a user account and used in the Statistics subsystem. This subsystem relies heavily on device sensors to generate accurate data as well as several web services to supplement the collected data.
+The Geolocation module will provide the primary functionality of the application, which is the collection of geographic route data associated with a user account. This subsystem relies heavily on device sensors to generate accurate data as well as several web services to supplement the collected data.
 
 The Geolocation and Statistics systems also employ a device side database for the storage of user specific Route and report information.
 
 Finally, the Statistics subsystem will be how the application allows users to derive and track useful information from repeated workouts. Using collected route data, users will be able to analyze performance metrics.
+
+\pagebreak
 
 \subsection{Pathway Flow}
 The Database system will necessarily communicate with systems at some point in the execution cycle of the application. Further, the Social and User systems will be dependent on each other, while also retrieving information from Statistics as needed.
@@ -88,7 +90,7 @@ The Statistics module will rely on data collected by the Geolocation module and 
 Pathway will rely on
 Figure 2. may also be used to describe a general flow of the user interface, which is as follows:
 \begin{enumerate}
-    \item Upon loading the application, the user is met with a login screen and prompted to login.
+    \item Upon loading the application, the user is brought to the map screen. Functionality is disabled until a user has logged in.
     \item If the user has an account, they may login directly.
     \subitem If unsuccessful, the user is returned to the login prompt.
     \subitem If successful, the user is taken to the main UI fragment, the geolocation fragment.
@@ -96,13 +98,15 @@ Figure 2. may also be used to describe a general flow of the user interface, whi
     \item The geolocation module depicts a map with the users location, routes in the immediate vicinity, and a start button.
     \item If the user presses start, the application begins recording user location and draws it to the map.
     \subitem User can record from the start of an existing route if tapped.
+    \subitem If the User is not currently near the beginning of their selected Route, they will be prompted to move to that location and to try recording again.
     \item From the map view, the user may use a navigation drawer panel to navigate to their profile, a summary of their social page, or metrics for the user and/or current route.
     \item From any of these views, the user may navigate to all other views using the navigation drawer.
-    \item From the navigation view, user may select logout to be taken back to the login screen.
+    \item From the navigation view, user may select logout.
 \end{enumerate}
 
 \section{User Requirements}
 \subsection{Functional}
+The User will be able to:
 \begin{enumerate}
     %%
     %% New user requirements
@@ -116,14 +120,14 @@ Figure 2. may also be used to describe a general flow of the user interface, whi
     \item Delete a route in the database.
     \item Update a route in the database.
     \item Query for statistical calculation on a user's data.
-    \item The user will be able to link their Facebook account with the app to create an account
-    \item The user will be able to fill out a form based application to create an account
+    \item Link their Facebook account with the app to create an account
+    \item Fill out a form based application to create an account
     \item The system will allow the user to challenge other users within their area through the application interface
-    \item Users will be able to compete for best time on routes in their area
+    \item Compete for best time on routes in their area
     \item If Facebook is down the account integration feature in the app will be expected to have downtime as well.
-    \item The system will use collected geospatial data and user demographic information to present analysis of the user�s performance.
+    \item The system will use collected geospatial data and user demographic information to present analysis of the user"s performance.
     \item The system will take user data and generate leaderboards for heavily used routes in certain areas, in order to allow users to compete for bragging rights on those routes.
-    \item The system will generate a report after a run detailing the user�s performance with comparisons of previous runs.
+    \item The system will generate a report after a run detailing the user"s performance with comparisons of previous runs.
     \item System will use device sensors to record GPS data in a Latitude/Longitude format.
     \item System will use device sensors to record user altitude.
     \item System will plot Geolocation data against a Google provided background map.
@@ -133,32 +137,31 @@ Figure 2. may also be used to describe a general flow of the user interface, whi
     \item System will allow the user to save individual routes to a comma-delimited file for personal use.
     \item System will display traversed routes in the User's immediate vicinity.
     \item System will allow a user to tap on a route to retrieve and view information associated with that route.
-    \item System will store a user�s routes in a particular format for use in Pathway.
+    \item System will store a user"s routes in a particular format for use in Pathway.
     \item System will maintain a local device database to store a user's route data.
     \item System will be available as long as a persistent data connection is allowed.
     \item System will be made available in a limited capacity with reduced accuracy and no map service while no data connection exists.
-    \item System will accurately and precisely locate the user�s position within an acceptable margin of error, allowing for a larger margin where service is weak or none exists.
+    \item System will accurately and precisely locate the user"s position within an acceptable margin of error, allowing for a larger margin where service is weak or none exists.
     \item The System will allow the user to create an account that will be kept up to date by the system.
     \item The system for user accounts will keep track of a user's life time statistics and display them in an always up to date state, statistics include, life time steps, distance, best course, best time, etc.
     \item The user accounts system will display a user's Routes in a list view on the Routes page.
     \item The system will allow the user to pull up these saved routes and see their best time or if that time has been beaten by anyone that they have shared it with.
-    \item The system will also create graphs that display the user�s progression over time of running a route, that user can see.
+    \item The system will also create graphs that display the user"s progression over time of running a route, that user can see.
     \item The system will be designed to accommodate future updates and additional functionality as needed.
     \item The system will be available for constant use, except during a small as of yet undetermined timeframe to allow for system maintenance and updates.
-    \item The system will be stable, minimizing application crashes, freezes, or �hang-ups�.
+    \item The system will be stable, minimizing application crashes, freezes, or "hang-ups".
     \item The system must be energy efficient with respect to the mobile device.
     \item The system must be efficient with respect with to cellular data consumption.
     \item The system must generate reports that should be easily readable and detailed while avoiding being confusing to users.
 
 
-
-
 \end{enumerate}
+\pagebreak
 \subsection{Quality}
 \begin{enumerate}
     \item The system will be designed to accommodate future updates and additional functionality as needed.
     \item The system will be available for constant use, except during a small as of yet undetermined time-frame to allow for system maintenance and updates.
-    \item The system will be stable, minimizing application crashes, freezes, or �hang-ups�.
+    \item The system will be stable, minimizing application crashes, freezes, or "hang-ups".
 \end{enumerate}
 \subsection{Platform}
 The client application will be written to support a minimal android version of 5. The back end will be built using Python3 and Flask, and will run inside of a Docker container. The database itself will be written in Python, MySQL, and SQLAlchemy and will also be housed inside of a Docker container. The container itself will be hosted on an Amazon Web Services (AWS) instance. The tracking and mapping of routes will be implemented through the use of the Google Maps API, and the statistical analysis of user data will be implemented with Python3 and Java, where necessary. The systems to provide statistical analysis will also be housed along with the back-end application.
@@ -167,6 +170,7 @@ Specific technologies should be listed here, including version numbers of langua
 \subsection{Process}
 The project will be completed over the course of the Fall 2017 semester, with regular progress updates provided every few weeks. We are currently deciding upon a software engineering methodology to follow, such as agile methodologies. As we near the actual development phase we will settle upon a methodology to adhere to.
 
+\pagebreak
 \section{Sub-Systems}
 
 \subsection{Back-end Infrastructure - Cory Sabol}
@@ -182,13 +186,13 @@ Android application and services provided by Pathway. Below is a list of the use
 \begin{enumerate}
     \item Request an account be created.
     \item Request that an account be logged into.
-    \item request that an account be logged out.
-    \item delete/remove an account, with appropriate privilege levels.
-    \item update an account's information.
-    \item create a route in the database.
-    \item delete a route in the database.
-    \item update a route in the database.
-    \item query for statistical calculation on a user's data.
+    \item Request that an account be logged out.
+    \item Delete/remove an account, with appropriate privilege levels.
+    \item Update an account's information.
+    \item Create a route in the database.
+    \item Delete a route in the database.
+    \item Update a route in the database.
+    \item Query for statistical calculation on a user's data.
 \end{enumerate}
 
 \subsubsection{Platform Requirements}
@@ -253,7 +257,7 @@ Other applications may require a backend which is similar to the backend for Pat
     \item Other fitness applications such as Strava.
     \item Other social applications such as Facebook, or Twitter may have similar backend logic.
 \end{itemize}
-
+\pagebreak
 \subsubsection{System Analysis}
 \paragraph{Introduction}
 This document describes the planning and analysis of the infrastructural subsystem of the
@@ -277,8 +281,7 @@ system objects belong to which tools.
     \label{fig:my_label}
 \end{figure}
 
-\paragraph{Detailed Model}
-\paragraph{System Analysis}
+\paragraph{Detailed Model - System Analysis}
 Detailing the model of the infrastructure really comes down to describing how the
 various components communicate with one another, and with other systems.
 The server itself communicates with the database via and ORM system, which is built into
@@ -576,12 +579,12 @@ the application. This was preferable because the developer of this subsystem was
 kind of work flow.
 
 %=====================================================================================
-
+\pagebreak
 \subsection{Social - Chris Carney}
 \subsubsection{Introduction}
-The Social subsystem will utilize some simplistic features that enable the user to interact with other users using the app within their local area. We will be implementing certain aspects from a Facebook API that will allow the user to integrate their Facebook profile when they first create an account that will let them expand their use of the app to include others. The user will also have a form based alternative to make a profile which would give the user an opportunity to create a profile straight from the app but would limit its inclusivity of other users and just be used to keep records of their routes that they recorded without any social aspect in place.
-The app will give the users an option to choose a route in their specified location which will then list the top times that the route was traveled, then the user will be able to choose a top time that is displayed in the list and will be able to implement the �Challenge� function, which is similar to a �poke� on Facebook. After the user picks the time they want to �challenge� on a certain route, and they complete it, the person that the user chose to challenge would be notified if their time was beaten depending on if the user completed that route in a faster time.
-We will also include an achievement system feature that will give incentives the user based on certain accomplishments within the app.
+The Social subsystem will utilize some simplistic features that enable the user to interact with other users that are using the app within their local area. We will be implementing certain aspects from a Facebook API that will allow the user to integrate their Facebook profile when they first create an account. This will let a user expand their use of the app to include others. The user will also have a form based alternative for profile creation, which would give the user an opportunity to create a profile from the app. This would limit inclusiveness of other users, as social features would be disabled, and would only be used to keep records of that user's routes.
+The app will give the users an option to choose a route in their specified location, which will then list the top times that the route was travelled. The user will be able to choose a top time that is displayed in the list and will be able to issue a "Challenge" , which is similar to a "poke" on Facebook. After the user picks the time they want to challenge on a certain route, and they complete it, the person that the user chose to challenge would be notified that their current record was broken.
+We will also include an achievement system feature that will give incentives to the user based on certain accomplishments within the application.
 
 \subsubsection{User Requirements}
 \begin{itemize}
@@ -591,7 +594,7 @@ We will also include an achievement system feature that will give incentives the
     \item Users will be able to compete for best time on routes in their area
     \item The system will be designed to accommodate future updates and additional functionality as needed.
     \item The system will be available for constant use, except during a small as of yet undetermined timeframe to allow for system maintenance and updates.
-    \item The system will be stable, minimizing application crashes, freezes, or �hang-ups�.
+    \item The system will be stable, minimizing application crashes, freezes, or "hang-ups".
     \item The system must be energy efficient with respect to the mobile device.
     \item The system must be efficient with respect with to cellular data consumption.
     \item If Facebook is down the account integration feature in the app will be expected to have downtime as well
@@ -613,7 +616,7 @@ We will also include an achievement system feature that will give incentives the
 \end{itemize}
 
 \paragraph{General Domain Knowledge}
-While many individuals like to share their workout information on social media sites, there does not currently exist an integrated fitness oriented social networking option.
+While many individuals like to share their workout information on social media sites, there does not currently exist an integrated, fitness-oriented, social-networking option.
 
 \paragraph{Clients and Users}
 \begin{itemize}
@@ -629,7 +632,7 @@ Primary functionality will be coded in Android 5.0 (Lollipop) and as such will b
     \item Linking Facebook account to the app: The app will ask if the user has a Facebook account they would like to link upon account creation.
         \subitem This will prompt Facebook to authorize permission for the app to access its functionality such as sharing posts straight from the app.
 
-    \item User �Challenges� a record time on the leaderboard for a route: User chooses a route within their area, which then lists the top times that the route was completed.
+    \item User "Challenges" a record time on the leaderboard for a route: User chooses a route within their area, which then lists the top times that the route was completed.
         \subitem User has option of picking what time they would like to challenge.
         \subitem Upon completion of the route, if the user who challenged the time completes the course in a shorter time, then the user that was challenged would receive a notification that their time was beaten.
 \end{itemize}
@@ -648,7 +651,7 @@ Many applications are similar to Pathway in the sense that they make use of geos
 
 \subsubsection{System Analysis}
 \paragraph{Introduction}
-Since the User Accounts subsystem will be focusing on implementing the choice to create a profile through the app, the Facebook API will be the majority of what we will be using in this subsystem to help authorize a user�s profile and also gain access to the users profile information given the option to control what permissions the user will be able to access from the app whether it be from their personal info to their friends lists.
+Since the User Accounts subsystem will be focusing on implementing the choice to create a profile through the app, the Facebook API will be the majority of what we will be using in this subsystem to help authorize a user"s profile and also gain access to the users profile information given the option to control what permissions the user will be able to access from the app whether it be from their personal info to their friends lists.
 
 In order to do this, we will first need to utilize a program called OpenSSL. OpenSSL is a software library for applications that secure communications over computer networks from being accessed by unauthorized users. It contains an open-source implementation of SSL and TLS protocols. It's core library implements cryptographic functions and provides various utility functions. OpenSSL also utilizes wrappers which allows its library to be used across many different computer languages so that there are no compatibility issues. With OpenSSL, we will be able to obtain a key hash. A key hash is a 28-character string that Facebook uses to authenticate any type of exchanges of information in between Facebook and the Pathway app. If a key hash is not obtained, there will be no possibility of Facebook integration within the app.
 
@@ -709,9 +712,9 @@ After establishing the connection to the users Facebook account, we will be impl
     \begin{enumerate}
     \item The user has an account and wishes to login, they either enter their credentials or select to login using their facebook.
     \end{enumerate}
-\item The user wishes to challenge a �top time� on a route:
+\item The user wishes to challenge a "top time" on a route:
     \begin{enumerate}
-    \item The user wants challenge a user that holds a record time for a route. After selecting a route from a list, the users can display the top times for that route and will have the option to �challenge� it
+    \item The user wants challenge a user that holds a record time for a route. After selecting a route from a list, the users can display the top times for that route and will have the option to "challenge" it
     \end{enumerate}
 \item The user wishes to see friends from Facebook that also have the app:
     \begin{enumerate}
@@ -743,12 +746,12 @@ After establishing the connection to the users Facebook account, we will be impl
 \begin{figure}[H]
 	\centering
 	\begin{center}
-		\makebox[\textwidth]{\includegraphics[width=0.5\paperwidth]{FBLoginScreenshot.png}}
+		\makebox[\textwidth]{\includegraphics[width=0.4\paperwidth]{FBLoginScreenshot.png}}
 	\end{center}
 	\caption{User linking Facebook to app}
 	\label{fig:my_label}
 \end{figure}
-
+\pagebreak
 \begin{itemize}
 	\item TC-02: Viewing Achievements
 	\subitem Requirements Fulfilled:
@@ -764,14 +767,14 @@ After establishing the connection to the users Facebook account, we will be impl
 \begin{figure}[H]
 	\centering
 	\begin{center}
-		\makebox[\textwidth]{\includegraphics[width=0.5\paperwidth]{AchievementsScreenshot.png}}
+		\makebox[\textwidth]{\includegraphics[width=0.4\paperwidth]{AchievementsScreenshot.png}}
 	\end{center}
 	\caption{User displaying the achievements page}
 	\label{fig:my_label}
 \end{figure}
-
+\pagebreak
 \begin{itemize}
-	\item TC-02: Viewing Friends
+	\item TC-03: Viewing Friends
 	\subitem Requirements Fulfilled:
 	\subsubitem The user will be able to see their Facebook friends that also have the app downloaded
 	\subitem Test Steps:
@@ -784,7 +787,7 @@ After establishing the connection to the users Facebook account, we will be impl
 \begin{figure}[H]
 	\centering
 	\begin{center}
-		\makebox[\textwidth]{\includegraphics[width=0.5\paperwidth]{FriendsListScreenshot.png}}
+		\makebox[\textwidth]{\includegraphics[width=0.4\paperwidth]{FriendsListScreenshot.png}}
 	\end{center}
 	\caption{User displaying the achievements page}
 	\label{fig:my_label}
@@ -922,9 +925,9 @@ The statistics sub-system will perform analysis of user data generated by the Ge
 
 \subsubsection{User Requirement}
 \begin{itemize}
-    \item The system will use collected geospatial data and user demographic information to present analysis of the user�s performance.
+    \item The system will use collected geospatial data and user demographic information to present analysis of the user"s performance.
     \item The system will take user data and generate leaderboards for heavily used routes in certain areas, in order to allow users to compete for bragging rights on those routes.
-    \item The system will generate a report after a run detailing the user�s performance with comparisons of previous runs.
+    \item The system will generate a report after a run detailing the user"s performance with comparisons of previous runs.
     \item The system must generate reports that should be easily readable and detailed while avoiding being confusing to users.
 \end{itemize}
 
@@ -945,7 +948,7 @@ The following applications/software may fulfill similar roles or offer similar f
 \end{itemize}
 
 \paragraph{Extensions}
-For later versions of this service we may try to increase the variety of analysis. We may also offer a web service allowing a more complete analysis of the user�s performance and physical activities.
+For later versions of this service we may try to increase the variety of analysis. We may also offer a web service allowing a more complete analysis of the user"s performance and physical activities.
 
 \paragraph{General Domain Knowledge}
 Few people have the knowledge or desire to manually formulate statistics about their fitness progress.
@@ -953,7 +956,7 @@ Few people have the knowledge or desire to manually formulate statistics about t
 \paragraph{Tasks and Procedures}
 \begin{itemize}
     \item The user finishes a route.
-    \item The user�s device uploads the route details up to the database on the server
+    \item The user"s device uploads the route details up to the database on the server
     \item The server calls the statistic subsystem analysis function
     \item The function will be passed a way to access the data uploaded by the user
     \item The function will perform the analysis
@@ -961,10 +964,10 @@ Few people have the knowledge or desire to manually formulate statistics about t
     \item Analyze the routes gps points to determine the data points needed to plot a graph of distance over time
     \item Any extra data analysis involving previous route data
     \item Prepare information to be sent back to user
-    \item Server sends the analysis data back to the user�s device
+    \item Server sends the analysis data back to the user"s device
     \item Device will process the analysis data to generate a report for the user
     \item The report will display the average speed, steps, etc. for the route
-    \item The device�s system will take the data points and plot a graph of distance over time.
+    \item The device"s system will take the data points and plot a graph of distance over time.
 \end{itemize}
 
 \paragraph{Clients and Users}
@@ -1052,7 +1055,7 @@ Generate Report
     \caption{Statistics system ER: Local SQLite Database}
     \label{fig:my_label}
 \end{figure}
-
+\pagebreak
 \subsubsection{Statistics Subsystem Testing}
 
 \paragraph{Introduction}
@@ -1216,7 +1219,7 @@ The original approach was to integrate the subsystem on the server to be called 
 The second approach, which we decided to implement, was to implement the system on the android device. The system was implemented in very much the same manner as the original, however the reports were generated and stored on the android device's local SQLite database. This approach offered easier access to some of the resources the report system needed and better security for the User's route data. It also made it easier for the Statistics subsystem to be intergrated with the other subsystem. The reports could be immediately stored and retrieved from a local database implemented on the client device.
 
 %======================================================================
-
+\pagebreak
 \subsection{Geolocation Collection and Plotting - Johnny Bragg}
 This sub-system, referred to as the Geolocation sub-system, will manage the collection, plotting, and storage of geospatial data that will comprise routes traversed by the user. This data will include: WGS 1984 Latitude and Longitude coordinates, expressed in decimal degrees, Elevation as measured in measures, 0 relative time-stamp information in a 24Hr hh:mm:ss format, and additional derived attributes from the aforementioned data, such as speed, direction, etc.
 
@@ -1226,6 +1229,7 @@ The Geolocation sub-system will transmit data to the database back-end for stora
 
 Sending and Receiving of Route information To and From the database server is accomplished by extending Java's AsyncTask\cite{g_AsyncTask} class to two new classes: FetchData and SendData. Both classes make use of an interface and Callback methods to send and retrieve data. An implementation of FetchData was found online and modified to handle POST requests as well as GETs.\cite{g_asyncget} The main map activity will implement interfaces for both classes to avoid blocking the UI during requests and while the application awaits a response from the server.
 
+\pagebreak
 \subsubsection{User Requirements}
 \begin{itemize}
     \item System will use device sensors to record GPS data in a Latitude/Longitude format.
@@ -1245,8 +1249,8 @@ Sending and Receiving of Route information To and From the database server is ac
 \end{itemize}
 
 \subsubsection{Process}
-The system will be completed an tested over the course of the Fall 2017 semester, with regular updates to follow.
-
+The system will be completed and tested over the course of the Fall 2017 semester, with regular updates to follow.
+\pagebreak
 \subsubsection{Domain Analysis}
 \paragraph{Introduction}
 This document conveys a brief overview of GPS based data plotting and collection as is commonly used in mapping applications. This is a well-established domain, with many existing applications employing mapping systems to some degree.
@@ -1288,7 +1292,7 @@ Our research has discovered that many applications incorporate mapping informati
 
 \paragraph{Domain Similarities}
 Mapping applications like the one we envision are common, and the usefulness of geographic data is apparent in many fields and industries. There is no shortage of similar systems available for use, so documentation is both plentiful and current. Due to the general nature of this sub-system, we are not concerned that any similarities would constitute a duplication of an existing system. The widespread usage of similar systems does however provide us with a wealth of information to be used towards development of our own system.
-
+\pagebreak
 \subsubsection{System Analysis}
 \paragraph{Introduction}
 The geolocation subsystem is relatively isolated from other subsystem within the Pathway project. The primary interaction between the geolocation
@@ -1927,7 +1931,7 @@ Tests performed to ensure accuracy of geolocation on a handheld device were larg
 
 \subsection{User Accounts - Daniel Cregan}
 This Sub-System focuses on user accounts and the aspects that go along with such a sub-system, such as security for the user and the storing of that users info for their use/consumption in the moment or for later.
-The sub-system itself will store all tracked and analyzed data from the statistical analysis sub-system and present the information to the user through their account page on the application when they move to their profile page via the GUI. The User's account will display such things as their average walk, run, bike, etc. speed as well as their best time amongst all their recorded routes and types of exercises. It will also display to them total amount of steps taken in lifetime use of the application, and it will also show them a graph of their improvement over their time using the application on either certain routes or just overall, and lastly it will also store all of their recorded routes that they wish to save on a routes page in their profile so that they may view specific statistics about their performance on a course or so that they may publish their route to their friends either using facebook or by using a native groups feature(this part is undecided as of yet as to which we�ll use to publish route data and issue challenges to those in your area).
+The sub-system itself will store all tracked and analyzed data from the statistical analysis sub-system and present the information to the user through their account page on the application when they move to their profile page via the GUI. The User's account will display such things as their average walk, run, bike, etc. speed as well as their best time amongst all their recorded routes and types of exercises. It will also display to them total amount of steps taken in lifetime use of the application, and it will also show them a graph of their improvement over their time using the application on either certain routes or just overall, and lastly it will also store all of their recorded routes that they wish to save on a routes page in their profile so that they may view specific statistics about their performance on a course or so that they may publish their route to their friends either using facebook or by using a native groups feature(this part is undecided as of yet as to which we"ll use to publish route data and issue challenges to those in your area).
 
 \subsubsection{User Requirements}
 \begin{itemize}
@@ -1935,10 +1939,10 @@ The sub-system itself will store all tracked and analyzed data from the statisti
     \item The system for user accounts will keep track of a user's life time statistics and display them in an always up to date state, statistics include, life time steps, distance, best course, best time, etc.
     \item The user accounts system will save all user routes as buttons that will produce a popup view of the selected route.
     \item The system will allow the user to pull up these saved routes and see their best time or if that time has been beaten by anyone that they have shared it with.
-    \item The system will also create graphs that display the user�s progression over time of running a route, that user can see.
+    \item The system will also create graphs that display the user"s progression over time of running a route, that user can see.
     \item The system will be designed to accommodate future updates and additional functionality as needed.
     \item The system will be available for constant use, except during a small as of yet undetermined timeframe to allow for system maintenance and updates.
-    \item The system will be stable, minimizing application crashes, freezes, or �hang-ups�.
+    \item The system will be stable, minimizing application crashes, freezes, or "hang-ups".
     \item The system must be energy efficient with respect to the mobile device.
     \item The system must be efficient with respect with to cellular data consumption.
     \item The system must generate reports that should be easily readable and detailed while avoiding being confusing to users.
@@ -1956,7 +1960,7 @@ The sub-system itself will store all tracked and analyzed data from the statisti
 
 \paragraph{General Domain Knowledge}
 \begin{itemize}
-    \item Users that have used other services will generally choose this one over others because of it�s much more robust security protocols.
+    \item Users that have used other services will generally choose this one over others because of it"s much more robust security protocols.
     \item The analysis of the user data will provide a good frame of reference for the user to see how to improve through the use of graphs.
     \item Users will be able to quickly access saved routes through their profile and see their statistics for each route.
     \item Routes will be protected unless a user authorizes the sharing of their route through security protocols.
@@ -2294,7 +2298,7 @@ Many applications are similar to Pathway in the sense that they make use of geos
 
 \section{Glossary}
 \begin{itemize}
-    \item \textbf{Route} - A Route in Pathway will be the geometric representation of a user�s tracked traversal path and will include geographic data that defines an exact geographic position through $XY$ coordinates and elevation.
+    \item \textbf{Route} - A Route in Pathway will be the geometric representation of a user"s tracked traversal path and will include geographic data that defines an exact geographic position through $XY$ coordinates and elevation.
     \item \textbf{Challenge} - A Challenge in Pathway will be the primary means of social interaction between users, acting as a prompt from User A to User B to encourage participation in an exercise activity.
     \item \textbf{REST API} - Representational State Transfer, provides interoperability between systems through the web.
     \item \textbf{Python} - Python is an interpreted, object-oriented programming language similar to PERL.
@@ -2307,22 +2311,22 @@ Many applications are similar to Pathway in the sense that they make use of geos
     \item \textbf{Dockerize} - The act of containing a piece of software within a docker container.
     \item \textbf{Statistics} - branch of mathematics dealing with the collection, analysis, interpretation, presentation, and organization of data.
     \item \textbf{Database} - application that contains organized collections of data in tables
-    \item \textbf{Geolocation} � A specific pair of x and y coordinates as plotted on a spherical surface, allowing the description of an exact geographic location on that sphere.
-    \item \textbf{Latitude} � The angular distance of a location in degrees, minutes, and seconds relative to the earth�s equator. Lat is shorthand.
-    \item \textbf{Longitude} � The angular distance of a location in degrees, minutes, and seconds relative to the meridian at Greenwich, England. Long is shorthand.
-    \item \textbf{Elevation} � A measurement of height above some arbitrary baseline, usually sea-level, expressed most often in feet or meters. Elev. is shorthand.
-    \item \textbf{User} � An individual person who maintains a Pathway account.
-    \item \textbf{Point} � A recorded location, being comprised of Latitude, Longitude, Elevation, and Time, relative to the first recorded point in the series.
+    \item \textbf{Geolocation} " A specific pair of x and y coordinates as plotted on a spherical surface, allowing the description of an exact geographic location on that sphere.
+    \item \textbf{Latitude} " The angular distance of a location in degrees, minutes, and seconds relative to the earth"s equator. Lat is shorthand.
+    \item \textbf{Longitude} " The angular distance of a location in degrees, minutes, and seconds relative to the meridian at Greenwich, England. Long is shorthand.
+    \item \textbf{Elevation} " A measurement of height above some arbitrary baseline, usually sea-level, expressed most often in feet or meters. Elev. is shorthand.
+    \item \textbf{User} " An individual person who maintains a Pathway account.
+    \item \textbf{Point} " A recorded location, being comprised of Latitude, Longitude, Elevation, and Time, relative to the first recorded point in the series.
 \end{itemize}
 
 
 \section{Bibliography}
 \begin{itemize}
-    \item -  Django.readthedocs.io. (2017). Using the Django authentication system � Django 2.1.dev20171017153446 documentation. [online] Available at: http://django.readthedocs.io/en/latest/topics/auth/default.html#how-to-log-a-user-in [Accessed 17 Oct. 2017].
+    \item -  Django.readthedocs.io. (2017). Using the Django authentication system " Django 2.1.dev20171017153446 documentation. [online] Available at: http://django.readthedocs.io/en/latest/topics/auth/default.html#how-to-log-a-user-in [Accessed 17 Oct. 2017].
     \item -  Cohen, U. (2017). Write your own Android Authenticator. [online] Blog.udinic.com. Available at: http://blog.udinic.com/2013/04/24/write-your-own-android-authenticator/ [Accessed 17 Oct. 2017].
     \item - Docs.djangoproject.com. (2017). django.contrib.auth | Django documentation | Django. [online] Available at: https://docs.djangoproject.com/
     en/1.11/ref/contrib/auth/ [Accessed 17 Oct. 2017].
-    \item - Python-3-patterns-idioms-test.readthedocs.io. (2017). The Singleton � Python 3 Patterns, Recipes and Idioms. [online] Available at: http://python-3-patterns-idioms-test.readthedocs.io/en/latest/Singleton.html [Accessed 17 Oct. 2017].
+    \item - Python-3-patterns-idioms-test.readthedocs.io. (2017). The Singleton " Python 3 Patterns, Recipes and Idioms. [online] Available at: http://python-3-patterns-idioms-test.readthedocs.io/en/latest/Singleton.html [Accessed 17 Oct. 2017].
     \item - Developer.android.com. (2017). HttpURLConnection | Android Developers. [online] Available at: https://developer.android.com/reference/java/
     net/HttpURLConnection.html [Accessed 13 Nov. 2017].
     \item - www.hackernoon.com. (2017). AWS vs. DigitalOcean. [online] Available at: https://hackernoon.com/aws-vs-digitalocean-which-cloud-server-is-better-1386499a6664 [Accessed 19 Nov. 2017].
