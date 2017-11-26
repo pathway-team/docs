@@ -229,7 +229,7 @@ The only clients that this subsystem can have are any applications which consume
 of the other subsystems which make up the native Android application.
 
 \paragraph{The Environment}
-The computing environment for this subsystem will be an Ubuntu 14.04 instance which has been dockerized. This will be deployed to an AWS instance. The purpose of running the server side code in a docker container is that docker allows us to tailor the OS environment
+The computing environment for this subsystem will be an Ubuntu 14.04 instance which has been dockerized. This will be deployed to a DigitalOcean droplet. The purpose of running the server side code in a docker container is that docker allows us to tailor the OS environment
 to cater specifically to the application. Which provides a more isolated development and production environment for the code, minimizing variables which could contribute to bugs and other such undesirable behaviors.
 
 \paragraph{Tasks and Procedures}
@@ -271,7 +271,7 @@ system objects belong to which tools.
 \begin{figure}
     \centering
     \begin{center}
-        \makebox[\textwidth]{\includegraphics[width=\paperwidth]{PWInfSeq.png}}
+        \makebox[\textwidth]{\includegraphics[width=\paperwidth]{infrastructure.png}}
     \end{center}
     \caption{Pathway Backend Sequence Diagram}
     \label{fig:my_label}
@@ -375,14 +375,13 @@ built with scalability in mind.
 \paragraph{Hosting}
 When developing an application which requires a back end server, it's also important to realize that
 hardware is required in order to actually host the application. The choices for this come down to
-Amazon Elastic Beanstalk or Heroku. Both of these services provide similar things. Hosting of
-web applications, and their databases, as well as management/admin tools. However, Elastic Beanstalk
-is somewhat cheaper as a student, and provides better load balancing tools, which is important
-should the service ever need to scale according it's userbase. There is a big difference between
-1000 concurrent users, and 10,000. Amazon web services has a great track record of being an
-industry standard when it comes to deploying hosting applications which may need to scale and
-handle large numbers of connections. The drawback to Beanstalk versus Heroku is that Heroku is
-vastly easier to use and interface with from a developer standpoint.
+Amazon Elastic Beanstalk or DigitalOcean. Both of these services provide similar things. Hosting of
+web applications, and their databases, as well as management/admin tools. However, DigitalOcean
+is somewhat cheaper as a student. While AWS provides stronger infrastructure such as better
+load balancing, the current alpha status of the app does not require such infrastructure.
+AWS as it turns out costs much more in terms of learning and configuration to deploy our app
+when compared to DigitalOcean. It is for this reason that using DigitalOcean alleviates a large
+portion of development time.
 
 \paragraph{Database}
 Choice of database is a very important choice as well. For this decision however we have opted to
@@ -421,10 +420,12 @@ it. Amazon Elastic Beanstalk also has support for deploying dockerized applicati
 \paragraph{Tool Selection}
 \begin{itemize}
     \item Docker
+    \item NGINX
+    \item Gunicorn
     \item Django
     \item Python3
     \item PostgreSQL
-    \item Amazon Elastic Beanstalk
+    \item DigitalOcean
 \end{itemize}
 
 \subsubsection{Selected Source Code}
@@ -514,6 +515,7 @@ services:
 We can see that the selected code snippets satisfy several of the test cases, which we define
 as use cases that have been backed by working code. Currently the code for the infrastructure
 subsystem satisfies several test cases, some more concrete than others.
+
 \begin{itemize}
 \item The system accepts HTTP requests and is capable of responding via HTTP.
 \item The system is able to handle the creation of a user.
@@ -1208,10 +1210,10 @@ It has also resulted in the addition of another feature to this subsystem, manag
 
 \subsubsection{Design Alternatives}
 We considered two different designs for this subsystem. One approach, the original, was to design and implement this subsystem on the server using Python. The second approach, was to implement the subsystem on the android device using Java.
-\paragraph{First Design Alternative}
+\paragraph{Design Alternative: Server-Side Implementation}
 The original approach was to integrate the subsystem on the server to be called when data for a route was being saved to the server's database. The subsystem would have called during the saving to create a report and then save the report to the server's database as well. The report would be saved for future requests. The subsystem was going to be implemented using a combination of the Factory Method and the Builder design patterns.
-\paragraph{Second Design Alternative}
-The second approach, which we decided to implement, was to implement the system on the android device. The system was implemented in very much the same manner as the original, however the reports were generated and stored on the android device's local SQLite database. This approach offered easier access and better security for the User's route data. It also made it easier for the Statistics subsystem to be intergrated with the other subsystem.
+\paragraph{Second Design Alternative: Client-Side Implementation}
+The second approach, which we decided to implement, was to implement the system on the android device. The system was implemented in very much the same manner as the original, however the reports were generated and stored on the android device's local SQLite database. This approach offered easier access to some of the resources the report system needed and better security for the User's route data. It also made it easier for the Statistics subsystem to be intergrated with the other subsystem. The reports could be immediately stored and retrieved from a local database implemented on the client device.
 
 %======================================================================
 
